@@ -1,0 +1,50 @@
+<ul class="nav nav-tabs justify-content-center">
+  <li
+    class="nav-item"
+    role="button"
+    (click)="onTabChange($event)"
+    routerLink="../main"
+  >
+    <a
+      class="nav-link"
+      [ngClass]="selected === 'Basic' ? 'active' : ''"
+      aria-current="page"
+      >Basic</a
+    >
+  </li>
+  <li class="nav-item" (click)="onTabChange($event)" role="button">
+    <a class="nav-link" [ngClass]="selected === 'Education' ? 'active' : ''"
+      >Education</a
+    >
+  </li>
+  <li class="nav-item" (click)="onTabChange($event)" role="button">
+    <a class="nav-link" [ngClass]="selected === 'Bibliography' ? 'active' : ''"
+      >Bibliography</a
+    >
+  </li>
+  <li class="nav-item" (click)="onTabChange($event)" role="button">
+    <a class="nav-link" [ngClass]="selected === 'Recordings' ? 'active' : ''"
+      >Recordings</a
+    >
+  </li>
+  <li class="nav-item" (click)="onTabChange($event)" role="button">
+    <a class="nav-link" [ngClass]="selected === 'Location' ? 'active' : ''"
+      >Location</a
+    >
+  </li>
+  <li class="nav-item" (click)="onTabChange($event)" role="button">
+    <a class="nav-link" [ngClass]="selected === 'Pictures' ? 'active' : ''"
+      >Pictures</a
+    >
+  </li>
+  <li class="nav-item" (click)="onTabChange($event)" role="button">
+    <a class="nav-link" [ngClass]="selected === 'Videos' ? 'active' : ''"
+      >Videos</a
+    >
+  </li>
+  <li class="nav-item" (click)="onTabChange($event)" role="button">
+    <a class="nav-link" [ngClass]="selected === 'Settings' ? 'active' : ''"
+      >Settings</a
+    >
+  </li>
+</ul>

@@ -1,0 +1,7 @@
+<div class="d-flex gap-3"><label for="">MODE:</label><p>OWNERS ACCOUNT</p></div>
+
+<app-personal-header (tabClickEvent)="changeTab($event)"></app-personal-header>
+<app-basic *ngIf="selected == 'Basic'"></app-basic>
+<app-education *ngIf="selected == 'Education'"></app-education>
+<app-bibliography *ngIf="selected == 'Bibliography'"></app-bibliography>
+<app-pictures *ngIf="selected == 'Pictures'"></app-pictures>
