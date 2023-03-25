@@ -15,9 +15,4 @@ export class PersonalComponent implements OnInit {
       this.selected = (<HTMLElement>inputEvent.target).innerText;
     });
   }
-
-  // changeTab(inputEvent: any) {
-  //   console.log(inputEvent.target.innerText);
-  //   this.selected = inputEvent.target.innerText;
-  // }
 }

@@ -7,7 +7,6 @@ import { IndividualService } from '../individual.service';
   styleUrls: ['./personal-header.component.css'],
 })
 export class PersonalHeaderComponent {
-  // @Output() tabClickEvent = new EventEmitter<PointerEvent>();
   selected = 'Basic';
 
   constructor(private individualService: IndividualService) {}
