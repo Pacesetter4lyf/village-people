@@ -1,1 +1,107 @@
-<p>settings works!</p>
+<div class="row">
+  <div class="col-3">
+    <div class="list-group">
+      <button
+        type="button"
+        class="list-group-item list-group-item-action active"
+        aria-current="true"
+      >
+        Info
+      </button>
+      <button type="button" class="list-group-item list-group-item-action">
+        Media
+      </button>
+      <button type="button" class="list-group-item list-group-item-action">
+        Relationships
+      </button>
+      <hr />
+      <button type="button" class="list-group-item list-group-item-action">
+        Merge
+      </button>
+    </div>
+  </div>
+  <div class="col-9">
+    <div>
+      <div class="div">
+        <nav class="nav nav-pills nav-justified">
+          <a class="nav-link active" aria-current="page" href="#">Posts</a>
+          <a class="nav-link" href="#">Photos</a>
+          <a class="nav-link" href="#">Audios</a>
+          <a class="nav-link disabled">Videos</a>
+        </nav>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-6">Media Name</div>
+        <div class="col-6 text-center">
+          Visibility
+          <div class="d-flex justify-content-around">
+            <p class="m-0">lineage</p>
+            <p class="m-0">public</p>
+          </div>
+        </div>
+        <hr class="m-0" />
+        <div class="row" *ngFor="let viewable of viewables">
+          <div class="col-6">{{ viewable }}</div>
+          <div class="col-6 d-flex justify-content-around">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="flexCheckDefault"
+              />
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="flexCheckDefault"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <h1></h1>
+      <!-- <div class="row">
+        <div class="col"></div>
+        <div class="col"></div>
+      </div> -->
+    </div>
+
+    <div class="mb-3 row">
+      <label for="staticEmail" class="col-sm-3 col-form-label"
+        >generate code</label
+      >
+      <div class="col-sm-6">
+        <input
+          type="text"
+          readonly
+          class="form-control-plaintext border"
+          id="staticEmail"
+          value="email@example.com"
+        />
+      </div>
+      <div class="col-3">
+        <button class="btn btn-primary">generate code</button>
+      </div>
+    </div>
+    <div class="mb-3 row">
+      <label for="staticEmail" class="col-sm-3 col-form-label"
+        >validate code</label
+      >
+      <div class="col-sm-6">
+        <input
+          type="text"
+          class="form-control border"
+          id="staticEmail"
+          value="email@example.com"
+        />
+      </div>
+      <div class="col-3">
+        <button class="btn btn-primary">validate code</button>
+      </div>
+    </div>
+  </div>
+</div>

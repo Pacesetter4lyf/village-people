@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class LineageHeaderComponent {
   selected = 2;
+  tabs = ["Tree", 'Discussions', 'Birthdays', 'Funds', 'Media', "Search"];
+
+  tabClick(tab: string){
+    console.log(tab)
+  }
 }

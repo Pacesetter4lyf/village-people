@@ -1,1 +1,52 @@
-<p>search works!</p>
+<div class="row">
+  <div class="col-md-6">
+    <form class="d-flex" role="search">
+      <input
+        class="form-control me-2"
+        type="search"
+        placeholder="Search"
+        aria-label="Search"
+      />
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+  <div class="col-md-6">
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value=""
+        id="flexCheckChecked"
+        checked
+      />
+      <label class="form-check-label" for="flexCheckChecked">
+        search in my branch
+      </label>
+    </div>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="col-md-6">
+      <ul class="list-group">
+        <li
+          class="list-group-item d-flex justify-content-between active"
+          role="button"
+        >
+          <p><strong>Name:</strong> Emmanuel</p>
+          <p><strong>Distance:</strong> 4</p>
+        </li>
+        <li class="list-group-item">A second item</li>
+        <li class="list-group-item">A third item</li>
+        <li class="list-group-item">A fourth item</li>
+        <li class="list-group-item">And a fifth one</li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <p *ngFor="let item of important">{{ item }}</p>
+      <div class="d-flex justify-content-between">
+        <div class="btn btn-primary">show tree</div>
+        <div class="btn btn-primary">Show details</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,5 @@
+import { Resource } from '../../shared/resource.model';
+
 export class Individual {
   constructor(
     public firstName: string,
@@ -8,9 +10,18 @@ export class Individual {
     public email: string,
     public description: string,
     public countryOfBirth: string,
-    public gender: "male" | "female" | "other",
+    public gender: 'male' | 'female' | 'other',
+    public appendedTo: string,
+    public appendedAs: string,
+    public image: string,
     public createdBy: string,
 
+    public settings: {
+      all: string[];
+      lineage: string[];
+    },
+
+    public editableBy?: string,
     public facebookAddress?: string,
     public state?: string,
     public vilage?: string,
@@ -20,6 +31,9 @@ export class Individual {
     public tertiary?: string,
     public currentAddress?: string,
     public postalCode?: string,
-
+    public posts?: Resource[],
+    public images?: Resource[],
+    public audios?: Resource[],
+    public videos?: Resource[]
   ) {}
 }

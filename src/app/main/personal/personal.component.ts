@@ -1,18 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { IndividualService } from './individual.service';
 
 @Component({
   selector: 'app-personal',
   templateUrl: './personal.component.html',
   styleUrls: ['./personal.component.css'],
 })
-export class PersonalComponent {
+export class PersonalComponent implements OnInit {
   selected: string = 'Basic';
+  constructor(private individualService: IndividualService) {}
 
-  // onTabChange(inputEvent: any){
-  //   console.log(inputEvent)
-  // }
-  changeTab(inputEvent: any) {
-    console.log(inputEvent.target.innerText);
-    this.selected = inputEvent.target.innerText
+  ngOnInit() {
+    this.individualService.tabClickEvent.subscribe((inputEvent) => {
+      this.selected = (<HTMLElement>inputEvent.target).innerText;
+    });
   }
+
+  // changeTab(inputEvent: any) {
+  //   console.log(inputEvent.target.innerText);
+  //   this.selected = inputEvent.target.innerText;
+  // }
 }

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { IndividualService } from '../individual.service';
 
 @Component({
   selector: 'app-personal-header',
@@ -6,11 +7,25 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./personal-header.component.css'],
 })
 export class PersonalHeaderComponent {
-  @Output() tabClickEvent = new EventEmitter<PointerEvent>();
+  // @Output() tabClickEvent = new EventEmitter<PointerEvent>();
   selected = 'Basic';
 
+  constructor(private individualService: IndividualService) {}
+  tabs: string[] = [
+    'Basic',
+    'Education',
+    'Bibliography',
+    'Recordings',
+    'Pictures',
+    'Videos',
+    'Posts',
+    'Chats',
+    'Settings',
+  ];
+
   onTabChange(something: PointerEvent) {
-    this.tabClickEvent.emit(something);
-    this.selected = (<HTMLElement>something.target).innerText
+    this.individualService.tabClickEvent.emit(something);
+    this.selected = (<HTMLElement>something.target).innerText;
   }
+
 }

@@ -1,0 +1,91 @@
+<div class="row">
+  <div class="col-md-6">
+    <div>
+      <iframe
+        width="100%"
+        src="https://www.youtube.com/embed/PaCmpygFfXo"
+        title="The spelled-out intro to language modeling: building makemore"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos quas
+          quisquam minus aliquam soluta quo.
+        </p>
+      </div>
+      <div class="col-12 d-flex justify-content-between" *ngIf="mediaEditable">
+        <button class="btn btn-danger">delete</button>
+        <button class="btn btn-primary mt-auto">edit</button>
+      </div>
+      <div class="col-12 d-flex " *ngIf="!mediaEditable">
+        <p class="">By Emmanuel Offor</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- width="320"
+height="240" -->
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#exampleModal"
+>
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <input
+          class="form-control form-control-sm"
+          type="text"
+          placeholder=".form-control-sm"
+          aria-label=".form-control-sm example"
+        />
+        <input
+          class="form-control form-control-sm"
+          type="text"
+          placeholder=".form-control-sm"
+          aria-label=".form-control-sm example"
+        />
+        <input
+          class="form-control form-control-sm"
+          type="text"
+          placeholder=".form-control-sm"
+          aria-label=".form-control-sm example"
+        />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
