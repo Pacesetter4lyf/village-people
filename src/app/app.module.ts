@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { HomeComponent } from './home/home.component';
 import { PersonalComponent } from './main/personal/personal.component';
 import { BasicComponent } from './main/personal/basic/basic.component';
 import { EducationComponent } from './main/personal/education/education.component';
@@ -29,15 +28,20 @@ import { PostsComponent } from './shared/posts/posts.component';
 import { SingleComponent } from './main/lineage/discussion/single/single.component';
 import { ChatsComponent } from './main/personal/chats/chats.component';
 import { IndividualService } from './main/personal/individual.service';
+import { AuthComponent } from './auth/auth.component';
+import { canActivateFn } from './auth/auth-guard.service';
+import { AuthService } from './auth/auth.service';
+import { AppendComponent } from './main/lineage/append/append.component';
 
 const appRoutes: Routes = [
   { path: '', component: LandingComponent },
-  { path: 'main/individual', component: PersonalComponent },
   {
-    path: 'main/lineage',
+    path: 'lineage',
     component: LineageComponent,
+    canActivate: [canActivateFn],
     children: [
-      { path: '', component: TreeComponent },
+      { path: '', redirectTo: 'tree' , pathMatch: 'full'},
+      { path: 'tree', component: TreeComponent },
       { path: 'discussions', component: DiscussionComponent },
       { path: 'discussions/:single', component: SingleComponent },
       { path: 'birthdays', component: BirthdaysComponent },
@@ -74,40 +78,44 @@ const appRoutes: Routes = [
           },
         ],
       },
-      { path: 'tree', component: TreeComponent },
       { path: 'search', component: SearchComponent },
     ],
   },
-  { path: '**', component: LandingComponent },
 
-  // {
-  //   path: 'main',
-  //   component: MainComponent,
-  //   children: [
-  //     {
-  //       path: 'personal',
-  //       component: PersonalComponent,
-  //       children: [
-  //         { path: 'basic', component: BasicComponent },
-  //         { path: 'education', component: EducationComponent },
-  //         { path: 'bibliography', component: BibliographyComponent },
-  //         { path: 'recordings', component: RecordingsComponent },
-  //         { path: 'location', component: LocationComponent },
-  //         { path: 'pictures', component: PicturesComponent },
-  //         { path: 'videos', component: VideosComponent },
-  //         { path: 'settings', component: SettingsComponent },
-  //       ],
-  //     },
-  //     { path: 'lineage', component: LineageComponent },
-  //   ],
-  // },
+  {
+    path: 'individual',
+    component: PersonalComponent,
+    canActivate: [canActivateFn],
+    children: [
+      { path: 'basic', component: BasicComponent },
+      { path: 'education', component: EducationComponent },
+      { path: 'bibliography', component: BibliographyComponent },
+      { path: 'recordings', component: RecordingsComponent },
+      { path: 'pictures', component: PicturesComponent },
+      { path: 'videos', component: VideosComponent },
+      { path: 'posts', component: PostsComponent },
+      { path: 'chats', component: ChatsComponent },
+      {
+        path: 'settings',
+        component: SettingsComponent,
+        children: [
+          { path: 'info', component: ChatsComponent },
+          { path: 'media', component: ChatsComponent },
+          { path: 'relationship', component: ChatsComponent },
+          { path: 'merge', component: ChatsComponent },
+        ],
+      },
+      { path: '', redirectTo: 'basic', pathMatch: 'full' },
+    ],
+  },
+  { path: 'auth', component: AuthComponent },
+  { path: '**', component: LandingComponent },
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    HomeComponent,
     PersonalComponent,
     BasicComponent,
     EducationComponent,
@@ -131,6 +139,8 @@ const appRoutes: Routes = [
     PostsComponent,
     SingleComponent,
     ChatsComponent,
+    AuthComponent,
+    AppendComponent,
   ],
   imports: [BrowserModule, RouterModule.forRoot(appRoutes)],
   providers: [IndividualService],

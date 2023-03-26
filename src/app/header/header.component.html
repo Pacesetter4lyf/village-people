@@ -1,8 +1,9 @@
 <nav
   class="navbar navbar-expand-lg bg-body-tertiary position-sticky bg-light top-0"
+  [ngStyle]="{ zIndex: '3' }"
 >
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Village People</a>
+    <a class="navbar-brand" [routerLink]="'/'" role="button">Village People</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -36,24 +37,23 @@
         <li *ngIf="signedIn">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" routerLink="/main/individual">Individual</a>
+              <a class="nav-link" routerLink="/individual">Individual</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" routerLink="/main/lineage">Lineage</a>
+              <a class="nav-link" routerLink="/lineage">Lineage</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" routerLink="/main/general_discussion"
+              <a class="nav-link" routerLink="/general_discussion"
                 >General Discussion</a
               >
             </li>
           </ul>
         </li>
       </ul>
-      <a [routerLink]="signedIn ? 'main/individual' : '/'"
-        ><button class="btn btn-primary ms-5" (click)="signedIn = !signedIn">
-          {{ signedIn ? "SIGN OUT" : "SIGN IN" }}
-        </button></a
-      >
+
+      <button class="btn btn-primary ms-5" (click)="auth()">
+        {{ !signedIn ? "SIGN IN" : "SIGN OUT" }}
+      </button>
     </div>
   </div>
 </nav>

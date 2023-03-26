@@ -1,20 +1,13 @@
-<ul class="nav justify-content-center" *ngIf="selected === 2">
+<ul class="nav justify-content-center">
   <!-- <li class="nav-item " *ngFor="let tab of tabs" (click)="tabClick(tab)">
     <a class="nav-link" role="button" >{{tab}}</a>
   </li> -->
-  <li class="nav-item" *ngFor="let tab of tabs" routerLinkActive="active">
-    <a class="nav-link" [routerLink]="[tab.toLowerCase()]">{{ tab }}</a>
+  <li class="nav-item" *ngFor="let tab of tabs">
+    <a
+      class="nav-link"
+      [routerLink]="[tab.toLowerCase()]"
+      [routerLinkActive]="'active'"
+      >{{ tab }}</a
+    >
   </li>
-  <!-- <li>
-    <form class="d-flex" role="search">
-      <input
-        class="form-control me-2"
-        type="search"
-        placeholder="Search"
-        aria-label="Search"
-      />
-      <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
-  </li> -->
-  <li><button class="btn btn-primary ms-5">Create Node</button></li>
 </ul>

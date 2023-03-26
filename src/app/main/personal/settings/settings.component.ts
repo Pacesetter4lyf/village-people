@@ -6,7 +6,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./settings.component.css'],
 })
 export class SettingsComponent {
-  inRelationship = false
+  inRelationship = false;
+  media = ['posts', 'photos', 'audio', 'video'];
+
+  selected = 'info';
+  selectedMedia = 'posts';
+
+  onChange(tab: string) {
+    this.selected = tab;
+  }
+
+  changeMedia(media: string) {
+    this.selectedMedia = media;
+  }
 
   viewables = [
     'firstName',

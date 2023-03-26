@@ -3,34 +3,57 @@
     <div class="list-group">
       <button
         type="button"
-        class="list-group-item list-group-item-action active"
+        class="list-group-item list-group-item-action"
         aria-current="true"
+        (click)="onChange('info')"
+        [ngClass]="'info' === selected ? 'active' : ''"
       >
         Info
       </button>
-      <button type="button" class="list-group-item list-group-item-action">
+      <button
+        type="button"
+        class="list-group-item list-group-item-action"
+        (click)="onChange('media')"
+        [ngClass]="'media' === selected ? 'active' : ''"
+      >
         Media
       </button>
-      <button type="button" class="list-group-item list-group-item-action">
+      <button
+        type="button"
+        class="list-group-item list-group-item-action"
+        (click)="onChange('relationships')"
+        [ngClass]="'relationships' === selected ? 'active' : ''"
+      >
         Relationships
       </button>
       <hr />
-      <button type="button" class="list-group-item list-group-item-action">
+      <button
+        type="button"
+        class="list-group-item list-group-item-action"
+        (click)="onChange('merge')"
+        [ngClass]="'merge' === selected ? 'active' : ''"
+      >
         Merge
       </button>
     </div>
   </div>
   <div class="col-9">
-    <div>
-      <div class="div">
+    <div *ngIf="selected === 'info' || selected === 'media'">
+      <div class="div" *ngIf="selected === 'media'">
         <nav class="nav nav-pills nav-justified">
-          <a class="nav-link active" aria-current="page" href="#">Posts</a>
-          <a class="nav-link" href="#">Photos</a>
-          <a class="nav-link" href="#">Audios</a>
-          <a class="nav-link disabled">Videos</a>
+          <a
+            class="nav-link"
+            aria-current="page"
+            *ngFor="let item of media"
+            (click)="changeMedia(item)"
+            [ngClass]="selectedMedia === item ? 'active' : ''"
+            role="button"
+            >{{ item }}</a
+          >
         </nav>
+        <hr />
       </div>
-      <hr />
+
       <div class="row">
         <div class="col-6">Media Name</div>
         <div class="col-6 text-center">

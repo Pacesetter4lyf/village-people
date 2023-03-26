@@ -4,10 +4,13 @@
     role="button"
     (click)="onTabChange($event)"
     *ngFor="let tab of tabs"
+    [routerLink]="tab.toLowerCase()"
+
   >
     <a
       class="nav-link"
-      [ngClass]="selected === tab ? 'active' : ''"
+
+      [routerLinkActive] = "'active'"
       aria-current="page"
       >{{ tab }}</a
     >

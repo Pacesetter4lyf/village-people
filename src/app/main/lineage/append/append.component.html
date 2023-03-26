@@ -1,0 +1,54 @@
+<div class="row">
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="staticBackdrop"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>Append AS what to this node?</p>
+          <!-- for the bottons -->
+          <div class="d-flex w-100 mbody flex-wrap gap-3 justify-content-center" >
+            <div *ngFor="let node of nodes" >
+              <input
+                type="radio"
+                class="btn-check"
+                name="options-outlined"
+                id="{{ node }}"
+                autocomplete="off"
+              />
+              <label class="btn btn-outline-success" for="{{ node }}">{{
+                node
+              }}</label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="button" class="btn btn-primary">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

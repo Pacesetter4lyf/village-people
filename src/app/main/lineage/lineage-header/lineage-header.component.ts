@@ -1,4 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  UrlSegment,
+} from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-lineage-header',
@@ -6,10 +13,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./lineage-header.component.css'],
 })
 export class LineageHeaderComponent {
-  selected = 2;
-  tabs = ["Tree", 'Discussions', 'Birthdays', 'Funds', 'Media', "Search"];
-
-  tabClick(tab: string){
-    console.log(tab)
-  }
+  tabs = ['Tree', 'Discussions', 'Birthdays', 'Funds', 'Media', 'Search'];
 }

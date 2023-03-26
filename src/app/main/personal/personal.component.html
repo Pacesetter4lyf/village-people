@@ -3,18 +3,6 @@
   <p>OWNERS ACCOUNT</p>
 </div>
 
-
 <app-personal-header ></app-personal-header>
 
-<app-basic *ngIf="selected == 'Basic'"></app-basic>
-<app-education *ngIf="selected == 'Education'"></app-education>
-<app-bibliography *ngIf="selected == 'Bibliography'"></app-bibliography>
-<app-pictures *ngIf="selected == 'Pictures'"></app-pictures>
-<app-recordings *ngIf="selected == 'Recordings'"></app-recordings>
-<app-location *ngIf="selected == 'Location'"></app-location>
-<app-videos *ngIf="selected == 'Videos'"></app-videos>
-<app-settings *ngIf="selected == 'Settings'"></app-settings>
-<app-posts *ngIf="selected == 'Posts'"></app-posts>
-<app-chats *ngIf="selected == 'Chats'"></app-chats>
-
-
+<router-outlet></router-outlet>
