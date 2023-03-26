@@ -32,6 +32,7 @@ import { AuthComponent } from './auth/auth.component';
 import { canActivateFn } from './auth/auth-guard.service';
 import { AuthService } from './auth/auth.service';
 import { AppendComponent } from './main/lineage/append/append.component';
+import { RelationshipComponent } from './main/personal/settings/relationship/relationship.component';
 
 const appRoutes: Routes = [
   { path: '', component: LandingComponent },
@@ -141,6 +142,7 @@ const appRoutes: Routes = [
     ChatsComponent,
     AuthComponent,
     AppendComponent,
+    RelationshipComponent,
   ],
   imports: [BrowserModule, RouterModule.forRoot(appRoutes)],
   providers: [IndividualService],

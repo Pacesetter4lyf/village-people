@@ -1,0 +1,23 @@
+.vl{
+    border-left: 2px solid green;
+    height: 35px;
+    position: absolute;
+    left: 50%;
+    margin-left: -2px;
+}
+
+.helper{
+    height: 35px
+}
+.vl2{
+    border-left: 2px solid green;
+    height: 35px;
+    position: absolute;
+    left: 50%;
+    margin-left: -2px; 
+    bottom: -40%
+}
+
+.child{
+    left: 20%;
+}
