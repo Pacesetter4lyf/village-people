@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -33,6 +36,8 @@ import { canActivateFn } from './auth/auth-guard.service';
 import { AuthService } from './auth/auth.service';
 import { AppendComponent } from './main/lineage/append/append.component';
 import { RelationshipComponent } from './main/personal/settings/relationship/relationship.component';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { AuthInterceptorService } from './auth/auth-inteceptor.service';
 
 const appRoutes: Routes = [
   { path: '', component: LandingComponent },
@@ -41,7 +46,7 @@ const appRoutes: Routes = [
     component: LineageComponent,
     canActivate: [canActivateFn],
     children: [
-      { path: '', redirectTo: 'tree' , pathMatch: 'full'},
+      { path: '', redirectTo: 'tree', pathMatch: 'full' },
       { path: 'tree', component: TreeComponent },
       { path: 'discussions', component: DiscussionComponent },
       { path: 'discussions/:single', component: SingleComponent },
@@ -143,9 +148,23 @@ const appRoutes: Routes = [
     AuthComponent,
     AppendComponent,
     RelationshipComponent,
+    LoadingSpinnerComponent,
   ],
-  imports: [BrowserModule, RouterModule.forRoot(appRoutes)],
-  providers: [IndividualService],
+  imports: [
+    BrowserModule,
+    CommonModule,
+    HttpClientModule,
+    FormsModule,
+    RouterModule.forRoot(appRoutes),
+  ],
+  providers: [
+    IndividualService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,19 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
-
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   signedIn = false;
+  private userSub: Subscription;
 
   constructor(private authService: AuthService, private router: Router) {}
   ngOnInit() {
-    this.authService.signedInEmitter.subscribe(
-      (signedIn) => (this.signedIn = signedIn)
-    );
+    this.userSub = this.authService.user.subscribe((user) => {
+      this.signedIn = !!user;
+      console.log('si', this.signedIn, user);
+    });
+  }
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
   }
   auth() {
     if (!this.signedIn) {
@@ -21,6 +26,5 @@ export class HeaderComponent implements OnInit {
       return;
     }
     this.authService.signout();
-    this.router.navigate(['']);
   }
 }

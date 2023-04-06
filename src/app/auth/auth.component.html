@@ -1,6 +1,12 @@
 <div class="row">
   <div class="col-md-6 offset-md-3 col-sm-10 offset-sm-1 pt-3">
-    <form>
+    <div *ngIf="isLoading" style="text-align: center">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <div *ngIf="error" style="text-align: center">
+      <p>{{ error }}</p>
+    </div>
+    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading">
       <div class="">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
         <input
@@ -8,22 +14,34 @@
           class="form-control"
           id="exampleInputEmail1"
           aria-describedby="emailHelp"
+          name="email"
+          ngModel
+          required
+          emai
         />
       </div>
       <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <label for="password" class="form-label">Password</label>
         <input
           type="password"
           class="form-control"
-          id="exampleInputPassword1"
+          id="password"
+          name="password"
+          ngModel
+          required
+          minlength="6"
         />
       </div>
       <div class="d-flex justify-content-between">
-        <button type="button" class="btn btn-primary" (click)="auth()">
-          {{ signup ? "sign up" : "sign in" }}
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!authForm.valid"
+        >
+          {{ isLoginMode ? "sign in" : "sign up" }}
         </button>
-        <a class="btn btn-link" (click)="signup = !signup"
-          >switch signup/signin</a
+        <a class="btn btn-link" (click)="isLoginMode = !isLoginMode"
+          >switch to {{ isLoginMode ? "sign up" : "sign in" }}</a
         >
       </div>
     </form>

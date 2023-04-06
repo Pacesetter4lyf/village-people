@@ -1,99 +1,146 @@
-<div class="row">
-  <div class="col-sm-6 col-md-4">
-    <div class="mt-3">
-      <label for="formFile" class="form-label">Profile Picture</label>
-      <div>
-        <img
-          src="/assets/images/egbebuike_emmanuel.png"
-
-          alt="img-thumbnail"
-          width="100px"
-          height="100px"
+<form #basicForm="ngForm" (ngSubmit)="onSubmit(basicForm)" *ngIf="!isLoading">
+  <div class="row">
+    <div class="col-sm-6 col-md-4">
+      <div class="mt-3">
+        <label for="formFile" class="form-label">Profile Picture</label>
+        <div>
+          <img
+            src="/assets/images/egbebuike_emmanuel.png"
+            alt="img-thumbnail"
+            width="100px"
+            height="100px"
+          />
+        </div>
+        <input
+          class="form-control form-control-sm"
+          type="file"
+          id="formFile"
+          *ngIf="!viewMode"
+          name="profilePicture"
+          ngModel
+          (change)="onFileChange($event)"
         />
       </div>
-      <input class="form-control form-control-sm" type="file" id="formFile" />
     </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-sm-10">
-    <app-text-input
-      value="pacesetter4lyf@gmail.com"
-      name="Email"
-      for="email"
-      type="email"
-      readonly="true"
-      class="form-control-plaintext"
-    ></app-text-input>
+  <div class="row">
+    <label for="email" class="col-4 col-form-label">Email</label>
+    <div class="col-8 col-md-3">
+      <input
+        type="email"
+        [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
+        id="email"
+        value="pacesetter4lyf@gmail.com"
+        placeholder="Enter your email"
+        ngModel
+        [readOnly]="viewMode"
+        name="email"
+      />
+    </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-sm-10">
-    <app-text-input
-      value="Emmanuel"
-      name="Firstname"
-      for="firstName"
-      type="text"
-      readonly="true"
-      class="form-control-plaintext"
-    ></app-text-input>
+  <div class="row">
+    <label for="email" class="col-4 col-form-label">Firstname</label>
+    <div class="col-8 col-md-3">
+      <input
+        value="Emmanuel"
+        name="firstName"
+        for="firstName"
+        type="text"
+        [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
+        ngModel
+        [readOnly]="viewMode"
+      />
+    </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-sm-10">
-    <app-text-input
-      value="Egbebuike"
-      name="Lastname"
-      for="lastName"
-      type="text"
-      readonly="true"
-      class="form-control-plaintext"
-    ></app-text-input>
+  <div class="row">
+    <label for="email" class="col-4 col-form-label">Lastname</label>
+    <div class="col-8 col-md-3">
+      <input
+        value="Egbebuike"
+        name="lastName"
+        for="lastName"
+        type="text"
+        [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
+        ngModel
+        [readOnly]="viewMode"
+      />
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-sm-10">
-    <app-text-input
-      value="1992-09-29"
-      name="Date of Birth"
-      for="dob"
-      type="date"
-      readonly="true"
-      class="form-control-plaintext"
-      placeholder="1992-09-29"
-    ></app-text-input>
+  <div class="row">
+    <label for="gender" class="col-4 col-form-label">Gender</label>
+    <div class="col-8 col-md-3">
+      <input
+        placeholder="Male"
+        name="gender"
+        for="gender"
+        type="text"
+        [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
+        ngModel
+        [readOnly]="viewMode"
+      />
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-sm-10">
-    <app-text-input
-      value="9055988713"
-      name="Phone Number"
-      for="phoneNumber"
-      type="number"
-      readonly="true"
-      class="form-control-plaintext"
-    ></app-text-input>
+  <div class="row">
+    <label for="email" class="col-4 col-form-label">Date of Birth</label>
+    <div class="col-8 col-md-3">
+      <input
+        value="1992-09-29"
+        name="dateOfBirth"
+        for="dob"
+        type="date"
+        [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
+        ngModel
+        [readOnly]="viewMode"
+        placeholder="1992-09-29"
+      />
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-sm-10">
-    <app-text-input
-      value="pacesetter4lyf"
-      name="FaceBook"
-      for="facebook"
-      type="text"
-      readonly="true"
-      class="form-control-plaintext"
-    ></app-text-input>
+  <div class="row">
+    <label for="phone number" class="col-4 col-form-label">Phone Number</label>
+    <div class="col-8 col-md-3">
+      <input
+        value="9055988713"
+        name="phoneNumber"
+        for="phoneNumber"
+        type="number"
+        [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
+        ngModel
+        [readOnly]="viewMode"
+      />
+    </div>
   </div>
-</div>
+  <div class="row">
+    <label for="facebook" class="col-4 col-form-label">Facebook Address</label>
+    <div class="col-8 col-md-3">
+      <input
+        value="pacesetter4lyf"
+        name="facebook"
+        for="facebook"
+        type="text"
+        [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
+        ngModel
+        [readOnly]="viewMode"
+      />
+    </div>
+  </div>
 
-<div class="row mt-auto mb-5">
-  <div class="col-sm-2 ms-auto text-end" >
-    <button class="btn btn-primary">Edit</button>
+  <div class="row mt-auto mb-5">
+    <div class="col-sm-2 ms-auto text-end" *ngIf="viewMode">
+      <button class="btn btn-primary btn-sm" (click)="changeMode()">
+        Edit
+      </button>
+    </div>
+
+    <div class="d-flex justify-content-end gap-1" *ngIf="!viewMode">
+      <button class="btn btn-sm btn-danger" (click)="changeMode()">
+        cancel
+      </button>
+      <button type="submit" class="btn btn-sm btn-primary">
+        save
+      </button>
+    </div>
   </div>
-</div>
+</form>

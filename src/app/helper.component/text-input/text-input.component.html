@@ -1,6 +1,6 @@
 <div class=" row">
-  <label [for]="for" class="col-sm-2 col-form-label">{{name}}</label>
-  <div class="col-sm-10">
+  <label [for]="for" class="col-4 col-form-label">{{name}}</label>
+  <div class="col-8">
     <input
       [type]="type"
       [readonly] = "readonly"
@@ -8,6 +8,7 @@
       [id]="for"
       [value]="value"
       [placeholder]="placeholder?placeholder:''"
+    
     />
   </div>
 </div>

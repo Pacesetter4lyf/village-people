@@ -14,5 +14,10 @@ export class PersonalComponent implements OnInit {
     this.individualService.tabClickEvent.subscribe((inputEvent) => {
       this.selected = (<HTMLElement>inputEvent.target).innerText;
     });
+
+    this.individualService.fetchDisplayUser();
+    // this.individualService.displayUserChange.subscribe(
+    //   (userId) => this.individualService.fetchDisplayUser(userId)
+    // );
   }
 }
