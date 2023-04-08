@@ -20,20 +20,23 @@ export interface BasicDetailsInterface {
   bibliography?: string;
 }
 
+type respType = {
+  data:  {
+    data: BasicDetailsInterface
+  }
+  status: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class IndividualService {
   tabClickEvent = new EventEmitter<PointerEvent>();
   error = '';
   displayMode: 'user' | 'admin' | 'guest' = 'user';
   displayUser: BasicDetailsInterface = null;
-  displayUserChange = new Subject<string>();
+  displayUserChange = new Subject<BasicDetailsInterface>();
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getBasicData(id: string) {
-    return this.http.get<any>(`http://localhost:3001/api/v1/users/data${id}`);
-    // .subscribe((data) => console.log(data));
-  }
   sendBasicDetails(data: BasicDetailsInterface) {
     const basicFormData = new FormData();
     Object.keys(data).map((key) => {
@@ -53,17 +56,24 @@ export class IndividualService {
     let currentId: string = userId;
     if (!userId) {
       if (this.displayUser) return;
-      this.authService.user.pipe(
-        take(1),
-        map((user) => (currentId = user.id))
-      );
+      this.authService.user
+        .pipe(
+          take(1),
+          map((user) => {
+            currentId = user.id;
+          })
+        )
+        .subscribe();
     }
-    return this.http
-      .get<any>(`http://localhost:3001/api/v1/users/data${userId}`)
+    return (
+      this.http
+        // .get<any>(`http://localhost:3001/api/v1/users/data${userId}`)
+        .get<respType>(`http://localhost:3001/api/v1/userdata/${currentId}`)
 
-      .subscribe((newUser) => {
-        console.log(newUser);
-        this.displayUser = newUser;
-      });
+        .subscribe((newUser) => {
+          this.displayUser = newUser.data.data;
+          this.displayUserChange.next(this.displayUser);
+        })
+    );
   }
 }

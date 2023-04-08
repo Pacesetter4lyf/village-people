@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { BasicDetailsInterface, IndividualService } from '../individual.service';
+import {
+  BasicDetailsInterface,
+  IndividualService,
+} from '../individual.service';
 import { NgForm } from '@angular/forms';
-
-
 
 @Component({
   selector: 'app-basic',
@@ -19,14 +20,13 @@ export class BasicComponent implements OnInit {
   constructor(private individualService: IndividualService) {}
 
   ngOnInit() {
-    // get the very user or a other user either from url or route params and fetch from db
-    this.id = '1234';
-    this.individualService.getBasicData(this.id).subscribe((data) => {});
+    this.basicDetails = this.individualService.displayUser;
+    console.log('basic details = ', this.basicDetails);
   }
   changeMode(mode: string) {
     this.viewMode = !this.viewMode;
   }
-
+  
   onFileChange(event: { target: { files: File } }) {
     this.photo = event.target.files[0];
   }
@@ -55,7 +55,9 @@ export class BasicComponent implements OnInit {
       address,
       photo: this.photo,
     };
-    this.individualService.sendBasicDetails(this.basicDetails).subscribe(()=>console.log('hello'))
+    this.individualService
+      .sendBasicDetails(this.basicDetails)
+      .subscribe(() => console.log('hello'));
     console.log(form.value, this.basicDetails);
   }
 }

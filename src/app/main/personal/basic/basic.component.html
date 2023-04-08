@@ -59,7 +59,7 @@
     <label for="email" class="col-4 col-form-label">Lastname</label>
     <div class="col-8 col-md-3">
       <input
-        value="Egbebuike"
+        value="ddff"
         name="lastName"
         for="lastName"
         type="text"
@@ -119,6 +119,20 @@
         value="pacesetter4lyf"
         name="facebook"
         for="facebook"
+        type="text"
+        [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
+        ngModel
+        [readOnly]="viewMode"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <label for="facebook" class="col-4 col-form-label">Address</label>
+    <div class="col-8 col-md-3">
+      <input
+        value=""
+        name="address"
+        for="address"
         type="text"
         [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
         ngModel

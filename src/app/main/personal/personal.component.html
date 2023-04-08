@@ -3,6 +3,8 @@
   <p>OWNERS ACCOUNT</p>
 </div>
 
-<app-personal-header ></app-personal-header>
+<app-personal-header></app-personal-header>
 
-<router-outlet></router-outlet>
+<!-- <div class="div" *ngIf="individualService.displayUser"> -->
+<router-outlet *ngIf="dataLoaded"></router-outlet>
+<!-- </div> -->
