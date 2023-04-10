@@ -1,29 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Individual } from './individual.model';
-import { catchError, exhaustMap, take, map } from 'rxjs/operators';
-import { throwError, Subject } from 'rxjs';
+import { catchError, exhaustMap, take, map, tap } from 'rxjs/operators';
+import { throwError, Subject, BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 export interface BasicDetailsInterface {
-  photo: string | File;
-  firstName: string;
-  lastName: string;
-  gender: string;
-  dateOfBirth: string;
-  phoneNumber: string;
-  facebook: string;
+  photo?: string | File;
+  firstName?: string;
+  lastName?: string;
+  gender?: string;
+  dateOfBirth?: string;
+  phoneNumber?: string;
+  facebook?: string;
   address?: string;
-
   primarySchool?: string;
   secondarySchool?: string;
   tertiarySchool?: string;
   bibliography?: string;
+  primary?: string;
+  secondary?: string;
+  tertiary?: string;
 }
 
-type respType = {
-  data:  {
-    data: BasicDetailsInterface
-  }
+export interface respType {
+  data: {
+    data: BasicDetailsInterface;
+  };
   status: string;
 }
 
@@ -31,9 +33,12 @@ type respType = {
 export class IndividualService {
   tabClickEvent = new EventEmitter<PointerEvent>();
   error = '';
-  displayMode: 'user' | 'admin' | 'guest' = 'user';
+  displayMode: 'self' | 'admin-creating' | 'admin-viewing' | 'lineage-viewing' =
+    'self';
   displayUser: BasicDetailsInterface = null;
-  displayUserChange = new Subject<BasicDetailsInterface>();
+  addMediaContentType = new BehaviorSubject<
+    'image' | 'text' | 'audio' | 'video'
+  >('image');
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -46,11 +51,13 @@ export class IndividualService {
       }
     });
 
-    return this.http.patch<any>(
-      `http://localhost:3001/api/v1/userdata/updateMe`,
+    return this.http
+      .patch<any>(
+        `http://localhost:3001/api/v1/userdata/updateMe`,
 
-      basicFormData
-    );
+        basicFormData
+      )
+      .subscribe();
   }
   fetchDisplayUser(userId?: string) {
     let currentId: string = userId;
@@ -65,15 +72,39 @@ export class IndividualService {
         )
         .subscribe();
     }
-    return (
-      this.http
-        // .get<any>(`http://localhost:3001/api/v1/users/data${userId}`)
-        .get<respType>(`http://localhost:3001/api/v1/userdata/${currentId}`)
+    return this.http
+      .get<respType>(`http://localhost:3001/api/v1/userdata/${currentId}`)
+      .pipe<BasicDetailsInterface>(
+        map((response) => (this.displayUser = response.data.data))
+      );
+  }
 
-        .subscribe((newUser) => {
-          this.displayUser = newUser.data.data;
-          this.displayUserChange.next(this.displayUser);
-        })
-    );
+  saveResourceToDb(fileDetails: {
+    description: string;
+    resourceName: string;
+    url: string;
+    text: string;
+  }) {
+    //if user, fetch user id and post
+    if (this.displayMode === 'self') {
+      const id = this.authService.user.getValue().id;
+      const newdata = {
+        ...fileDetails,
+        ['id']: id,
+        resourceType: this.addMediaContentType.value,
+      };
+      console.log('new data', newdata);
+      return this.http
+        .patch<any>(
+          `http://localhost:3001/api/v1/resource/updateMe`,
+
+          newdata
+        )
+        .subscribe();
+    }
+
+    //if admin-creating, get display user information and send
+    //if admin viewing, get display info and send
+    //if lineage, do not show edit button
   }
 }

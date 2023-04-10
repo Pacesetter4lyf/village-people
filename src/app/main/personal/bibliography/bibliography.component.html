@@ -1,22 +1,32 @@
-<div class="row justify-content-center">
-  <div class="col-10">
-    <div class="mb-3 mt-3">
-      <label for="exampleFormControlTextarea1" class="form-label"
-        >Example textarea</label
-      >
-      <textarea
-        class="form-control form-control-plaintext"
-        id="exampleFormControlTextarea1"
-        rows="3"
-        readonly
-        placeholder="This simple paragraph tells you all you some of the things you need to know about me. I am a poet and a software developer. I am also a machine learning enthuthiast"
-      ></textarea>
+<form #bibliography="ngForm" (ngSubmit)="onSubmit(bibliography)">
+  <div class="row justify-content-center">
+    <div class="col-10">
+      <div class="mb-3 mt-3">
+        <textarea
+          id="bibliography"
+          name="bibliography"
+          [ngModel]="data.bibliography"
+          rows="3"
+          [readOnly]="viewMode"
+          [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
+          placeholder="This simple paragraph tells you all you some of the things you need to know about me. I am a poet and a software developer. I am also a machine learning enthuthiast"
+        ></textarea>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="row mt-auto mb-5">
-  <div class="col-sm-2 ms-auto text-end" >
-    <button class="btn btn-primary">Edit</button>
+  <div class="row mt-auto mb-5">
+    <div class="col-sm-2 ms-auto text-end" *ngIf="viewMode">
+      <button class="btn btn-primary btn-sm" (click)="changeMode()">
+        Edit
+      </button>
+    </div>
+
+    <div class="d-flex justify-content-end gap-1" *ngIf="!viewMode">
+      <button class="btn btn-sm btn-danger" (click)="changeMode()">
+        cancel
+      </button>
+      <button type="submit" class="btn btn-sm btn-primary">save</button>
+    </div>
   </div>
-</div>
+</form>

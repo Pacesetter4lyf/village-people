@@ -10,8 +10,9 @@ export const canActivateFn = () => {
   console.log(authService.signedIn);
   return authService.user.pipe(
     map((user) => {
-      return !!user;
+      const isAuth = !!user;
+      if (isAuth) return true;
+      return router.navigate(['auth']);
     })
   );
-  return router.navigate(['auth']);
 };

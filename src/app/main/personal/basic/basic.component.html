@@ -24,32 +24,16 @@
     </div>
   </div>
 
-  <div class="row">
-    <label for="email" class="col-4 col-form-label">Email</label>
-    <div class="col-8 col-md-3">
-      <input
-        type="email"
-        [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
-        id="email"
-        value="pacesetter4lyf@gmail.com"
-        placeholder="Enter your email"
-        ngModel
-        [readOnly]="viewMode"
-        name="email"
-      />
-    </div>
-  </div>
 
   <div class="row">
     <label for="email" class="col-4 col-form-label">Firstname</label>
     <div class="col-8 col-md-3">
       <input
-        value="Emmanuel"
         name="firstName"
         for="firstName"
         type="text"
         [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
-        ngModel
+        [ngModel]="basicDetails.firstName"
         [readOnly]="viewMode"
       />
     </div>
@@ -59,12 +43,11 @@
     <label for="email" class="col-4 col-form-label">Lastname</label>
     <div class="col-8 col-md-3">
       <input
-        value="ddff"
         name="lastName"
         for="lastName"
         type="text"
         [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
-        ngModel
+        [ngModel]="basicDetails.lastName"
         [readOnly]="viewMode"
       />
     </div>
@@ -78,7 +61,7 @@
         for="gender"
         type="text"
         [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
-        ngModel
+        [ngModel]="basicDetails.gender"
         [readOnly]="viewMode"
       />
     </div>
@@ -87,12 +70,11 @@
     <label for="email" class="col-4 col-form-label">Date of Birth</label>
     <div class="col-8 col-md-3">
       <input
-        value="1992-09-29"
         name="dateOfBirth"
         for="dob"
         type="date"
         [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
-        ngModel
+        [ngModel]="basicDetails.dateOfBirth.substring(0, 10)" 
         [readOnly]="viewMode"
         placeholder="1992-09-29"
       />
@@ -102,12 +84,11 @@
     <label for="phone number" class="col-4 col-form-label">Phone Number</label>
     <div class="col-8 col-md-3">
       <input
-        value="9055988713"
         name="phoneNumber"
         for="phoneNumber"
         type="number"
         [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
-        ngModel
+        [ngModel]="basicDetails.phoneNumber"
         [readOnly]="viewMode"
       />
     </div>
@@ -116,26 +97,24 @@
     <label for="facebook" class="col-4 col-form-label">Facebook Address</label>
     <div class="col-8 col-md-3">
       <input
-        value="pacesetter4lyf"
         name="facebook"
         for="facebook"
         type="text"
         [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
-        ngModel
+        [ngModel]="basicDetails.facebook"
         [readOnly]="viewMode"
       />
     </div>
   </div>
   <div class="row">
     <label for="facebook" class="col-4 col-form-label">Address</label>
-    <div class="col-8 col-md-3">
+    <div class="col-8 col-md-7">
       <input
-        value=""
         name="address"
         for="address"
         type="text"
         [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
-        ngModel
+        [ngModel]="basicDetails.address"
         [readOnly]="viewMode"
       />
     </div>
@@ -152,9 +131,7 @@
       <button class="btn btn-sm btn-danger" (click)="changeMode()">
         cancel
       </button>
-      <button type="submit" class="btn btn-sm btn-primary">
-        save
-      </button>
+      <button type="submit" class="btn btn-sm btn-primary">save</button>
     </div>
   </div>
 </form>

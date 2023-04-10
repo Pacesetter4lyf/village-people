@@ -1,0 +1,89 @@
+<!-- Modal -->
+<form #resourceForm="ngForm">
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Add {{ contentType }}
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <label for="">Name</label>
+          <input
+            class="form-control form-control-sm mb-3"
+            type="text"
+            placeholder="resource name"
+            aria-label=".form-control-sm example"
+            [ngModel]
+            name="resourceName"
+            required
+          />
+          <label for="">Description</label>
+          <input
+            class="form-control form-control-sm mb-3"
+            type="text"
+            placeholder="description"
+            aria-label=".form-control-sm example"
+            [ngModel]
+            name="description"
+            required
+          />
+
+          <div class="" *ngIf="contentType !== 'text'">
+            <label for="">Link</label>
+            <input
+              class="form-control form-control-sm mb-3"
+              type="file"
+              placeholder="link"
+              aria-label=".form-control-sm example"
+              (change)="onFileChange($event)"
+              name="file"
+              #fileInput
+            />
+          </div>
+          <div *ngIf="contentType === 'text'">
+            <textarea
+              name="text"
+              [(ngModel)]="text"
+              id=""
+              rows="5"
+              class="w-100 form-control"
+            >
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas possimus excepturi sequi accusamus consectetur inventore distinctio commodi eligendi doloremque, recusandae asperiores quae quibusdam porro harum eum culpa ad beatae esse repellendus ipsa maxime iusto. Assumenda saepe illum nam nulla quasi tempore neque minima temporibus, aliquid cumque error nesciunt facilis sint voluptatem iure natus veritatis reprehenderit delectus ducimus facere rem laborum ratione eos? Dolore quis sed perspiciatis voluptatum omnis? Maxime hic esse itaque, deserunt molestiae quo, fugit maiores magnam blanditiis qui nesciunt, distinctio alias culpa fugiat laudantium aliquam non. Voluptatem magni iure doloremque placeat iste veniam eius odio amet accusamus vitae! Quam ad magnam odio nulla consectetur voluptate nemo aut adipisci iste. Blanditiis architecto a esse inventore sit. Ipsa laboriosam assumenda distinctio doloremque qui odit nam dicta magni autem? Corrupti necessitatibus voluptatem dolore laudantium in aliquam amet omnis, excepturi cupiditate error deserunt impedit autem nam eligendi quibusdam quos quasi. Rerum, fuga eveniet? Tempora ipsum blanditiis autem quisquam! Voluptatibus nemo, autem architecto praesentium ipsum veritatis laboriosam totam facilis rerum molestiae ut. Repellendus, impedit! Obcaecati omnis ex doloribus debitis inventore animi facere saepe neque, tempore quas quisquam molestias, facilis et eveniet eaque excepturi dignissimos placeat voluptate, minus fuga itaque culpa! Deleniti, voluptatum molestias.</textarea
+            >
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="onSubmit()"
+            [disabled]="!resourceForm.form.valid"
+          >
+            Save changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

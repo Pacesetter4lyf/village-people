@@ -9,7 +9,7 @@ import { IndividualService } from './individual.service';
 })
 export class PersonalComponent implements OnInit, OnDestroy {
   selected: string = 'Basic';
-  dataLoaded = false;
+  dataLoaded = true;
   clickSub: Subscription;
   displayUserSub: Subscription;
   constructor(private individualService: IndividualService) {}
@@ -20,16 +20,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
         this.selected = (<HTMLElement>inputEvent.target).innerText;
       }
     );
-
-    this.individualService.fetchDisplayUser();
-
-    this.displayUserSub = this.individualService.displayUserChange.subscribe(
-      (displayUser) => (this.dataLoaded = !!displayUser)
-    );
   }
 
   ngOnDestroy() {
     this.clickSub.unsubscribe();
-    this.displayUserSub.unsubscribe();
   }
 }

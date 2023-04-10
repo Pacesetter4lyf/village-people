@@ -35,7 +35,7 @@ export class AuthComponent {
         this.error = error.message;
       },
     };
-
+    
     if (this.isLoginMode) {
       this.authService.login(email, password).subscribe(subObj);
     } else {

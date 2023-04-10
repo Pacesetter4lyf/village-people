@@ -1,51 +1,61 @@
-<div class="mb-3 row">
-  <label for="staticEmail" class="col-sm-2 col-form-label"
-    >Primary School</label
-  >
-  <div class="col-sm-10">
-    <input
-      type="text"
-      readonly
-      class="form-control-plaintext"
-      id="staticEmail"
-      value="email@example.com"
-    />
+<form #education="ngForm" (ngSubmit)="onSubmit(education)">
+  <div class="mb-3 row">
+    <label for="staticEmail" class="col-4 col-form-label">Primary School</label>
+    <div class="col-8">
+      <input
+        type="text"
+        id="staticEmail"
+        value="email@example.com"
+        name="primarySchool"
+        [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
+        [ngModel]="data.primarySchool"
+        [readOnly]="viewMode"
+      />
+    </div>
   </div>
-</div>
 
-<div class="mb-3 row">
-  <label for="staticEmail" class="col-sm-2 col-form-label"
-    >Secondary/High</label
-  >
-  <div class="col-sm-10">
-    <input
-      type="text"
-      readonly
-      class="form-control-plaintext"
-      id="staticEmail"
-      value="email@example.com"
-    />
+  <div class="mb-3 row">
+    <label for="secondary" class="col-4 col-form-label">Secondary /High</label>
+    <div class="col-8">
+      <input
+        type="text"
+        id="secondary"
+        name="secondarySchool"
+        [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
+        [ngModel]="data.secondarySchool"
+        [readOnly]="viewMode"
+      />
+    </div>
   </div>
-</div>
 
-<div class="mb-3 row">
-  <label for="staticEmail" class="col-sm-2 col-form-label"
-    >Tertiary/College</label
-  >
-  <div class="col-sm-10">
-    <input
-      type="text"
-      readonly
-      class="form-control-plaintext"
-      id="staticEmail"
-      value="email@example.com"
-    />
+  <div class="mb-3 row">
+    <label for="staticEmail" class="col-4 col-form-label"
+      >Tertiary /College</label
+    >
+    <div class="col-8">
+      <input
+        type="text"
+        id="tertiary"
+        name="tertiarySchool"
+        [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
+        [ngModel]="data.tertiarySchool"
+        [readOnly]="viewMode"
+      />
+    </div>
   </div>
-</div>
 
+  <div class="row mt-auto mb-5">
+    <div class="col-sm-2 ms-auto text-end" *ngIf="viewMode">
+      <button class="btn btn-primary btn-sm" (click)="changeMode()">
+        Edit
+      </button>
+    </div>
 
-<div class="row mt-auto mb-5">
-  <div class="col-sm-2 ms-auto text-end" >
-    <button class="btn btn-primary">Edit</button>
+    <div class="d-flex justify-content-end gap-1" *ngIf="!viewMode">
+      <button class="btn btn-sm btn-danger" (click)="changeMode()">
+        cancel
+      </button>
+      <button type="submit" class="btn btn-sm btn-primary">save</button>
+    </div>
   </div>
-</div>
+</form>

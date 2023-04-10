@@ -38,6 +38,11 @@ import { AppendComponent } from './main/lineage/append/append.component';
 import { RelationshipComponent } from './main/personal/settings/relationship/relationship.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { AuthInterceptorService } from './auth/auth-inteceptor.service';
+import { IndividualResolver } from './main/personal/individual-resolver.service';
+import { ModalComponent } from './shared/modal/modal.component';
+import { ButtonComponent } from './shared/modal/button/button.component';
+
+import { UcWidgetModule } from 'ngx-uploadcare-widget';
 
 const appRoutes: Routes = [
   { path: '', component: LandingComponent },
@@ -92,6 +97,7 @@ const appRoutes: Routes = [
     path: 'individual',
     component: PersonalComponent,
     canActivate: [canActivateFn],
+    resolve: [IndividualResolver],
     children: [
       { path: 'basic', component: BasicComponent },
       { path: 'education', component: EducationComponent },
@@ -149,6 +155,8 @@ const appRoutes: Routes = [
     AppendComponent,
     RelationshipComponent,
     LoadingSpinnerComponent,
+    ModalComponent,
+    ButtonComponent,
   ],
   imports: [
     BrowserModule,
@@ -156,6 +164,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),
+    UcWidgetModule,
   ],
   providers: [
     IndividualService,
@@ -165,6 +174,7 @@ const appRoutes: Routes = [
       multi: true,
     },
   ],
+  // schemas:[],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -23,10 +23,11 @@ export class BasicComponent implements OnInit {
     this.basicDetails = this.individualService.displayUser;
     console.log('basic details = ', this.basicDetails);
   }
+
   changeMode(mode: string) {
     this.viewMode = !this.viewMode;
   }
-  
+
   onFileChange(event: { target: { files: File } }) {
     this.photo = event.target.files[0];
   }
@@ -55,9 +56,7 @@ export class BasicComponent implements OnInit {
       address,
       photo: this.photo,
     };
-    this.individualService
-      .sendBasicDetails(this.basicDetails)
-      .subscribe(() => console.log('hello'));
+    this.individualService.sendBasicDetails(this.basicDetails);
     console.log(form.value, this.basicDetails);
   }
 }
