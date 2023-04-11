@@ -12,6 +12,8 @@ export class PersonalComponent implements OnInit, OnDestroy {
   dataLoaded = true;
   clickSub: Subscription;
   displayUserSub: Subscription;
+  displayMode: string;
+
   constructor(private individualService: IndividualService) {}
 
   ngOnInit() {
@@ -20,6 +22,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
         this.selected = (<HTMLElement>inputEvent.target).innerText;
       }
     );
+    this.displayMode = this.individualService.displayMode;
   }
 
   ngOnDestroy() {

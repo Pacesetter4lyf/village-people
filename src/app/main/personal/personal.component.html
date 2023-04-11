@@ -1,10 +1,10 @@
 <div class="d-flex gap-3">
   <label for="">MODE:</label>
-  <p>OWNERS ACCOUNT</p>
+  <p>{{ displayMode | uppercase}}</p>
 </div>
 
 <app-personal-header></app-personal-header>
 
 <router-outlet></router-outlet>
 
-<app-modal ></app-modal>
+<app-modal></app-modal>

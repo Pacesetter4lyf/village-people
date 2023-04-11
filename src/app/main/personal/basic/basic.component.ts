@@ -1,27 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   BasicDetailsInterface,
   IndividualService,
 } from '../individual.service';
 import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-basic',
   templateUrl: './basic.component.html',
   styleUrls: ['./basic.component.css'],
 })
-export class BasicComponent implements OnInit {
+export class BasicComponent implements OnInit, OnDestroy {
   viewMode = true;
   basicDetails: BasicDetailsInterface;
   id: string;
   isLoading: false;
   photo: File;
+  userSub: Subscription;
 
   constructor(private individualService: IndividualService) {}
 
   ngOnInit() {
-    this.basicDetails = this.individualService.displayUser;
-    console.log('basic details = ', this.basicDetails);
+    this.userSub = this.individualService.displayUser.subscribe(
+      (user) => (this.basicDetails = user)
+    );
+  }
+  ngOnDestroy(): void {
+    this.userSub.unsubscribe();
   }
 
   changeMode(mode: string) {

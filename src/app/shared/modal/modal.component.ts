@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { IndividualService } from 'src/app/main/personal/individual.service';
 // import uploadcare from 'uploadcare-widget/uploadcare.lang.en.min.js';
 import uploadcare from 'uploadcare-widget/uploadcare.full.min.js';
+declare var window: any;
 
 @Component({
   selector: 'app-modal',
@@ -25,6 +26,9 @@ export class ModalComponent implements OnInit, OnDestroy {
   mediaTypeSubscription: Subscription;
   file: File;
   fileUrl: string;
+  myModal: any;
+  modalSubscription: Subscription;
+  showModal = false;
 
   constructor(private individualService: IndividualService) {}
 
@@ -33,9 +37,20 @@ export class ModalComponent implements OnInit, OnDestroy {
       this.individualService.addMediaContentType.subscribe(
         (contentType) => (this.contentType = contentType)
       );
+
+    this.myModal = new window.bootstrap.Modal(
+      document.getElementById('exampleModal')
+    );
+
+    this.individualService.showModal.subscribe((show) => {
+      if (show) {
+        this.myModal.show();
+      }
+    });
   }
   ngOnDestroy() {
     this.mediaTypeSubscription.unsubscribe();
+    this.modalSubscription.unsubscribe();
   }
   onFileChange(event: { target: { files: File } }) {
     this.file = event.target.files[0];
@@ -48,24 +63,28 @@ export class ModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSubmit() {
+  async onSubmit() {
     console.log(this.resourceForm.value);
     let url: string;
-    if (this.contentType !== 'text' && !this.file) {
+    if (this.contentType !== 'text' && this.file) {
       let upload = uploadcare.fileFrom('object', this.file);
-      upload.done((fileInfo: { cdnUrl: string }) => {
+      await upload.done((fileInfo: { cdnUrl: string }) => {
         console.log('Your file has been uploaded. URL: ' + fileInfo.cdnUrl);
         this.fileUrl = fileInfo.cdnUrl;
         url = fileInfo.cdnUrl;
       });
+      this.file = null;
+      this.fileInput.nativeElement.value = '';
     }
 
-    const { description, resourceName, text } = this.resourceForm.value;
+    const { description, name, text } = this.resourceForm.value;
     this.individualService.saveResourceToDb({
       description,
-      resourceName,
+      name,
       url,
       text,
+      id: this.individualService.displayUser.value._id,
     });
+    this.resourceForm.reset();
   }
 }
