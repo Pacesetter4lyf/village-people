@@ -1,9 +1,17 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Individual } from './individual.model';
-import { catchError, exhaustMap, take, map, tap } from 'rxjs/operators';
+import {
+  catchError,
+  exhaustMap,
+  take,
+  map,
+  tap,
+  switchMap,
+} from 'rxjs/operators';
 import { throwError, Subject, BehaviorSubject, of } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
+import { ResourceService } from 'src/app/shared/modal/resource.service';
 export interface BasicDetailsInterface {
   _id?: string;
   photo?: string | File;
@@ -28,8 +36,13 @@ export interface BasicDetailsInterface {
     name: string;
     text?: string;
     url?: string;
-    user: string;
-    resourceType: string;
+    user:
+      | string
+      | {
+          firstName: string;
+          lastName: string;
+        };
+    resourceType: 'image' | 'text' | 'audio' | 'video' | '';
   }[];
 }
 
@@ -44,20 +57,16 @@ export interface respType {
 export class IndividualService {
   tabClickEvent = new EventEmitter<PointerEvent>();
   error = '';
-  displayMode:
-    | 'self'
-    | 'admin-creating'
-    | 'admin-viewing'
-    | 'lineage-viewing'
-    | 'guest' = 'self';
+  displayMode = new BehaviorSubject<
+    'self' | 'admin-creating' | 'admin-viewing' | 'lineage-viewing' | 'guest'
+  >('self');
   // displayUser: BasicDetailsInterface = null;
   displayUser = new BehaviorSubject<BasicDetailsInterface>(null);
-  addMediaContentType = new BehaviorSubject<
-    'image' | 'text' | 'audio' | 'video'
-  >('image');
-  showModal = new Subject<boolean>();
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService // private resourceService: ResourceService
+  ) {}
 
   sendBasicDetails(data: BasicDetailsInterface) {
     const basicFormData = new FormData();
@@ -95,7 +104,11 @@ export class IndividualService {
       .pipe(
         catchError(this.handleError),
         map((response) => response.data.data),
-        tap((response) => this.displayUser.next(response))
+        tap<BasicDetailsInterface>((response) => {
+          console.log('user ', this.displayUser);
+          this.displayUser.next(response);
+          // this.resourceService.fetchResources();
+        })
       );
   }
 
@@ -143,41 +156,5 @@ export class IndividualService {
       });
     }
     return throwError(() => Error(error));
-  }
-
-  saveResourceToDb(fileDetails: {
-    description: string;
-    name: string;
-    url: string;
-    text: string;
-    id: string;
-  }) {
-    //if user, fetch user id and post
-    if (this.displayMode === 'self') {
-      // const id = this.authService.user.getValue().id;
-      // const id = this.authService.
-      const newdata = {
-        ...fileDetails,
-        ['user']: fileDetails.id,
-        resourceType: this.addMediaContentType.value,
-      };
-      console.log('new data', newdata);
-      return this.http
-        .post<any>(
-          `http://localhost:3001/api/v1/resource`,
-
-          newdata
-        )
-        .subscribe((response) => {
-          let displayUser = this.displayUser.getValue();
-          displayUser.resource.push(response.data.data);
-          this.displayUser.next(displayUser);
-          console.log(response);
-        });
-    }
-
-    //if admin-creating, get display user information and send
-    //if admin viewing, get display info and send
-    //if lineage, do not show edit button
   }
 }

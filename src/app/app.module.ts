@@ -43,6 +43,7 @@ import { ModalComponent } from './shared/modal/modal.component';
 import { ButtonComponent } from './shared/modal/button/button.component';
 
 import { UcWidgetModule } from 'ngx-uploadcare-widget';
+import { ResourceResolver } from './main/lineage/lineage-resource-resolver';
 
 const appRoutes: Routes = [
   { path: '', component: LandingComponent },
@@ -50,6 +51,7 @@ const appRoutes: Routes = [
     path: 'lineage',
     component: LineageComponent,
     canActivate: [canActivateFn],
+    resolve: [IndividualResolver, ResourceResolver],
     children: [
       { path: '', redirectTo: 'tree', pathMatch: 'full' },
       { path: 'tree', component: TreeComponent },

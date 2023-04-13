@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ResourceService } from 'src/app/shared/modal/resource.service';
 import { IndividualService } from './individual.service';
 
 @Component({
@@ -14,7 +15,10 @@ export class PersonalComponent implements OnInit, OnDestroy {
   displayUserSub: Subscription;
   displayMode: string;
 
-  constructor(private individualService: IndividualService) {}
+  constructor(
+    private individualService: IndividualService,
+    private resourceService: ResourceService
+  ) {}
 
   ngOnInit() {
     this.clickSub = this.individualService.tabClickEvent.subscribe(
@@ -22,7 +26,13 @@ export class PersonalComponent implements OnInit, OnDestroy {
         this.selected = (<HTMLElement>inputEvent.target).innerText;
       }
     );
-    this.displayMode = this.individualService.displayMode;
+    
+    // this.individualService.displayMode.subscribe((mode) =>
+    //   this.resourceService.initializeResources()
+    // );
+    this.resourceService.viewingIndividual.next(true)
+    this.resourceService.initializeResources('individual')
+
   }
 
   ngOnDestroy() {

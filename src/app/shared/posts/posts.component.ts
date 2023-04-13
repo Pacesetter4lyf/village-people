@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { IndividualService } from 'src/app/main/personal/individual.service';
+import { ResourceService } from '../modal/resource.service';
 
 @Component({
   selector: 'app-posts',
@@ -9,23 +11,36 @@ import { IndividualService } from 'src/app/main/personal/individual.service';
 })
 export class PostsComponent implements OnInit, OnDestroy {
   mediaEditable: boolean = true;
+  texts;
+  textSub: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
-    private individualService: IndividualService
+    private resourceService: ResourceService
   ) {}
 
   ngOnInit() {
-    // this.activatedRoute.params.subscribe(
-    //   (params: Params) => (this.mediaEditable = params['mediaEditable'])
-    // );
     if (this.activatedRoute.snapshot.data.isEditable === false) {
       this.mediaEditable = false;
     }
 
-    this.individualService.addMediaContentType.next('text');
+    this.resourceService.addMediaContentType.next('text');
+
+    this.textSub = this.resourceService.resources.subscribe(
+      (resources) =>
+        (this.texts = resources.filter(
+          (resource) => resource.resourceType === 'text'
+        ))
+    );
+  }
+
+  onDelete(id: string) {
+    this.resourceService.deleteResource(id);
+  }
+  onEdit(id: string) {
+    this.resourceService.mode.next(id);
   }
 
   ngOnDestroy() {
-    // this.individualService.addMediaContentType.next('media');
+    this.textSub.unsubscribe();
   }
 }

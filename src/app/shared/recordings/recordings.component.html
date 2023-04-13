@@ -39,7 +39,7 @@
   </div>
 </div> -->
 
-<div class="row border" *ngFor="let audio of audios">
+<div class="row border mt-1" *ngFor="let audio of audios">
   <div class="col-lg-4">
     <audio controls>
       <source [src]="audio.url" type="audio/mpeg" />
@@ -57,11 +57,22 @@
       class="d-flex flex-md-column justify-content-between h-100"
       *ngIf="mediaEditable"
     >
-      <button class="btn btn-primary "  (click)="showModal()">edit</button>
-      <button class="btn btn-danger">delete</button>
+      <button
+        class="btn btn-primary btn-sm"
+        (click)="onEdit(audio._id)"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        edit
+      </button>
+      <button class="btn btn-danger" (click)="onDelete(audio._id)">
+        delete
+      </button>
     </div>
   </div>
-  <div class="" *ngIf="!mediaEditable">By Emmanuel Offor</div>
+  <div class="" *ngIf="!mediaEditable">
+    {{ audio.user.firstName }} - {{ audio.user.lastName }}
+  </div>
 </div>
 
 <app-modal-button [mediaEditable]="mediaEditable"></app-modal-button>

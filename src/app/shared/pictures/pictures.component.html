@@ -1,24 +1,26 @@
-<p>pictures works!</p>
 <div class="row">
-  <div class="col-lg-3 col-md-4 col-sm-6">
+  <div class="col-lg-4 col-md-4 col-sm-6" *ngFor="let image of images">
     <div class="card">
-      <img
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScOgcuQjMpvZFQIQyWjFyrXJAGGj9W-UJzLw&usqp=CAU"
-        class="card-img-top"
-        alt="..."
-      />
+      <img [src]="image.url" class="card-img-top" alt="{{ image.name }}" />
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
+        <h5 class="card-title">{{ image.name }}</h5>
+        <p class="card-text">{{ image.description }}</p>
         <div class="div">
           <div class="d-flex justify-content-between" *ngIf="mediaEditable">
-            <a href="#" class="btn btn-primary">Delete</a>
-            <a href="#" class="btn btn-primary">Edit</a>
+            <a href="#" class="btn btn-primary" (click)="onDelete(image._id)"
+              >Delete</a
+            >
+            <a
+              class="btn btn-primary"
+              (click)="onEdit(image._id)"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              >Edit</a
+            >
           </div>
-          <div class="div" *ngIf="!mediaEditable">By - Emmanuel Offor</div>
+          <div class="div" *ngIf="!mediaEditable">
+            By - {{ image.user.firstName }} - {{ image.user.lastName }}
+          </div>
         </div>
       </div>
     </div>

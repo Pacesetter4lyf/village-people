@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { IndividualService } from 'src/app/main/personal/individual.service';
+import { ResourceService } from '../modal/resource.service';
 
 @Component({
   selector: 'app-videos',
@@ -9,18 +11,28 @@ import { IndividualService } from 'src/app/main/personal/individual.service';
 })
 export class VideosComponent implements OnInit {
   mediaEditable: boolean = true;
+  videos;
+  videosSub: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
-    private individualService: IndividualService
+    private resourceService: ResourceService
   ) {}
 
   ngOnInit() {
-    // this.activatedRoute.params.subscribe(
-    //   (params: Params) => (this.mediaEditable = params['mediaEditable'])
-    // );
     if (this.activatedRoute.snapshot.data.isEditable === false) {
       this.mediaEditable = false;
     }
-    this.individualService.addMediaContentType.next('video');
+    this.resourceService.addMediaContentType.next('video');
+
+    this.videosSub = this.resourceService.resources.subscribe(
+      (resources) =>
+        (this.videos = resources.filter(
+          (resource) => resource.resourceType === 'video'
+        ))
+    );
+  }
+
+  ngOnDestroy() {
+    this.videosSub.unsubscribe();
   }
 }

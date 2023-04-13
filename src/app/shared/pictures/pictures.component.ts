@@ -5,7 +5,12 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { IndividualService } from 'src/app/main/personal/individual.service';
+import { Subscription } from 'rxjs';
+import {
+  BasicDetailsInterface,
+  IndividualService,
+} from 'src/app/main/personal/individual.service';
+import { ResourceService } from '../modal/resource.service';
 
 @Component({
   selector: 'app-pictures',
@@ -14,16 +19,34 @@ import { IndividualService } from 'src/app/main/personal/individual.service';
 })
 export class PicturesComponent implements OnInit {
   mediaEditable: boolean = true;
-  constructor(private activatedRoute: ActivatedRoute, private individualService: IndividualService) {}
+  imagesSub: Subscription;
+  images: BasicDetailsInterface['resource'];
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private resourceService: ResourceService,
+    private individualService: IndividualService
+  ) {}
 
   ngOnInit() {
-    // this.activatedRoute.params.subscribe(
-    //   (params: Params) => (this.mediaEditable = params['mediaEditable'])
-    // );
     if (this.activatedRoute.snapshot.data.isEditable === false) {
       this.mediaEditable = false;
     }
-    this.individualService.addMediaContentType.next('image');
+    this.resourceService.addMediaContentType.next('image');
+
+    this.imagesSub = this.resourceService.resources.subscribe((resources) =>
+      this.images = resources.filter((resource) => resource.resourceType === 'image')
+    );
   }
-  
+
+  ngOnDestroy() {
+    this.imagesSub.unsubscribe();
+  }
+
+  onEdit(id: string) {
+    this.resourceService.mode.next(id);
+    // this.individualService.showModal.next(true);
+  }
+  onDelete(id: string) {
+    this.resourceService.deleteResource(id);
+  }
 }

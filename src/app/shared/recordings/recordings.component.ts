@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ApplicationRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import {
   BasicDetailsInterface,
   IndividualService,
 } from 'src/app/main/personal/individual.service';
+import { ResourceService } from '../modal/resource.service';
 
 @Component({
   selector: 'app-recordings',
@@ -17,24 +18,22 @@ export class RecordingsComponent implements OnInit {
   audiosSub: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
-    private individualService: IndividualService
+    private individualService: IndividualService,
+    private resourceService: ResourceService,
+    private appRef: ApplicationRef
   ) {}
 
   ngOnInit() {
-    // this.activatedRoute.params.subscribe(
-    //   (params: Params) => (this.mediaEditable = params['mediaEditable'])
-    // );
     if (this.activatedRoute.snapshot.data.isEditable === false) {
       this.mediaEditable = false;
     }
-    this.individualService.addMediaContentType.next('audio');
+    this.resourceService.addMediaContentType.next('audio');
 
-    this.audiosSub = this.individualService.displayUser.subscribe(
-      (value) =>
-        (this.audios = value.resource.filter(
+    this.audiosSub = this.resourceService.resources.subscribe(
+      (resources) =>
+        (this.audios = resources.filter(
           (resource) => resource.resourceType === 'audio'
         ))
-        
     );
   }
 
@@ -42,7 +41,10 @@ export class RecordingsComponent implements OnInit {
     this.audiosSub.unsubscribe();
   }
 
-  showModal() {
-    this.individualService.showModal.next(true);
+  onEdit(id: string) {
+    this.resourceService.mode.next(id);
+  }
+  onDelete(id: string) {
+    this.resourceService.deleteResource(id);
   }
 }

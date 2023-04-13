@@ -1,9 +1,9 @@
 <div class="row">
-  <div class="col-md-4 col-sm-6">
+  <div class="col-md-4 col-sm-6" *ngFor="let video of videos">
     <div>
       <iframe
         width="100%"
-        src="https://www.youtube.com/embed/PaCmpygFfXo"
+        [src]="video.url"
         title="The spelled-out intro to language modeling: building makemore"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -23,7 +23,7 @@
         <button class="btn btn-primary mt-auto">edit</button>
       </div>
       <div class="col-12 d-flex" *ngIf="!mediaEditable">
-        <p class="">By Emmanuel Offor</p>
+        <p class="">{{ video.user.firstName }} - {{ video.user.lastName }}</p>
       </div>
     </div>
   </div>
