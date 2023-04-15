@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Route, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { IndividualService } from '../main/personal/individual.service';
 import { AuthService, AuthResponseData } from './auth.service';
 
 @Component({
@@ -13,7 +14,15 @@ export class AuthComponent {
   isLoginMode = true;
   isLoading = false;
   error: string = null;
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private individualService: IndividualService
+  ) {}
+
+  ngOnInit() {
+    this.individualService.displayUser.next(null);
+  }
 
   onSubmit(form: NgForm) {
     if (!form.valid) {
@@ -35,7 +44,7 @@ export class AuthComponent {
         this.error = error.message;
       },
     };
-    
+
     if (this.isLoginMode) {
       this.authService.login(email, password).subscribe(subObj);
     } else {

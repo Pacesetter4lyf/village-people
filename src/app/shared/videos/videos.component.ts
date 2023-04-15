@@ -15,7 +15,7 @@ export class VideosComponent implements OnInit {
   videosSub: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
-    private resourceService: ResourceService
+    private resourceService: ResourceService,
   ) {}
 
   ngOnInit() {
@@ -35,4 +35,5 @@ export class VideosComponent implements OnInit {
   ngOnDestroy() {
     this.videosSub.unsubscribe();
   }
+
 }

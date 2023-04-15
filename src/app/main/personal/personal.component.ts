@@ -26,13 +26,12 @@ export class PersonalComponent implements OnInit, OnDestroy {
         this.selected = (<HTMLElement>inputEvent.target).innerText;
       }
     );
-    
-    // this.individualService.displayMode.subscribe((mode) =>
-    //   this.resourceService.initializeResources()
-    // );
-    this.resourceService.viewingIndividual.next(true)
-    this.resourceService.initializeResources('individual')
 
+    this.individualService.displayMode.subscribe(
+      (mode) => (this.displayMode = mode)
+    );
+    this.resourceService.viewingIndividual.next(true);
+    this.resourceService.initializeResources('individual');
   }
 
   ngOnDestroy() {

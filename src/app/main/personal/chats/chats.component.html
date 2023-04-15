@@ -1,26 +1,44 @@
 <div class="row">
   <div class="col-md-6">
-    <div class="chat mb-1">
-      <div class="">Emmanuel - 9:49</div>
+    <div
+      class="chat mb-1 border border-primary"
+      role="button"
+      *ngFor="let chat of chatParents"
+      (click)="viewChat(chat.to)"
+    >
+      <div class="d-flex justify-content-between">
+        <p>
+          {{ chat.lastMessageBy }} - {{ chat.lastMessageDate.substring(0, 10) }}
+        </p>
+        <p class="fw-bold">{{ chat.name }}</p>
+      </div>
       <div class="">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, quo?
+        {{ chat.lastMessage }}
       </div>
     </div>
   </div>
   <div class="col-md-6">
-    <div class="details">
+    <div
+      class="d-flex border border-danger"
+      *ngFor="let chat of chatDetails"
+      [ngClass]="chat.sentByUser ? ' ps-3' : 'justify-content-end pe-3'"
+    >
       <div class="chat mb-1">
-        <div class="">Emmanuel - 9:49</div>
         <div class="">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, quo?
+          {{ chat.from }} - {{ chat.createdAt.substring(0, 10) }}
+        </div>
+        <div class="">
+          {{ chat.message }}
         </div>
       </div>
     </div>
     <div class="div">
-      <textarea name="" id="" rows="2" class="w-100"></textarea>
+      <form>
+        <textarea #message name="" id="" rows="2" class="w-100"></textarea>
+      </form>
     </div>
     <div class="div">
-      <button class="btn btn-success">send</button>
+      <button class="btn btn-success" (click)="sendMessage()">send</button>
     </div>
   </div>
 </div>

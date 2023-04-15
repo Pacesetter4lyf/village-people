@@ -1,11 +1,11 @@
 <div class="row">
-  <div class="col" *ngFor="let text of texts">
-    <h4>{{text.name}}</h4>
+  <div class="col border border-primary rounded" *ngFor="let text of texts">
+    <h6>{{ text.name }}</h6>
     <div class="row">
-      <div class="col">
-        <textarea name="" id="" rows="5" class="w-100 form-control" readonly
-          >{{ text.text }} </textarea
-        >
+      <div class="col " >
+        <p name="" id="" rows="5" class="w-100 form-control" readonly>
+          {{ text.text }}
+        </p>
       </div>
       <div
         class="col-md-auto justify-content-between d-flex mt-1 flex-md-column"

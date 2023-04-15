@@ -15,5 +15,6 @@ export const ResourceResolver: ResolveFn<any> = (
   if (lineageResources) {
     return true;
   }
-  return inject(ResourceService).fetchAllResources();
+  // return inject(ResourceService).fetchAllResources();
+  return inject(ResourceService).initializeResources('lineage');
 };

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Subject, take, tap } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map, Subject, take, tap } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 import {
   BasicDetailsInterface,
   IndividualService,
@@ -24,29 +25,38 @@ export class ResourceService {
     user: '',
     resourceType: '',
   };
-  resources = new BehaviorSubject<BasicDetailsInterface['resource']>(null  );
+  resources: BehaviorSubject<BasicDetailsInterface['resource']>;
   lineageResources: BasicDetailsInterface['resource'];
 
   constructor(
     private individualService: IndividualService,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
+    private authService: AuthService
+  ) {
+    this.resources = new BehaviorSubject<BasicDetailsInterface['resource']>([
+      this.emptyData,
+    ]);
+  }
 
-  initializeResources(view: 'individual' | 'lineage') {
+  initializeResources = async (view: 'individual' | 'lineage') => {
     if (view === 'individual') {
       this.resources.next(this.individualService.displayUser.value.resource);
+
       this.viewingIndividual.next(true);
     } else {
-      if (this.lineageResources) this.resources.next(this.lineageResources);
+      if (!this.authService.user.value.isRegistered) {
+        this.resources.next([this.emptyData]);
+      } else if (this.lineageResources)
+        this.resources.next(this.lineageResources);
       else {
         this.fetchAllResources().subscribe((response) => {
-          this.resources = response;
+          this.resources.next(response);
           console.log(response);
         });
       }
       this.viewingIndividual.next(false);
     }
-  }
+  };
 
   fetchAllResources() {
     return this.http.get<any>(`http://localhost:3001/api/v1/resource/`).pipe(
@@ -88,6 +98,7 @@ export class ResourceService {
         )
         .subscribe((response) => {
           let displayUser = this.individualService.displayUser.getValue();
+          console.log('du ', displayUser)
           displayUser.resource.push(response.data.data);
           this.individualService.displayUser.next(displayUser);
           this.resources.next(displayUser.resource);

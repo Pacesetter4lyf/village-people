@@ -46,12 +46,14 @@ export interface BasicDetailsInterface {
   }[];
 }
 
-export interface respType {
+export interface respType<T> {
   data: {
-    data: BasicDetailsInterface;
+    data?: T;
+    user?: T;
   };
   status: string;
 }
+
 
 @Injectable({ providedIn: 'root' })
 export class IndividualService {
@@ -63,10 +65,7 @@ export class IndividualService {
   // displayUser: BasicDetailsInterface = null;
   displayUser = new BehaviorSubject<BasicDetailsInterface>(null);
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService // private resourceService: ResourceService
-  ) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   sendBasicDetails(data: BasicDetailsInterface) {
     const basicFormData = new FormData();
@@ -78,13 +77,19 @@ export class IndividualService {
     });
 
     return this.http
-      .patch<any>(
+      .patch<respType<BasicDetailsInterface>>(
         `http://localhost:3001/api/v1/userdata/updateMe`,
 
         basicFormData
       )
-      .subscribe();
+      .subscribe((value) => {
+        console.log(value);
+        if (value.status === 'success') {
+          this.displayUser.next(value.data.user);
+        }
+      });
   }
+
   fetchDisplayUser(userId?: string) {
     let currentId: string = userId;
     if (!userId) {
@@ -98,18 +103,56 @@ export class IndividualService {
         )
         .subscribe();
     }
-
-    return this.http
-      .get<respType>(`http://localhost:3001/api/v1/userdata/${currentId}`)
-      .pipe(
-        catchError(this.handleError),
-        map((response) => response.data.data),
-        tap<BasicDetailsInterface>((response) => {
-          console.log('user ', this.displayUser);
-          this.displayUser.next(response);
-          // this.resourceService.fetchResources();
-        })
-      );
+    console.log('is reg', this.authService.user.value.isRegistered);
+    if (this.authService.user.value.isRegistered) {
+      return this.http
+        .get<respType<BasicDetailsInterface>>(
+          `http://localhost:3001/api/v1/userdata/${currentId}`
+        )
+        .pipe(
+          catchError(this.handleError),
+          map((response) => response.data.data),
+          tap<BasicDetailsInterface>((response) => {
+            console.log('user ', this.displayUser);
+            this.displayUser.next(response);
+            // this.resourceService.fetchResources();
+          })
+        );
+    } else {
+      console.log('here');
+      const emptyData: BasicDetailsInterface = {
+        _id: '',
+        photo: '',
+        firstName: '',
+        lastName: '',
+        gender: '',
+        dateOfBirth: '',
+        phoneNumber: '',
+        facebook: '',
+        address: '',
+        primarySchool: '',
+        secondarySchool: '',
+        tertiarySchool: '',
+        bibliography: '',
+        primary: '',
+        secondary: '',
+        tertiary: '',
+        resource: [
+          {
+            _id: '',
+            viewableBy: '',
+            description: '',
+            name: '',
+            text: '',
+            url: '',
+            user: '',
+            resourceType: '',
+          },
+        ],
+      };
+      this.displayUser.next(emptyData);
+      return of<BasicDetailsInterface>(emptyData);
+    }
   }
 
   private handleError(errorRes: HttpErrorResponse) {

@@ -17,6 +17,7 @@ export interface AuthResponseData {
       _id: string;
       email: string;
       __v?: number;
+      isRegistered?: boolean;
     };
   };
 }
@@ -43,7 +44,8 @@ export class AuthService {
             resData.data.user.email,
             resData.data.user._id,
             resData.token,
-            new Date(resData.expiry)
+            new Date(resData.expiry),
+            resData.data.user.isRegistered
           )
         )
       );
@@ -61,7 +63,8 @@ export class AuthService {
             resData.data.user.email,
             resData.data.user._id,
             resData.token,
-            new Date(resData.expiry)
+            new Date(resData.expiry),
+            resData.data.user.isRegistered
           )
         )
       );
@@ -71,9 +74,10 @@ export class AuthService {
     email: string,
     id: string,
     token: string,
-    expiration: Date
+    expiration: Date,
+    isRegistered: boolean
   ) {
-    const user = new User(email, id, token, expiration);
+    const user = new User(email, id, token, expiration, isRegistered);
     this.user.next(user);
     this.autoLogout(expiration.getTime() - new Date().getTime());
     localStorage.setItem('user', JSON.stringify(user));
@@ -101,7 +105,8 @@ export class AuthService {
       user.email,
       user.id,
       user._token,
-      new Date(user._tokenExpirationDate)
+      new Date(user._tokenExpirationDate),
+      user._isRegistered
     );
     if (loadedUser.token) {
       this.user.next(loadedUser);

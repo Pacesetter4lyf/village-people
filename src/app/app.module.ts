@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AppComponent } from './app.component';
+import { AppComponent, SafePipe } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { PersonalComponent } from './main/personal/personal.component';
 import { BasicComponent } from './main/personal/basic/basic.component';
@@ -159,6 +159,7 @@ const appRoutes: Routes = [
     LoadingSpinnerComponent,
     ModalComponent,
     ButtonComponent,
+    SafePipe
   ],
   imports: [
     BrowserModule,
