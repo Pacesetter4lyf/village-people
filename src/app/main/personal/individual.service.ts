@@ -12,6 +12,8 @@ import {
 import { throwError, Subject, BehaviorSubject, of } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ResourceService } from 'src/app/shared/modal/resource.service';
+import { DisplayUserModel } from './display-user.model';
+import { Resource } from 'src/app/shared/resource.model';
 export interface BasicDetailsInterface {
   _id?: string;
   photo?: string | File;
@@ -30,10 +32,10 @@ export interface BasicDetailsInterface {
   secondary?: string;
   tertiary?: string;
   resource?: {
-    _id: string;
-    viewableBy: string;
-    description: string;
-    name: string;
+    _id?: string;
+    viewableBy?: string;
+    description?: string;
+    name?: string;
     text?: string;
     url?: string;
     user:
@@ -53,15 +55,18 @@ export interface respType<T> {
   };
   status: string;
 }
-
-
+type DisplayModeType =
+  | 'self'
+  | 'user-creating'
+  | 'admin-viewing'
+  | 'user-viewing'
+  | 'lineage-viewing'
+  | 'guest';
 @Injectable({ providedIn: 'root' })
 export class IndividualService {
   tabClickEvent = new EventEmitter<PointerEvent>();
   error = '';
-  displayMode = new BehaviorSubject<
-    'self' | 'admin-creating' | 'admin-viewing' | 'lineage-viewing' | 'guest'
-  >('self');
+  displayMode = new BehaviorSubject<DisplayModeType>('self');
   // displayUser: BasicDetailsInterface = null;
   displayUser = new BehaviorSubject<BasicDetailsInterface>(null);
 
@@ -120,36 +125,7 @@ export class IndividualService {
         );
     } else {
       console.log('here');
-      const emptyData: BasicDetailsInterface = {
-        _id: '',
-        photo: '',
-        firstName: '',
-        lastName: '',
-        gender: '',
-        dateOfBirth: '',
-        phoneNumber: '',
-        facebook: '',
-        address: '',
-        primarySchool: '',
-        secondarySchool: '',
-        tertiarySchool: '',
-        bibliography: '',
-        primary: '',
-        secondary: '',
-        tertiary: '',
-        resource: [
-          {
-            _id: '',
-            viewableBy: '',
-            description: '',
-            name: '',
-            text: '',
-            url: '',
-            user: '',
-            resourceType: '',
-          },
-        ],
-      };
+      const emptyData: BasicDetailsInterface = this.emptyUser();
       this.displayUser.next(emptyData);
       return of<BasicDetailsInterface>(emptyData);
     }
@@ -164,40 +140,38 @@ export class IndividualService {
     if (errorRes.statusText === 'Not Found') {
       return of({
         data: {
-          data: {
-            _id: '',
-            photo: '',
-            firstName: '',
-            lastName: '',
-            gender: '',
-            dateOfBirth: '',
-            phoneNumber: '',
-            facebook: '',
-            address: '',
-            primarySchool: '',
-            secondarySchool: '',
-            tertiarySchool: '',
-            bibliography: '',
-            primary: '',
-            secondary: '',
-            tertiary: '',
-            resource: [
-              {
-                _id: '',
-                viewableBy: '',
-                description: '',
-                name: '',
-                text: '',
-                url: '',
-                user: '',
-                resourceType: '',
-              },
-            ],
-          },
+          data: this.emptyUser(),
         },
         status: '',
       });
     }
     return throwError(() => Error(error));
+  }
+
+  setDisplayMode(mode: DisplayModeType) {
+    this.displayMode.next(mode);
+    this.displayUser.next(this.emptyUser());
+  }
+
+  emptyUser() {
+    return new DisplayUserModel(
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      []
+    );
   }
 }

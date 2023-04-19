@@ -4,6 +4,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from '@angular/router';
+import { DisplayUserModel } from './display-user.model';
 
 import {
   BasicDetailsInterface,

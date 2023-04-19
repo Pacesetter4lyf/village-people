@@ -1,9 +1,17 @@
 export class Resource {
   constructor(
-    public nameortitle: string,
-    public urlorcontent: string,
+    public user:
+      | string
+      | {
+          firstName: string;
+          lastName: string;
+        },
+    public resourceType: 'image' | 'text' | 'audio' | 'video' | '',
+    public _id?: string,
+    public viewableBy?: string,
     public description?: string,
-    public viewable: 'self' | 'lineage' | 'all' = 'self',
-    public publicUrl?: string
+    public name?: string,
+    public text?: string,
+    public url?: string
   ) {}
 }

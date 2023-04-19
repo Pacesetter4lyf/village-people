@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom, map, Subject, take, tap } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
+import { DisplayUserModel } from 'src/app/main/personal/display-user.model';
 import {
   BasicDetailsInterface,
   IndividualService,
@@ -98,7 +99,7 @@ export class ResourceService {
         )
         .subscribe((response) => {
           let displayUser = this.individualService.displayUser.getValue();
-          console.log('du ', displayUser)
+          console.log('du ', displayUser);
           displayUser.resource.push(response.data.data);
           this.individualService.displayUser.next(displayUser);
           this.resources.next(displayUser.resource);

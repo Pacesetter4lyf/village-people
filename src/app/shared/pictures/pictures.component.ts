@@ -6,6 +6,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { DisplayUserModel } from 'src/app/main/personal/display-user.model';
 import {
   BasicDetailsInterface,
   IndividualService,
@@ -33,8 +34,11 @@ export class PicturesComponent implements OnInit {
     }
     this.resourceService.addMediaContentType.next('image');
 
-    this.imagesSub = this.resourceService.resources.subscribe((resources) =>
-      this.images = resources.filter((resource) => resource.resourceType === 'image')
+    this.imagesSub = this.resourceService.resources.subscribe(
+      (resources) =>
+        (this.images = resources.filter(
+          (resource) => resource.resourceType === 'image'
+        ))
     );
   }
 

@@ -1,7 +1,13 @@
 <div class="row">
   <div class="col-lg-4 col-md-4 col-sm-6" *ngFor="let image of images">
     <div class="card">
-      <img [src]="image.url" class="card-img-top" alt="{{ image.name }}" />
+      <img
+        [src]="image.url"
+        class="card-img-top object-fit-scale"
+        alt="{{ image.name }}"
+        height="250px"
+        width="100%"
+      />
       <div class="card-body">
         <h5 class="card-title">{{ image.name }}</h5>
         <p class="card-text">{{ image.description }}</p>

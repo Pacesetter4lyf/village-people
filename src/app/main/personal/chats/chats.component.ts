@@ -21,7 +21,7 @@ export class ChatsComponent implements OnInit {
     this.chatService.chatsChanged.subscribe((chatParents) => {
       this.chatParents = chatParents;
       if (this.chatParents[0]) {
-        this.viewChat(this.chatParents[0]?.to);
+        // this.viewChat(this.chatParents[0]?.to);
       }
       // console.log('chats ', this.chatParents);
     });

@@ -5,6 +5,7 @@ import {
 } from '../individual.service';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { DisplayUserModel } from '../display-user.model';
 
 @Component({
   selector: 'app-basic',

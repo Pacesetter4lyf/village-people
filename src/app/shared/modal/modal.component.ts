@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { FormGroup, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { DisplayUserModel } from 'src/app/main/personal/display-user.model';
 import {
   BasicDetailsInterface,
   IndividualService,

@@ -1,6 +1,7 @@
 import { ApplicationRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { DisplayUserModel } from 'src/app/main/personal/display-user.model';
 import {
   BasicDetailsInterface,
   IndividualService,
