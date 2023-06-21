@@ -31,6 +31,6 @@ export class TreeModel implements TreeInterface {
     public sibling: dependentType[],
     public husbands: dependentType[],
     public wives: dependentType[],
-    public child: dependentType[],
+    public child: dependentType[]
   ) {}
 }
