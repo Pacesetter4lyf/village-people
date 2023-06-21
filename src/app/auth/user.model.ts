@@ -7,7 +7,7 @@ export class User {
     public id: string,
     private _token: string,
     private _tokenExpirationDate: Date,
-    private _isRegistered?: boolean
+    private _isRegistered?: Boolean
   ) {}
 
   get token() {

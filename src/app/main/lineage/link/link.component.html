@@ -1,0 +1,111 @@
+<form #searchForm="ngForm">
+  <div class="row">
+    <div class="col">
+      <div class="search">
+        <input
+          type="text"
+          class="link-text"
+          placeholder="Type here"
+          ngModel
+          name="searchTextA"
+          #textA
+        />
+        <button class="my-btn" (click)="search('A')">Search</button>
+        <span style="font-weight: bold; padding: 1rem">A</span>
+      </div>
+      <div class="border">
+        <div class="list">
+          <ul class="unordered-list">
+            <li
+              *ngFor="let item of A"
+              (click)="onSelect('A', item.id)"
+              [ngClass]="{ selected: selectedA?.id === item.id }"
+            >
+              {{ item.firstName }}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="border mt-1" *ngIf="selectedA">
+        <div>
+          <span>FirstName: </span><span>{{ selectedA.firstName }}</span>
+        </div>
+        <div>
+          <span>Lastname: </span><span>{{ selectedA.lastName }}</span>
+        </div>
+        <div>
+          <span>father: </span><span>{{ selectedA?.father?.firstName }}</span>
+        </div>
+        <div>
+          <span>mother: </span><span>{{ selectedA.mother?.firstName }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="search">
+        <input
+          type="text"
+          class="link-text"
+          placeholder="Type here"
+          ngModel
+          name="searchTextB"
+          #textB
+        />
+        <button class="my-btn" (click)="search('B')">Search</button>
+        <span style="font-weight: bold; padding: 1rem">B</span>
+      </div>
+      <div class="border">
+        <div class="list">
+          <ul class="unordered-list">
+            <li
+              *ngFor="let item of B"
+              (click)="onSelect('B', item.id)"
+              [ngClass]="{ selected: selectedB?.id === item.id }"
+            >
+              {{ item.firstName }}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="border mt-1" *ngIf="selectedB">
+        <div>
+          <span>FirstName: </span><span>{{ selectedB.firstName }}</span>
+        </div>
+        <div>
+          <span>Lastname: </span><span>{{ selectedB.lastName }}</span>
+        </div>
+        <div>
+          <span>father: </span><span>{{ selectedB?.father?.firstName }}</span>
+        </div>
+        <div>
+          <span>mother: </span><span>{{ selectedB.mother?.firstName }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="row">
+  <div class="col">
+    <div>
+      <div><p>B is the</p></div>
+      <div class="relationship-block">
+        <span
+          *ngFor="let value of values"
+          class="relationship"
+          [ngClass]="{ selected: value === relationship }"
+          (click)="setUnset(value)"
+          >{{ value }}</span
+        >
+      </div>
+      <div><p>of A</p></div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="d-flex gap-1 justify-content-center">
+      <button (click)="viewNode('A')">view A</button>
+      <button>view B</button>
+    </div>
+  </div>
+</div>

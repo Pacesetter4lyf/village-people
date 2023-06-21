@@ -19,6 +19,7 @@ export class BasicComponent implements OnInit, OnDestroy {
   isLoading: false;
   photo: File;
   userSub: Subscription;
+  isEditable: Boolean;
 
   constructor(private individualService: IndividualService) {}
 
@@ -26,6 +27,15 @@ export class BasicComponent implements OnInit, OnDestroy {
     this.userSub = this.individualService.displayUser.subscribe(
       (user) => (this.basicDetails = user)
     );
+
+    const viewMode = this.individualService.displayMode.value;
+    if (viewMode === 'user-creating') {
+      this.viewMode = false;
+    }
+    this.isEditable =
+      viewMode === 'user-creating' ||
+      viewMode === 'user-viewing' ||
+      viewMode === 'self';
   }
   ngOnDestroy(): void {
     this.userSub.unsubscribe();

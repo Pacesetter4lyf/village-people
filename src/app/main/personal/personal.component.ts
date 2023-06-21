@@ -12,7 +12,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   selected: string = 'Basic';
   dataLoaded = true;
   clickSub: Subscription;
-  displayUserSub: Subscription;
+  userSub: Subscription;
   displayMode: string;
 
   constructor(
@@ -31,10 +31,13 @@ export class PersonalComponent implements OnInit, OnDestroy {
       (mode) => (this.displayMode = mode)
     );
     this.resourceService.viewingIndividual.next(true);
-    this.resourceService.initializeResources('individual');
+    this.userSub = this.individualService.displayUser.subscribe((user) => {
+      this.resourceService.initializeResources('individual');
+    });
   }
 
   ngOnDestroy() {
     this.clickSub.unsubscribe();
+    this.userSub.unsubscribe();
   }
 }

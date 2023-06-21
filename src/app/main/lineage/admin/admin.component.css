@@ -1,0 +1,21 @@
+.active{
+    background-color: skyblue;
+}
+
+.active-row{
+    color: blue;
+    border: 1px solid blue
+}
+
+th, td {
+    padding-inline: 5px;
+    line-height: 1.0rem;
+  }
+
+th {
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}

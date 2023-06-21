@@ -17,7 +17,7 @@ export interface AuthResponseData {
       _id: string;
       email: string;
       __v?: number;
-      isRegistered?: boolean;
+      isRegistered?: Boolean;
     };
   };
 }
@@ -75,7 +75,7 @@ export class AuthService {
     id: string,
     token: string,
     expiration: Date,
-    isRegistered: boolean
+    isRegistered: Boolean
   ) {
     const user = new User(email, id, token, expiration, isRegistered);
     this.user.next(user);

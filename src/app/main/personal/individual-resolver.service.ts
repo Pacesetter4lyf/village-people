@@ -17,9 +17,11 @@ export const IndividualResolver: ResolveFn<BasicDetailsInterface> = (
   state: RouterStateSnapshot
 ) => {
   let displayUser = inject(IndividualService).displayUser.value;
-  console.log(displayUser);
+  // console.log(displayUser);
   if (displayUser && displayUser._id.length > 5) {
     return displayUser;
   }
   return inject(IndividualService).fetchDisplayUser();
 };
+
+

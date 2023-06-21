@@ -1,0 +1,390 @@
+<div class="row">
+  <div class="col-md-4 col-lg-3 d-md-block d-none">
+    <ul>
+      <li
+        *ngFor="let item of navItems; let i = index"
+        (click)="itemClicked(item)"
+        [ngClass]="{ active: item === itemSelected }"
+      >
+        {{ item }}
+      </li>
+    </ul>
+  </div>
+  <div class="button d-md-none">
+    <button
+      class="btn btn-primary"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#menu-section"
+      aria-controls="menu-section"
+    >
+      menu
+    </button>
+  </div>
+  <div class="col-md-8 col-lg-9 border">
+    <!-- all members -->
+    <div
+      class="row all-members"
+      *ngIf="itemSelected === 'all members'"
+      style="overflow-x: auto"
+    >
+      <table style="width: 100%">
+        <tr>
+          <th>firstname</th>
+          <th>lastname</th>
+          <th>mother</th>
+          <th>father</th>
+          <th>view</th>
+        </tr>
+        <tr *ngFor="let member of membersList">
+          <td>{{ member.firstName }}</td>
+          <td>{{ member.lastName }}</td>
+          <td>{{ member.mother }}</td>
+          <td>{{ member.father }}</td>
+          <td style="font-size: 0.7rem" (click)="viewNode(member.id)">
+            <button>view</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <!-- generate code here -->
+    <div class="row generate-code" *ngIf="itemSelected === 'generate code'">
+      <div class="col-lg-9" style="overflow-x: auto">
+        <table style="width: 100%">
+          <tr>
+            <th>firstname</th>
+            <th>lastname</th>
+            <th>mother</th>
+            <th>father</th>
+            <th>spouse</th>
+          </tr>
+          <tr
+            *ngFor="let member of membersList; let i = index"
+            [ngClass]="{ 'active-row': i === t2SelectedRow }"
+            (click)="selectRow(2, i)"
+            role="button"
+          >
+            <td>{{ member.firstName }}</td>
+            <td>{{ member.lastName }}</td>
+            <td>{{ member.mother }}</td>
+            <td>{{ member.father }}</td>
+            <td>{{ member.husband || member.wife }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-lg-3">
+        <div class="append-replace-box mt-3">
+          <div class="div d-flex justify-content-between flex-lg-column">
+            <div class="replace-box">
+              <input
+                type="radio"
+                id="replace"
+                name="replace_append"
+                value="replace"
+                [(ngModel)]="joinType"
+              />
+              <label>replace</label>
+            </div>
+            <div class="append-button">
+              <input
+                type="radio"
+                id="append"
+                name="replace_append"
+                value="append"
+                [(ngModel)]="joinType"
+              />
+              <label>append</label>
+              <select
+                name="append"
+                id="append"
+                [(ngModel)]="appendMode"
+                *ngIf="joinType === 'append'"
+              >
+                <option value="none">none</option>
+                <option value="father">father</option>
+                <option value="mother">mother</option>
+                <option value="husband">husband</option>
+                <option value="wife">wife</option>
+                <option value="sibling">sibling</option>
+                <option value="child">child</option>
+              </select>
+            </div>
+          </div>
+          <div class="mx-auto">
+            <button class="" (click)="generateCode()">generate code</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- see generated codes -->
+    <div class="generated-codes" *ngIf="itemSelected === 'generated codes'">
+      <table style="width: 100%">
+        <tr>
+          <th>firstname</th>
+          <th>lastname</th>
+          <th>mother</th>
+          <th>append as</th>
+          <th>code</th>
+          <th>cancel</th>
+        </tr>
+        <tr *ngFor="let member of codesList; let i = index">
+          <td>{{ member.userData.firstName }}</td>
+          <td>{{ member.userData.lastName }}</td>
+          <td>{{ member.userData.mother?.firstName || "none" }}</td>
+          <td>{{ member.mode }}</td>
+          <td>{{ member.code }}</td>
+          <td style="font-size: 0.7rem"><button>cancel</button></td>
+        </tr>
+      </table>
+    </div>
+    <!-- see incoming requests -->
+    <div
+      style="overflow-x: auto"
+      class="incoming-requests"
+      *ngIf="itemSelected === 'incoming requests'"
+    >
+      <table style="width: 100%">
+        <tr>
+          <th>firstname</th>
+          <th>lastname</th>
+          <th>mother</th>
+          <th>father</th>
+          <th>appendAs</th>
+          <th>firstname</th>
+          <th>lastname</th>
+          <th>mother</th>
+          <th>father</th>
+          <th>cancel</th>
+          <th>merge</th>
+          <th>view</th>
+        </tr>
+        <tr>
+          <td>firstname</td>
+          <td>lastname</td>
+          <td>mother</td>
+          <td>father</td>
+          <td>appendAs</td>
+          <th>firstname</th>
+          <th>lastname</th>
+          <th>mother</th>
+          <th>father</th>
+          <td style="font-size: 0.7rem"><button>cancel</button></td>
+          <td style="font-size: 0.7rem"><button>merge</button></td>
+          <td style="font-size: 0.7rem"><button>view</button></td>
+        </tr>
+      </table>
+    </div>
+    <!-- find people -->
+    <div class="row find-people" *ngIf="itemSelected === 'find people'">
+      <div class="d-flex my-1 flex-wrap gap-1 justify-content-between">
+        <input type="text" [placeholder]="'lastname'" />
+
+        <input type="text" [placeholder]="'state'" />
+
+        <input type="text" [placeholder]="'village'" />
+
+        <button>find</button>
+      </div>
+      <hr />
+
+      <div class="col-md-12">
+        <table style="width: 100%">
+          <tr>
+            <th>firstname</th>
+            <th>lastname</th>
+            <th>mother</th>
+            <th>father</th>
+            <th>spouse</th>
+            <th>view</th>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-6 d-none">
+        <div class="append-replace-box mt-3 border">
+          <span>You want to take over the other Node</span>
+          <div class="div d-flex justify-content-between">
+            <div class="replace-box">
+              <input
+                type="radio"
+                id="replace"
+                name="replace_append"
+                value="replace"
+              />
+              <label>replace</label>
+            </div>
+            <div class="append-button">
+              <input
+                type="radio"
+                id="append"
+                name="replace_append"
+                value="append"
+              />
+              <label>append</label>
+              <select name="append" id="append">
+                <option value="none">none</option>
+                <option value="father">father</option>
+                <option value="mother">mother</option>
+                <option value="husband">husband</option>
+                <option value="wife">wife</option>
+                <option value="sibling">sibling</option>
+                <option value="child">child</option>
+              </select>
+            </div>
+          </div>
+          <div class="mx-auto">
+            <button class="">send request</button>
+          </div>
+        </div>
+      </div>
+      <!-- aux -->
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <input
+            type="radio"
+            name="rep-mode"
+            value="me"
+            [(ngModel)]="controlledBy"
+            (change)="controlledByChanged()"
+          />
+          <label>You want to take over the other Node</label>
+        </div>
+        <div class="col-md-6">
+          <input
+            type="radio"
+            name="rep-mode"
+            value="them"
+            [(ngModel)]="controlledBy"
+            (change)="controlledByChanged()"
+          />
+          <label>Ask them to take over a node</label>
+        </div>
+      </div>
+      <hr class="mb-0" />
+      <!-- controlled by me -->
+      <div class="col-md-6" *ngIf="controlledBy === 'me'">
+        <div class="append-replace-box mt-3 border">
+          <span>You want to take over the other Node</span>
+          <div class="div d-flex justify-content-between">
+            <div class="replace-box">
+              <input
+                type="radio"
+                id="replace"
+                name="replace_append"
+                value="replace"
+              />
+              <label>replace</label>
+            </div>
+            <div class="append-button">
+              <input
+                type="radio"
+                id="append"
+                name="replace_append"
+                value="append"
+              />
+              <label>append</label>
+              <select name="append" id="append">
+                <option value="none">none</option>
+                <option value="father">father</option>
+                <option value="mother">mother</option>
+                <option value="husband">husband</option>
+                <option value="wife">wife</option>
+                <option value="sibling">sibling</option>
+                <option value="child">child</option>
+              </select>
+            </div>
+          </div>
+          <div class="mx-auto">
+            <button class="">send request</button>
+          </div>
+        </div>
+      </div>
+      <!-- controlled by them -->
+      <div class="col-md-12" *ngIf="controlledBy === 'them'">
+        <table style="width: 100%">
+          <tr>
+            <th>firstname</th>
+            <th>lastname</th>
+            <th>mother</th>
+            <th>append as</th>
+            <th>code</th>
+          </tr>
+          <tr>
+            <td>firstname</td>
+            <td>lastname</td>
+            <td>mother</td>
+            <td>append as</td>
+            <td>code</td>
+          </tr>
+        </table>
+        <div class="mt-1">
+          <button>send</button>
+        </div>
+      </div>
+    </div>
+    <!-- my request -->
+    <div class="row sent-requests" *ngIf="itemSelected === 'sent requests'">
+      <div class="col-md-12">
+        <table style="width: 100%">
+          <tr>
+            <th>firstname</th>
+            <th>lastname</th>
+            <th>mother</th>
+            <th>father</th>
+            <th>append as</th>
+            <th>view</th>
+            <th>cancel</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <!-- apply and view codes -->
+    <div class="row apply-codes" *ngIf="itemSelected === 'apply code'">
+      <div class="col-md-6 my-3">
+        <div class=""><input type="text" /> <button>apply</button></div>
+      </div>
+      <p>list to be merged</p>
+      <div class="col-md-12" style="overflow-x: auto">
+        <table style="width: 100%">
+          <tr>
+            <th>code</th>
+            <th>firstname</th>
+            <th>lastname</th>
+            <th>mother</th>
+            <th>father</th>
+            <th>appendas</th>
+            <th>firstname</th>
+            <th>lastname</th>
+            <th>mother</th>
+            <th>father</th>
+            <th>view</th>
+            <th>cancel</th>
+            <th>merge</th>
+            <th>status</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="menu-section"
+  aria-labelledby="menu-sectionLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="menu-sectionLabel">admin options</h5>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul>
+      <li *ngFor="let item of navItems">{{ item }}</li>
+    </ul>
+  </div>
+</div>

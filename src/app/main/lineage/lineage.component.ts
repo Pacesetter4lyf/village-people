@@ -10,7 +10,6 @@ export class LineageComponent implements OnInit {
   constructor(private resourceService: ResourceService) {}
   ngOnInit() {
     this.resourceService.viewingIndividual.next(false);
-    this.resourceService.initializeResources('lineage');
-    console.log('hello')
+    // this.resourceService.initializeResources('lineage');
   }
 }

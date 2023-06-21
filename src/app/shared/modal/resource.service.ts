@@ -42,7 +42,6 @@ export class ResourceService {
   initializeResources = async (view: 'individual' | 'lineage') => {
     if (view === 'individual') {
       this.resources.next(this.individualService.displayUser.value.resource);
-
       this.viewingIndividual.next(true);
     } else {
       if (!this.authService.user.value.isRegistered) {

@@ -26,7 +26,7 @@ import { TextInputComponent } from './helper.component/text-input/text-input.com
 import { PersonalHeaderComponent } from './main/personal/personal-header/personal-header.component';
 import { LineageHeaderComponent } from './main/lineage/lineage-header/lineage-header.component';
 import { SettingsComponent } from './main/personal/settings/settings.component';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, RouterStateSnapshot } from '@angular/router';
 import { PostsComponent } from './shared/posts/posts.component';
 import { SingleComponent } from './main/lineage/discussion/single/single.component';
 import { ChatsComponent } from './main/personal/chats/chats.component';
@@ -44,6 +44,13 @@ import { ButtonComponent } from './shared/modal/button/button.component';
 
 import { UcWidgetModule } from 'ngx-uploadcare-widget';
 import { ResourceResolver } from './main/lineage/lineage-resource-resolver';
+import {
+  chatGuard,
+  IndividualGuard,
+  settingsGuard,
+} from './main/personal/individual-guard.service';
+import { LinkComponent } from './main/lineage/link/link.component';
+import { AdminComponent } from './main/lineage/admin/admin.component';
 
 const appRoutes: Routes = [
   { path: '', component: LandingComponent },
@@ -55,10 +62,12 @@ const appRoutes: Routes = [
     children: [
       { path: '', redirectTo: 'tree', pathMatch: 'full' },
       { path: 'tree', component: TreeComponent },
+      { path: 'link', component: LinkComponent },
       { path: 'discussions', component: DiscussionComponent },
       { path: 'discussions/:single', component: SingleComponent },
       { path: 'birthdays', component: BirthdaysComponent },
       { path: 'funds', component: FundsComponent },
+      { path: 'admin', component: AdminComponent },
       {
         path: 'media',
         component: GalleryComponent,
@@ -108,10 +117,11 @@ const appRoutes: Routes = [
       { path: 'pictures', component: PicturesComponent },
       { path: 'videos', component: VideosComponent },
       { path: 'posts', component: PostsComponent },
-      { path: 'chats', component: ChatsComponent },
+      { path: 'chats', component: ChatsComponent, resolve: [chatGuard] },
       {
         path: 'settings',
         component: SettingsComponent,
+        resolve: [settingsGuard],
         children: [
           { path: 'info', component: ChatsComponent },
           { path: 'media', component: ChatsComponent },
@@ -159,7 +169,9 @@ const appRoutes: Routes = [
     LoadingSpinnerComponent,
     ModalComponent,
     ButtonComponent,
-    SafePipe
+    SafePipe,
+    LinkComponent,
+    AdminComponent,
   ],
   imports: [
     BrowserModule,

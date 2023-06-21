@@ -13,5 +13,14 @@ import { filter } from 'rxjs';
   styleUrls: ['./lineage-header.component.css'],
 })
 export class LineageHeaderComponent {
-  tabs = ['Tree', 'Discussions', 'Birthdays', 'Funds', 'Media', 'Search'];
+  tabs = [
+    'Tree',
+    'Link',
+    'Admin',
+    'Media',
+    'Search',
+    'Funds',
+    'Birthdays',
+    'Discussions',
+  ];
 }

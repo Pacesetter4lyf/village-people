@@ -11,9 +11,7 @@ import {
 } from 'rxjs/operators';
 import { throwError, Subject, BehaviorSubject, of } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { ResourceService } from 'src/app/shared/modal/resource.service';
 import { DisplayUserModel } from './display-user.model';
-import { Resource } from 'src/app/shared/resource.model';
 export interface BasicDetailsInterface {
   _id?: string;
   photo?: string | File;
@@ -31,6 +29,7 @@ export interface BasicDetailsInterface {
   primary?: string;
   secondary?: string;
   tertiary?: string;
+  createdBy?: string;
   resource?: {
     _id?: string;
     viewableBy?: string;
@@ -62,43 +61,91 @@ type DisplayModeType =
   | 'user-viewing'
   | 'lineage-viewing'
   | 'guest';
+
 @Injectable({ providedIn: 'root' })
 export class IndividualService {
   tabClickEvent = new EventEmitter<PointerEvent>();
   error = '';
   displayMode = new BehaviorSubject<DisplayModeType>('self');
-  // displayUser: BasicDetailsInterface = null;
+  appendAsWhat: string;
+  appendTo: string;
   displayUser = new BehaviorSubject<BasicDetailsInterface>(null);
+  actualUser = new BehaviorSubject<BasicDetailsInterface>(null);
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) {
+    this.authService.user.subscribe((user) => {
+      if (!user) {
+        this.displayMode.next('self');
+        this.displayUser.next(null);
+        this.actualUser.next(null);
+      }
+    });
+  }
 
   sendBasicDetails(data: BasicDetailsInterface) {
     const basicFormData = new FormData();
     Object.keys(data).map((key) => {
-      if (data[key] !== null) {
+      if (data[key] !== null && data[key] !== '') {
         basicFormData.append(key, data[key]);
         console.log(key, data[key]);
       }
     });
 
+    const displayUserId = this.displayUser.value._id;
+    const displayMode = this.displayMode.value;
+    if (!displayUserId) {
+      // we are having an empty display user
+      // determine whether in self mode or user-creating
+      if (displayMode === 'self') {
+        basicFormData.append('mode', 'self');
+      } else {
+        basicFormData.append('mode', 'other');
+        basicFormData.append('appendAs', this.appendAsWhat);
+        basicFormData.append('appendTo', this.appendTo);
+      }
+      return this.http
+        .post<respType<BasicDetailsInterface>>(
+          `http://localhost:3001/api/v1/userdata/createUser`,
+          basicFormData
+        )
+        .subscribe((value) => {
+          console.log(value);
+          if (value.status === 'success') {
+            this.displayUser.next(value.data.user);
+            if (displayMode === 'self') this.actualUser.next(value.data.user);
+            this.updateModeAfterCreation();
+          }
+        });
+    }
+
     return this.http
       .patch<respType<BasicDetailsInterface>>(
-        `http://localhost:3001/api/v1/userdata/updateMe`,
+        `http://localhost:3001/api/v1/userdata/${displayUserId}`,
 
         basicFormData
       )
       .subscribe((value) => {
-        console.log(value);
+        console.log('patch', value);
         if (value.status === 'success') {
           this.displayUser.next(value.data.user);
+          if (displayMode === 'self') this.actualUser.next(value.data.user);
         }
       });
   }
 
+  updateModeAfterCreation() {
+    const mode = this.displayMode.value;
+    if (mode === 'user-creating') {
+      this.displayMode.next('user-viewing');
+    }
+  }
+
   fetchDisplayUser(userId?: string) {
     let currentId: string = userId;
+    let self = false;
     if (!userId) {
       if (this.displayUser.value) return;
+      self = true;
       this.authService.user
         .pipe(
           take(1),
@@ -120,6 +167,7 @@ export class IndividualService {
           tap<BasicDetailsInterface>((response) => {
             console.log('user ', this.displayUser);
             this.displayUser.next(response);
+            if (self) this.actualUser.next(response);
             // this.resourceService.fetchResources();
           })
         );
@@ -148,9 +196,11 @@ export class IndividualService {
     return throwError(() => Error(error));
   }
 
-  setDisplayMode(mode: DisplayModeType) {
+  addIndividual(mode: DisplayModeType, asWhat: string, appendTo: string) {
     this.displayMode.next(mode);
     this.displayUser.next(this.emptyUser());
+    this.appendAsWhat = asWhat;
+    this.appendTo = appendTo;
   }
 
   emptyUser() {
@@ -173,5 +223,36 @@ export class IndividualService {
       '',
       []
     );
+  }
+
+
+  getUserWithId(id: string) {
+    return this.http
+      .get<respType<BasicDetailsInterface>>(
+        `http://localhost:3001/api/v1/userdata/byId/${id}`
+      )
+      .pipe(
+        catchError(this.handleError),
+        map((response) => response.data.data),
+        tap<BasicDetailsInterface>((response) => {
+          if (!response.resource) {
+            response.resource = [];
+          }
+          this.displayUser.next(response);
+          console.log('view resp ', response);
+          if (this.displayUser.value?.createdBy === this.actualUser.value._id)
+            this.displayMode.next('user-viewing');
+        })
+      )
+      .subscribe();
+  }
+
+  showDetails(id: string) {
+    if (id === this.actualUser.value._id) {
+      this.displayMode.next('self');
+      return;
+    }
+    this.getUserWithId(id);
+    // set esit mode to false
   }
 }

@@ -1,0 +1,50 @@
+.search{
+    border-color: blue;
+    border: 2px;
+}
+
+
+.my-btn{
+    background-color: blue;
+    border: none;
+}
+.my-btn:hover{
+    background-color: blueviolet;
+}
+
+.link-text{
+}
+
+
+.unordered-list{
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px
+}
+.unordered-list li{
+    cursor: pointer;
+}
+
+.relationship-block{
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin:0px;
+    margin-block: 1rem;
+}
+
+.relationship{
+    border: 1px!important;
+    border-color: blue!important;
+    cursor: pointer;
+}
+
+p{
+    text-align: center;
+}
+
+.selected{
+ color: blue;
+ border: 1px solid blue;
+ background-color: yellow;
+}
