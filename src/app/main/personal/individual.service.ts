@@ -225,7 +225,6 @@ export class IndividualService {
     );
   }
 
-
   getUserWithId(id: string) {
     return this.http
       .get<respType<BasicDetailsInterface>>(
@@ -250,8 +249,10 @@ export class IndividualService {
   showDetails(id: string) {
     if (id === this.actualUser.value._id) {
       this.displayMode.next('self');
+      this.displayUser = this.actualUser
       return;
     }
+    console.log('now getting user');
     this.getUserWithId(id);
     // set esit mode to false
   }

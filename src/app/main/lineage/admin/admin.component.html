@@ -111,7 +111,9 @@
             </div>
           </div>
           <div class="mx-auto">
-            <button class="" (click)="generateCode()">generate code</button>
+            <button class="" (click)="generateCode('generateOnly')">
+              generate code
+            </button>
           </div>
         </div>
       </div>
@@ -127,13 +129,15 @@
           <th>code</th>
           <th>cancel</th>
         </tr>
-        <tr *ngFor="let member of codesList; let i = index">
+        <tr *ngFor="let member of generatedRequest; let i = index">
           <td>{{ member.userData.firstName }}</td>
           <td>{{ member.userData.lastName }}</td>
           <td>{{ member.userData.mother?.firstName || "none" }}</td>
           <td>{{ member.mode }}</td>
           <td>{{ member.code }}</td>
-          <td style="font-size: 0.7rem"><button>cancel</button></td>
+          <td style="font-size: 0.7rem" (click)="revokeCode(member.id)">
+            <button>cancel</button>
+          </td>
         </tr>
       </table>
     </div>
@@ -154,41 +158,107 @@
           <th>lastname</th>
           <th>mother</th>
           <th>father</th>
-          <th>cancel</th>
+          <th>decline</th>
           <th>merge</th>
           <th>view</th>
         </tr>
+        <tr
+          *ngFor="let member of incomingRequest; let i = index"
+          (click)="selectRow('incomingRequest', i)"
+          role="button"
+        >
+          <td>{{ member.userData.firstName }}</td>
+          <td>{{ member.userData.lastName }}</td>
+          <td>{{ member.userData.mother?.firstName }}</td>
+          <td>{{ member.userData.father?.firstName }}</td>
+          <td>{{ member.mode }}</td>
+          <td>{{ member.nodeTo.firstName }}</td>
+          <td>{{ member.nodeTo.lastName }}</td>
+          <td>{{ member.nodeTo?.mother?.firstName }}</td>
+          <td>{{ member.nodeTo?.father?.firstName }}</td>
+          <td style="font-size: 0.7rem">
+            <button (click)="declineEnableRequest(member.id, i)">
+              {{ member.status === "declined" ? "enable" : "decline" }}
+            </button>
+          </td>
+          <td style="font-size: 0.7rem">
+            <button (click)="beginMerge(member.id)">merge</button>
+          </td>
+          <td style="font-size: 0.7rem" (click)="viewNode(member.userData.id)">
+            <button>view</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <!-- request status' -->
+    <div
+      style="overflow-x: auto"
+      class="incoming-requests"
+      *ngIf="itemSelected === 'request status'"
+    >
+      <table style="width: 100%" *ngIf="requestStatusList">
         <tr>
-          <td>firstname</td>
-          <td>lastname</td>
-          <td>mother</td>
-          <td>father</td>
-          <td>appendAs</td>
           <th>firstname</th>
           <th>lastname</th>
           <th>mother</th>
           <th>father</th>
-          <td style="font-size: 0.7rem"><button>cancel</button></td>
-          <td style="font-size: 0.7rem"><button>merge</button></td>
-          <td style="font-size: 0.7rem"><button>view</button></td>
+          <th>appendAs</th>
+          <th>firstname</th>
+          <th>lastname</th>
+          <th>mother</th>
+          <th>father</th>
+          <th>status</th>
+          <th>action</th>
+        </tr>
+        <tr
+          *ngFor="let member of requestStatusList; let i = index"
+          (click)="selectRow('requestStatus', i)"
+          role="button"
+        >
+          <td>{{ member.userData.firstName }}</td>
+          <td>{{ member.userData.lastName }}</td>
+          <td>{{ member.userData.mother?.firstName }}</td>
+          <td>{{ member.userData.father?.firstName }}</td>
+          <td>{{ member.mode }}</td>
+          <td>{{ member.nodeTo.firstName }}</td>
+          <td>{{ member.nodeTo.lastName }}</td>
+          <td>{{ member.nodeTo?.mother?.firstName }}</td>
+          <td>{{ member.nodeTo?.father?.firstName }}</td>
+          <td style="font-size: 0.7rem">status</td>
+          <td style="font-size: 0.7rem">
+            <button>action</button>
+          </td>
         </tr>
       </table>
+      <div *ngIf="!requestStatusList">
+        <p>No request currently</p>
+      </div>
     </div>
     <!-- find people -->
     <div class="row find-people" *ngIf="itemSelected === 'find people'">
       <div class="d-flex my-1 flex-wrap gap-1 justify-content-between">
-        <input type="text" [placeholder]="'lastname'" />
+        <form (ngSubmit)="findPeople()" [formGroup]="form">
+          <input
+            type="text"
+            formControlName="lastName"
+            [placeholder]="'lastname'"
+          />
 
-        <input type="text" [placeholder]="'state'" />
+          <input type="text" formControlName="state" [placeholder]="'state'" />
 
-        <input type="text" [placeholder]="'village'" />
+          <input
+            type="text"
+            formControlName="village"
+            [placeholder]="'village'"
+          />
 
-        <button>find</button>
+          <button type="submit">find</button>
+        </form>
       </div>
       <hr />
 
       <div class="col-md-12">
-        <table style="width: 100%">
+        <table style="width: 100%" *ngIf="peopleFound?.length">
           <tr>
             <th>firstname</th>
             <th>lastname</th>
@@ -196,6 +266,26 @@
             <th>father</th>
             <th>spouse</th>
             <th>view</th>
+          </tr>
+          <tr
+            *ngFor="let person of peopleFound; let i = index"
+            [ngClass]="{ 'active-row': i === t4SelectedRow }"
+            (click)="selectRow(4, i)"
+            role="button"
+          >
+            <td>{{ person.firstName }}</td>
+            <td>{{ person.lastName }}</td>
+            <td>{{ person.mother }}</td>
+            <td>{{ person.father }}</td>
+            <td>{{ person.wife || person.husband }}</td>
+            <td>
+              <button
+                style="font-size: 0.7rem"
+                (click)="viewNode(person.id, true)"
+              >
+                view
+              </button>
+            </td>
           </tr>
         </table>
       </div>
@@ -264,38 +354,42 @@
       <div class="col-md-6" *ngIf="controlledBy === 'me'">
         <div class="append-replace-box mt-3 border">
           <span>You want to take over the other Node</span>
-          <div class="div d-flex justify-content-between">
-            <div class="replace-box">
-              <input
-                type="radio"
-                id="replace"
-                name="replace_append"
-                value="replace"
-              />
-              <label>replace</label>
+          <form #form="ngForm" (submit)="generateCode2(form.value)">
+            <div class="div d-flex justify-content-between">
+              <div class="replace-box">
+                <input
+                  type="radio"
+                  id="replace"
+                  name="replace_append"
+                  value="replace"
+                  ngModel
+                />
+                <label>replace</label>
+              </div>
+              <div class="append-button">
+                <input
+                  type="radio"
+                  id="append"
+                  name="replace_append"
+                  ngModel
+                  value="append"
+                />
+                <label>append</label>
+                <select name="append" id="append" ngModel>
+                  <option value="none">none</option>
+                  <option value="father">father</option>
+                  <option value="mother">mother</option>
+                  <option value="husband">husband</option>
+                  <option value="wife">wife</option>
+                  <option value="sibling">sibling</option>
+                  <option value="child">child</option>
+                </select>
+              </div>
             </div>
-            <div class="append-button">
-              <input
-                type="radio"
-                id="append"
-                name="replace_append"
-                value="append"
-              />
-              <label>append</label>
-              <select name="append" id="append">
-                <option value="none">none</option>
-                <option value="father">father</option>
-                <option value="mother">mother</option>
-                <option value="husband">husband</option>
-                <option value="wife">wife</option>
-                <option value="sibling">sibling</option>
-                <option value="child">child</option>
-              </select>
+            <div class="mx-auto">
+              <button class="" type="submit">send request</button>
             </div>
-          </div>
-          <div class="mx-auto">
-            <button class="">send request</button>
-          </div>
+          </form>
         </div>
       </div>
       <!-- controlled by them -->
@@ -308,22 +402,27 @@
             <th>append as</th>
             <th>code</th>
           </tr>
-          <tr>
-            <td>firstname</td>
-            <td>lastname</td>
-            <td>mother</td>
-            <td>append as</td>
-            <td>code</td>
+          <tr
+            *ngFor="let member of codesList; let i = index"
+            [ngClass]="{ 'active-row': i === t5SelectedRow }"
+            (click)="selectRow(5, i)"
+            role="button"
+          >
+            <td>{{ member.userData.firstName }}</td>
+            <td>{{ member.userData.lastName }}</td>
+            <td>{{ member.userData.mother?.firstName || "none" }}</td>
+            <td>{{ member.mode }}</td>
+            <td>{{ member.code }}</td>
           </tr>
         </table>
         <div class="mt-1">
-          <button>send</button>
+          <button (click)="sendRequestToExternal()">send</button>
         </div>
       </div>
     </div>
     <!-- my request -->
     <div class="row sent-requests" *ngIf="itemSelected === 'sent requests'">
-      <div class="col-md-12">
+      <div class="col-md-12" style="overflow-x: auto">
         <table style="width: 100%">
           <tr>
             <th>firstname</th>
@@ -331,18 +430,58 @@
             <th>mother</th>
             <th>father</th>
             <th>append as</th>
+            <th>firstname</th>
+            <th>lastname</th>
+            <th>mother</th>
+            <th>father</th>
+            <th>status</th>
             <th>view</th>
             <th>cancel</th>
+          </tr>
+          <tr
+            *ngFor="let member of sentRequest; let i = index"
+            (click)="selectRow(6, i)"
+            role="button"
+          >
+            <td>{{ member.userData.firstName }}</td>
+            <td>{{ member.userData.lastName }}</td>
+            <td>{{ member.userData.mother?.firstName }}</td>
+            <td>{{ member.userData.father?.firstName }}</td>
+            <td>{{ member.mode }}</td>
+            <td>{{ member.nodeTo.firstName }}</td>
+            <td>{{ member.nodeTo.lastName }}</td>
+            <td>{{ member.nodeTo?.mother?.firstName }}</td>
+            <td>{{ member.nodeTo?.father?.firstName }}</td>
+            <td>{{ member.status }}</td>
+            <td
+              style="font-size: 0.7rem"
+              (click)="
+                viewNode(
+                  member.nodeTo.id === member.generatedBy
+                    ? member.userData.id
+                    : member.nodeTo.id
+                )
+              "
+            >
+              <button>view</button>
+            </td>
+            <td style="font-size: 0.7rem">
+              <button (click)="revokeCode(member.id)">cancel</button>
+            </td>
           </tr>
         </table>
       </div>
     </div>
     <!-- apply and view codes -->
     <div class="row apply-codes" *ngIf="itemSelected === 'apply code'">
-      <div class="col-md-6 my-3">
-        <div class=""><input type="text" /> <button>apply</button></div>
+      <div class="col-md-12 my-3 gap-1">
+        <div class="">
+          <input type="text" #codeInput />
+          <button (click)="seeSourceNode(codeInput.value)">see node</button>
+          <button>update sender</button>
+        </div>
       </div>
-      <p>list to be merged</p>
+
       <div class="col-md-12" style="overflow-x: auto">
         <table style="width: 100%">
           <tr>
@@ -352,16 +491,68 @@
             <th>mother</th>
             <th>father</th>
             <th>appendas</th>
+            <th>view</th>
+          </tr>
+          <tr *ngIf="foundPersonFromCode">
+            <td>{{ foundPersonFromCode.code }}</td>
+            <td>{{ foundPersonFromCode.userData.firstName }}</td>
+            <td>{{ foundPersonFromCode.userData.lastName }}</td>
+            <td>{{ foundPersonFromCode.userData?.mother?.firstName }}</td>
+            <td>{{ foundPersonFromCode.userData?.father?.firstName }}</td>
+            <td>{{ foundPersonFromCode.mode }}</td>
+            <td
+              style="font-size: 0.7rem"
+              (click)="viewNode(foundPersonFromCode.userData.id)"
+            >
+              <button>view</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <p class="mb-0 mt-1">select a member to be merged</p>
+      <div class="row all-members" style="overflow-x: auto">
+        <table style="width: 100%">
+          <tr>
             <th>firstname</th>
             <th>lastname</th>
             <th>mother</th>
             <th>father</th>
             <th>view</th>
-            <th>cancel</th>
-            <th>merge</th>
-            <th>status</th>
+          </tr>
+          <tr
+            *ngFor="let member of membersList; let i = index"
+            [ngClass]="{ 'active-row': i === tMembersApplyCode }"
+            (click)="selectRow('tMembersApplyCode', i)"
+            role="button"
+          >
+            <td>{{ member.firstName }}</td>
+            <td>{{ member.lastName }}</td>
+            <td>{{ member.mother }}</td>
+            <td>{{ member.father }}</td>
+            <td style="font-size: 0.7rem" (click)="viewNode(member.id)">
+              <button>view</button>
+            </td>
           </tr>
         </table>
+      </div>
+    </div>
+    <!-- the merge process -->
+    <div class="row" *ngIf="itemSelected === 'merge'">
+      <div class="d-flex justify-content-between align-items-center">
+        <label for="">firstname</label>
+        <p class="mb-0">Emmanuel</p>
+        <input type="text" />
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <label for="">lastname</label>
+        <p class="mb-0">Emmanuel</p>
+        <input type="text" class="fs-6" />
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <label for="">lastname</label>
+        <p class="mb-0">Emmanuel</p>
+        <input type="text" class="fs-6" />
       </div>
     </div>
   </div>

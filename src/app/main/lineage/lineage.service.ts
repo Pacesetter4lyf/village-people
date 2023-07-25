@@ -23,6 +23,9 @@ export class LineageService {
     private individualService: IndividualService,
     private http: HttpClient
   ) {}
+
+  private isPublic = false;
+
   appendNode(asWhat: string, appendTo: string) {
     this.individualService.addIndividual('user-creating', asWhat, appendTo);
     this.router.navigate(['individual']);
@@ -50,5 +53,10 @@ export class LineageService {
         set: set,
       }
     );
+  }
+
+  changeViewMode(isPublic: boolean) {
+    this.isPublic = !!isPublic;
+    if (isPublic) this.individualService.displayMode.next('guest');
   }
 }
