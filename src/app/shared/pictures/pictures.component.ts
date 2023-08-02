@@ -11,7 +11,7 @@ import {
   BasicDetailsInterface,
   IndividualService,
 } from 'src/app/main/personal/individual.service';
-import { ResourceService } from '../modal/resource.service';
+import { ResourceService } from '../resource.service';
 
 @Component({
   selector: 'app-pictures',

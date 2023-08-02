@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IndividualService } from 'src/app/main/personal/individual.service';
-import { ResourceService } from '../modal/resource.service';
+import { ResourceService } from '../resource.service';
 
 @Component({
   selector: 'app-videos',
@@ -15,7 +15,7 @@ export class VideosComponent implements OnInit {
   videosSub: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
-    private resourceService: ResourceService,
+    private resourceService: ResourceService
   ) {}
 
   ngOnInit() {
@@ -35,5 +35,4 @@ export class VideosComponent implements OnInit {
   ngOnDestroy() {
     this.videosSub.unsubscribe();
   }
-
 }

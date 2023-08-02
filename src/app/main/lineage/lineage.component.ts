@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ResourceService } from 'src/app/shared/modal/resource.service';
+import { ResourceService } from 'src/app/shared/resource.service';
 
 @Component({
   selector: 'app-lineage',

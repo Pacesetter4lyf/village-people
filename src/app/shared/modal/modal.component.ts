@@ -19,7 +19,7 @@ import {
 } from 'src/app/main/personal/individual.service';
 // import uploadcare from 'uploadcare-widget/uploadcare.lang.en.min.js';
 import uploadcare from 'uploadcare-widget/uploadcare.full.min.js';
-import { ResourceService } from './resource.service';
+import { ResourceService } from '../resource.service';
 declare var window: any;
 
 @Component({

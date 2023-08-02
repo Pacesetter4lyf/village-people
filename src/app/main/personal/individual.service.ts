@@ -30,6 +30,8 @@ export interface BasicDetailsInterface {
   secondary?: string;
   tertiary?: string;
   createdBy?: string;
+  lineage?: string[];
+  adminOf?: number[];
   resource?: {
     _id?: string;
     viewableBy?: string;
@@ -218,6 +220,7 @@ export class IndividualService {
       '',
       '',
       '',
+      [],
       '',
       '',
       '',
@@ -249,7 +252,7 @@ export class IndividualService {
   showDetails(id: string) {
     if (id === this.actualUser.value._id) {
       this.displayMode.next('self');
-      this.displayUser = this.actualUser
+      this.displayUser = this.actualUser;
       return;
     }
     console.log('now getting user');

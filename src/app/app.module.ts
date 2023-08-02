@@ -30,6 +30,7 @@ import { Routes, RouterModule, RouterStateSnapshot } from '@angular/router';
 import { PostsComponent } from './shared/posts/posts.component';
 import { SingleComponent } from './main/lineage/discussion/single/single.component';
 import { ChatsComponent } from './main/personal/chats/chats.component';
+import { ChatComponent } from './main/personal/chats/chat/chat.component';
 import { IndividualService } from './main/personal/individual.service';
 import { AuthComponent } from './auth/auth.component';
 import { canActivateFn } from './auth/auth-guard.service';
@@ -117,7 +118,12 @@ const appRoutes: Routes = [
       { path: 'pictures', component: PicturesComponent },
       { path: 'videos', component: VideosComponent },
       { path: 'posts', component: PostsComponent },
-      { path: 'chats', component: ChatsComponent, resolve: [chatGuard] },
+      {
+        path: 'chats',
+        component: ChatsComponent,
+        resolve: [chatGuard],
+        children: [{ path: ':id', component: ChatComponent }],
+      },
       {
         path: 'settings',
         component: SettingsComponent,
@@ -172,6 +178,7 @@ const appRoutes: Routes = [
     SafePipe,
     LinkComponent,
     AdminComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,

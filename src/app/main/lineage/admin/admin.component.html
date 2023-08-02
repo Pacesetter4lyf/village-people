@@ -28,19 +28,48 @@
       *ngIf="itemSelected === 'all members'"
       style="overflow-x: auto"
     >
+      <!-- to switch the lineage -->
+      <div class="col-3">
+        <select
+          [(ngModel)]="currentLineage"
+          class="form-select"
+          aria-label="Default select example"
+          (change)="lineageChanged()"
+        >
+          <option *ngFor="let lineage of userLineage" value="{{ lineage }}">
+            {{ lineage }}
+          </option>
+        </select>
+      </div>
       <table style="width: 100%">
         <tr>
           <th>firstname</th>
           <th>lastname</th>
           <th>mother</th>
           <th>father</th>
+          <th>remove</th>
+          <th>chat</th>
           <th>view</th>
         </tr>
-        <tr *ngFor="let member of membersList">
+        <tr *ngFor="let member of filteredMembersList">
           <td>{{ member.firstName }}</td>
           <td>{{ member.lastName }}</td>
           <td>{{ member.mother }}</td>
           <td>{{ member.father }}</td>
+          <td
+            style="font-size: 0.7rem"
+            (click)="changeMemberStatus(member.id, 'remove')"
+          >
+            <button>remove</button>
+          </td>
+          <td>
+            <a
+              [routerLink]="['/individual', 'chats', member.id]"
+              [queryParams]="{ firstName: member.firstName }"
+              class="link-primary"
+              >message</a
+            >
+          </td>
           <td style="font-size: 0.7rem" (click)="viewNode(member.id)">
             <button>view</button>
           </td>
@@ -553,6 +582,44 @@
         <label for="">lastname</label>
         <p class="mb-0">Emmanuel</p>
         <input type="text" class="fs-6" />
+      </div>
+    </div>
+    <!-- archived -->
+    <div
+      style="overflow-x: auto"
+      class="archived"
+      *ngIf="itemSelected === 'archived'"
+    >
+      <table style="width: 100%" *ngIf="archivedList">
+        <tr>
+          <th>firstname</th>
+          <th>lastname</th>
+          <th>delete</th>
+          <th>reinstate</th>
+          <th>view</th>
+        </tr>
+        <tr
+          *ngFor="let member of archivedList; let i = index"
+          (click)="selectRow('archived', i)"
+          role="button"
+        >
+          <td>{{ member.firstName }}</td>
+          <td>{{ member.lastName }}</td>
+          <td style="font-size: 0.7rem">
+            <button>delete</button>
+          </td>
+          <td style="font-size: 0.7rem">
+            <button (click)="changeMemberStatus(member.id, 'reinstate')">
+              reinstate
+            </button>
+          </td>
+          <td style="font-size: 0.7rem">
+            <button (click)="viewNode(member.id)">view</button>
+          </td>
+        </tr>
+      </table>
+      <div *ngIf="!archivedList">
+        <p>No archived</p>
       </div>
     </div>
   </div>

@@ -12,6 +12,7 @@ export class Resource {
     public description?: string,
     public name?: string,
     public text?: string,
-    public url?: string
+    public url?: string,
+    public forUser?: string
   ) {}
 }

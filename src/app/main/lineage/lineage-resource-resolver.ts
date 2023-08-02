@@ -4,7 +4,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from '@angular/router';
-import { ResourceService } from 'src/app/shared/modal/resource.service';
+import { ResourceService } from 'src/app/shared/resource.service';
 
 export const ResourceResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ResourceService } from 'src/app/shared/modal/resource.service';
+import { ResourceService } from 'src/app/shared/resource.service';
 import { IndividualService } from './individual.service';
 
 @Component({

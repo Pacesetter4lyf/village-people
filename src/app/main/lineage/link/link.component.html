@@ -85,9 +85,23 @@
   </div>
 </form>
 <div class="row">
+  <div class="col-12 d-flex justify-content-center">
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value=""
+        id="buildotherlinkages"
+        [(ngModel)]="linkNode"
+      />
+      <label class="form-check-label" for="buildotherlinkages">
+        build linkages of B as well
+      </label>
+    </div>
+  </div>
   <div class="col">
     <div>
-      <div><p>B is the</p></div>
+      <div><p>B is the/ append B as</p></div>
       <div class="relationship-block">
         <span
           *ngFor="let value of values"
@@ -97,7 +111,7 @@
           >{{ value }}</span
         >
       </div>
-      <div><p>of A</p></div>
+      <div><p>of A / to A</p></div>
     </div>
   </div>
 </div>

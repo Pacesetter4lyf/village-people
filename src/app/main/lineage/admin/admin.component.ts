@@ -6,6 +6,7 @@ import {
 } from './admin.service';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -15,13 +16,15 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class AdminComponent implements OnInit, OnDestroy {
   constructor(
     private adminService: AdminService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {
     this.form = this.formBuilder.group({
       lastName: [''],
       state: [''],
       village: [''],
     });
+    this.currentLineage = 'all';
   }
 
   navItems: string[] = [
@@ -43,6 +46,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   appendMode = 'none';
 
   membersList: personRowInterface[];
+  archivedList: personRowInterface[];
+  filteredMembersList: personRowInterface[];
   codesList: codeRowInterface[];
   sentRequest: codeRowInterface[];
   incomingRequest: codeRowInterface[];
@@ -51,6 +56,10 @@ export class AdminComponent implements OnInit, OnDestroy {
   foundPersonFromCode: codeRowInterface;
   allMembersSub: Subscription;
   allCodesSub: Subscription;
+
+  // the lineage
+  currentLineage: 'all' | number;
+  userLineage: string[];
 
   // the people got by finding
   peopleFound: personRowInterface[];
@@ -78,8 +87,14 @@ export class AdminComponent implements OnInit, OnDestroy {
     //for instance where you add a member in individual and then move to the admin
     this.adminService.fetchMembersList();
     this.allMembersSub = this.adminService.getMembers().subscribe((members) => {
-      this.membersList = members;
-      console.log(this.membersList);
+      this.membersList = [...members];
+      this.filteredMembersList = members.filter(
+        (member) => member.status !== 'archived'
+      );
+
+      this.archivedList = members.filter(
+        (member) => member.status === 'archived'
+      );
     });
 
     this.allCodesSub = this.adminService.getCodes().subscribe((codes) => {
@@ -110,6 +125,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.adminService.findResult.subscribe((response) => {
       this.peopleFound = response;
     });
+
+    this.userLineage = ['all', ...this.adminService.getMe().lineage];
   }
 
   ngOnDestroy() {
@@ -223,5 +240,52 @@ export class AdminComponent implements OnInit, OnDestroy {
       // decline the request. a patch with status set to declined
       this.adminService.updateRequest(request.id, 'declined');
     }
+  }
+  lineageChanged() {
+    console.log('lineage has changed');
+    if (this.currentLineage === 'all')
+      this.filteredMembersList = [...this.membersList];
+    else {
+      this.filteredMembersList = this.membersList.filter((member) => {
+        return member.lineage.includes(+this.currentLineage);
+      });
+    }
+  }
+
+  changeMemberStatus(id: string, action: string) {
+    // if you are the admin of the node
+    //    if it was created by you  and has no other lineage then delete it
+    //    if it wasnt created by you then remove it
+
+    if (this.currentLineage === 'all' && action === 'remove') {
+      alert('select an actual lineage');
+      return;
+    }
+    //lineage we adminster
+    const adminOf = this.adminService.getMe().adminOf;
+    // the node we want to remove
+    const target = this.membersList.filter((members) => members.id === id)[0]; // sould e find
+    // find the node, and then if we admin the node
+    console.log(target);
+    if (target && target.lineage.filter((item) => adminOf.includes(item))) {
+      if (action === 'remove') {
+        this.adminService.changeMemberStatus(
+          'remove',
+          id,
+          +this.currentLineage
+        );
+      } else {
+        this.adminService.changeMemberStatus('reinstate', id);
+      }
+    } else {
+      alert('you are not an admin');
+    }
+  }
+
+  chatMember(id: string) {
+    const firstName = this.membersList.find((m) => m.id === id);
+    this.router.navigate(['./individual', 'chats', id], {
+      queryParams: firstName,
+    });
   }
 }

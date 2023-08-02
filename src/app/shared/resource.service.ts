@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, firstValueFrom, map, Subject, take, tap } from 'rxjs';
+import { BehaviorSubject, map, Subject, take, tap } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { DisplayUserModel } from 'src/app/main/personal/display-user.model';
 import {
   BasicDetailsInterface,
   IndividualService,
@@ -37,6 +36,10 @@ export class ResourceService {
     this.resources = new BehaviorSubject<BasicDetailsInterface['resource']>([
       this.emptyData,
     ]);
+
+
+
+    
   }
 
   initializeResources = async (view: 'individual' | 'lineage') => {

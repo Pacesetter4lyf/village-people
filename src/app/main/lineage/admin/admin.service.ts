@@ -24,6 +24,8 @@ export interface personRowInterface {
   father: string;
   wife: string;
   husband: string;
+  lineage: number[];
+  status: string;
 }
 export interface codeRowInterface {
   id: string;
@@ -70,6 +72,7 @@ export class AdminService {
   ) {
     this.fetchMembersList();
     this.fetchCodes();
+    this.currentLineage = this.individualService.actualUser.value.lineage[0];
   }
 
   // trying out the different method
@@ -84,10 +87,12 @@ export class AdminService {
 
   public findResult = new Subject<personRowInterface[]>(); //also find people
 
+  public currentLineage: string;
+
   fetchMembersList() {
     this.http
       .get<respType<personRowInterface[]>>(
-        'http://localhost:3001/api/v1/userdata/members/members'
+        'http://localhost:3001/api/v1/userdata/members'
       )
       .pipe(
         catchError((error) => {
@@ -233,6 +238,9 @@ export class AdminService {
   getMyId() {
     return this.individualService.actualUser.value._id;
   }
+  getMe() {
+    return this.individualService.actualUser.value;
+  }
 
   // when you put in a code and wants to find the person to which you will be attaching
   seeSourceNode(code: string) {
@@ -266,6 +274,15 @@ export class AdminService {
       .subscribe((response) => {
         console.log(response.data.data);
         this.fetchCodes();
+      });
+  }
+
+  changeMemberStatus(action: string, id: string, lineage?: number) {
+    this.http
+      .get(`http://localhost:3001/api/v1/userdata/member/${id}/${lineage}/${action}`)
+      .subscribe((response) => {
+        this.fetchCodes();
+        this.fetchMembersList();
       });
   }
 }

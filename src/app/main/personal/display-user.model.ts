@@ -15,6 +15,7 @@ interface DisplayUserInterface {
   secondarySchool?: string;
   tertiarySchool?: string;
   bibliography?: string;
+  lineage?: string[];
   primary?: string;
   secondary?: string;
   tertiary?: string;
@@ -50,9 +51,11 @@ export class DisplayUserModel implements DisplayUserInterface {
     public secondarySchool?: string,
     public tertiarySchool?: string,
     public bibliography?: string,
+    public lineage?: string[],
     public primary?: string,
     public secondary?: string,
     public tertiary?: string,
-    public resource?: Resource[]
+    public resource?: Resource[],
+    public adminOf?: number[]
   ) {}
 }

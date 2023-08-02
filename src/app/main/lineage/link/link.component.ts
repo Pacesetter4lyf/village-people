@@ -21,6 +21,8 @@ export class LinkComponent {
   selectSubscribe: Subscription;
   searchSubscribtion: Subscription;
 
+  linkNode = false;
+
   constructor(
     private lineageService: LineageService,
     private treeService: TreeService,
@@ -30,14 +32,22 @@ export class LinkComponent {
   ngOnInit() {}
 
   setUnset(value: string) {
-    console.log(value);
+    if (this.linkNode) {
+      let answer = confirm('Are you sure you want to build linkages of B?');
+      if (!answer) return;
+
+      answer = confirm('Are you sure you want to build linkages of B?');
+      if (!answer) return;
+    }
+
     if (this.selectedA && this.selectedB) {
       this.lineageService
         .setUnset(
           this.selectedA?.id,
           this.selectedB?.id,
           value,
-          this.relationship === 'none'
+          this.relationship === 'none',
+          this.linkNode
         )
         .subscribe((resp) => {
           if (resp.status == 'success') {

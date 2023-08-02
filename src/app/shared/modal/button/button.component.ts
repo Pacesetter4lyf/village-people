@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { IndividualService } from 'src/app/main/personal/individual.service';
-import { ResourceService } from '../resource.service';
+import { ResourceService } from '../../resource.service';
 
 @Component({
   selector: 'app-modal-button',
@@ -15,6 +15,6 @@ export class ButtonComponent {
   ) {}
 
   onClick() {
-    this.resourceService.mode.next('create')
+    this.resourceService.mode.next('create');
   }
 }

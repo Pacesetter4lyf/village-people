@@ -45,12 +45,19 @@ export class LineageService {
     );
   }
 
-  setUnset(a: string, b: string, relationship: string, set: boolean) {
+  setUnset(
+    a: string,
+    b: string,
+    relationship: string,
+    set: boolean,
+    linkNode: boolean
+  ) {
     return this.http.patch<respType<string>>(
       `http://localhost:3001/api/v1/userdata/relationship/${a}/${b}`,
       {
         relationship: relationship,
         set: set,
+        linkNode,
       }
     );
   }
