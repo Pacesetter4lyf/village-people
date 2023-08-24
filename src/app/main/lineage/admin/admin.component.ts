@@ -4,7 +4,7 @@ import {
   codeRowInterface,
   personRowInterface,
 } from './admin.service';
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -84,38 +84,45 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log('Hello here');
-    //for instance where you add a member in individual and then move to the admin
-    this.adminService.fetchMembersList();
-    this.allMembersSub = this.adminService.getMembers().subscribe((members) => {
-      this.membersList = [...members];
-      this.filteredMembersList = members.filter(
-        (member) => member.status !== 'archived'
-      );
+    this.allMembersSub = this.adminService
+      .fetchMembersList()
+      .pipe(
+        switchMap((members) => {
+          this.membersList = [...members];
+          this.filteredMembersList = members.filter(
+            (member) => member.status !== 'archived'
+          );
 
-      this.archivedList = members.filter(
-        (member) => member.status === 'archived'
-      );
-    });
+          this.archivedList = members.filter(
+            (member) => member.status === 'archived'
+          );
 
-    this.allCodesSub = this.adminService.getCodes().subscribe((codes) => {
-      this.codesList = codes;
+          return this.adminService.getCodes(); // Return the second observable
+        })
+      )
+      .subscribe((codes) => {
+        this.codesList = codes;
 
-      this.sentRequest = this.codesList.filter((item) => {
-        return item.nodeTo && item.generatedBy === this.adminService.getMyId();
-      });
-      this.incomingRequest = this.codesList.filter((item) => {
-        return item.nodeTo && item.generatedBy !== this.adminService.getMyId();
-      });
-      //requestStatusList
-      const membersListId = this.membersList.map((item) => item.id);
-      this.generatedRequest = this.codesList.filter((item) => {
-        return membersListId.includes(item.userData.id);
-      });
+        this.sentRequest = this.codesList.filter((item) => {
+          return (
+            item.nodeTo && item.generatedBy === this.adminService.getMyId()
+          );
+        });
+        this.incomingRequest = this.codesList.filter((item) => {
+          return (
+            item.nodeTo && item.generatedBy !== this.adminService.getMyId()
+          );
+        });
+        //requestStatusList
+        const membersListId = this.membersList.map((item) => item.id);
+        this.generatedRequest = this.codesList.filter((item) => {
+          return membersListId.includes(item.userData.id);
+        });
 
-      this.requestStatusList = this.codesList.filter((item) => {
-        return item.status !== 'created';
+        this.requestStatusList = this.codesList.filter((item) => {
+          return item.status !== 'created';
+        });
       });
-    });
 
     this.adminService.foundCode.subscribe((person) => {
       this.foundPersonFromCode = person;
@@ -131,7 +138,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.allMembersSub.unsubscribe();
-    this.allCodesSub.unsubscribe();
   }
 
   viewNode(id: string, publicNode?: boolean) {
@@ -283,9 +289,14 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   chatMember(id: string) {
+    // this.adminService.switchToSelf()
     const firstName = this.membersList.find((m) => m.id === id);
     this.router.navigate(['./individual', 'chats', id], {
       queryParams: firstName,
     });
+  }
+
+  openChat(id: string, name: string){
+    this.adminService.openChat(id, name)
   }
 }

@@ -1,10 +1,25 @@
 <div class="row">
   <div class="col">
-    <div class="d-flex gap-3">
-      <p>Name</p>
-      <p>Date</p>
-      <p>Days remaining</p>
-      <a href="">See</a>
+    <div class="div">
+      <p>Bitrhdays!!</p>
+      <table style="width: 100%">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Days remaining</th>
+            <th>Days passed</th>
+            <th>See</th>
+          </tr>
+        </thead>
+        <tr *ngFor="let birthday of birthdays">
+          <td>{{ birthday.firstName }} {{ birthday.lastName }}</td>
+          <td>{{ birthday.dateOfBirth }}</td>
+          <td>{{ birthday.daysRemaining }}</td>
+          <td>{{ birthday.daysPassed }}</td>
+          <td><a [routerLink]="['/main/individual']">See</a></td>
+        </tr>
+      </table>
     </div>
   </div>
 </div>

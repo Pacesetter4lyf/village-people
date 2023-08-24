@@ -4,3 +4,16 @@
     color: white;
 } */
 
+.main{
+    min-height: 100vh; 
+}
+.chat{
+    z-index: 2;
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    bottom: 0px;
+    right: 0px;
+    border: 1px solid blue;
+    background-color: blue;
+}

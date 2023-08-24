@@ -54,9 +54,7 @@ export class TreeService {
 
   deleteNode(id: string) {
     this.http
-      .delete<respType<string>>(
-        `http://localhost:3001/api/v1/userdata/${id}`
-      )
+      .delete<respType<string>>(`http://localhost:3001/api/v1/userdata/${id}`)
       .subscribe();
     this.resetNode();
     this.fetchTreeNode();

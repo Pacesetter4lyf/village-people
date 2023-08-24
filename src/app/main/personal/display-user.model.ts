@@ -19,21 +19,6 @@ interface DisplayUserInterface {
   primary?: string;
   secondary?: string;
   tertiary?: string;
-  resource?: {
-    _id?: string;
-    viewableBy?: string;
-    description?: string;
-    name?: string;
-    text?: string;
-    url?: string;
-    user?:
-      | string
-      | {
-          firstName: string;
-          lastName: string;
-        };
-    resourceType?: 'image' | 'text' | 'audio' | 'video' | '';
-  }[];
 }
 
 export class DisplayUserModel implements DisplayUserInterface {

@@ -17,7 +17,7 @@ export interface AuthResponseData {
       _id: string;
       email: string;
       __v?: number;
-      isRegistered?: Boolean;
+      isRegistered?: string;
     };
   };
 }
@@ -39,15 +39,16 @@ export class AuthService {
       })
       .pipe(
         catchError(this.handleError),
-        tap((resData) =>
+        tap((resData) => {
+          console.log('res data ', resData);
           this.handleAuthentication(
             resData.data.user.email,
             resData.data.user._id,
             resData.token,
             new Date(resData.expiry),
             resData.data.user.isRegistered
-          )
-        )
+          );
+        })
       );
   }
   signup(email: string, password: string) {
@@ -75,7 +76,7 @@ export class AuthService {
     id: string,
     token: string,
     expiration: Date,
-    isRegistered: Boolean
+    isRegistered: string
   ) {
     const user = new User(email, id, token, expiration, isRegistered);
     this.user.next(user);
@@ -129,5 +130,25 @@ export class AuthService {
       clearTimeout(this.tokenExpirationTimer);
     }
     this.router.navigate(['auth']);
+  }
+
+  setRegistered(id: string) {
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (!user) return;
+    const loadedUser = new User(
+      user.email,
+      user.id,
+      user._token,
+      new Date(user._tokenExpirationDate),
+      id
+    );
+    if (loadedUser.token) {
+      this.user.next(loadedUser);
+      this.autoLogout(
+        new Date(user._tokenExpirationDate).getTime() - new Date().getTime()
+      );
+    }
+    localStorage.setItem('user', JSON.stringify(loadedUser));
   }
 }

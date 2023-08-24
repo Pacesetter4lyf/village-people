@@ -1,5 +1,8 @@
 <form #bibliography="ngForm" (ngSubmit)="onSubmit(bibliography)">
-  <div class="row justify-content-center">
+  <div
+    class="row justify-content-center"
+    *ngIf="isEditable || (data.bibliography && !isEditable)"
+  >
     <div class="col-10">
       <div class="mb-3 mt-3">
         <textarea
@@ -15,7 +18,7 @@
     </div>
   </div>
 
-  <div class="row mt-auto mb-5">
+  <div class="row mt-auto mb-5" *ngIf="isEditable">
     <div class="col-sm-2 ms-auto text-end" *ngIf="viewMode">
       <button class="btn btn-primary btn-sm" (click)="changeMode()">
         Edit

@@ -1,0 +1,84 @@
+<div class="nav">
+  <a [routerLink]="['../']">Back</a>
+</div>
+<div class="matter" *ngIf="loaded">
+  <div class="top-row">
+    <div class="title">
+      <p>{{ post.title }}</p>
+      <p>{{ post.datePosted | slice : 0 : 10 }}</p>
+      <p>{{ post.poster.firstName }}</p>
+    </div>
+    <div class="admin-options">
+      <button (click)="makePopupVisible()">options . . .</button>
+      <div
+        class="pop-over"
+        [ngClass]="popupVisible ? 'visible' : 'not-visible'"
+      >
+        <!-- <a [routerLink]="[../${post.id}/edit]">edit</a> -->
+        <span (click)="editPage(post.id)">edit</span>
+        <span (click)="turnOffVisibility()">delete</span>
+        <span (click)="enableComment()" *ngIf="isThePoster">{{
+          isCommentEnabled ? "disable comment" : "enable comment"
+        }}</span>
+        <span (click)="lineageResource()" *ngIf="isAdminOfPostersLineage">{{
+          isLineageResource ? "unset lineage resource" : "set lineage resource"
+        }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="admin-row">
+    <button>edit</button>
+    <button>delete</button>
+    <div class="comment-switch">
+      <input type="checkbox" name="commentSwitch" id="commentSwitch" />
+      <label for="commentSwitch">comments</label>
+    </div>
+    <div class="resource-switch">
+      <input type="checkbox" name="resourceSwitch" id="resourceSwitch" />
+      <label for="resourceSwitch">lineage resource</label>
+    </div>
+  </div>
+  <div class="likes">
+    <span (click)="liked()" [ngClass]="{ like: isLiked }"
+      >{{ isLiked ? "liked" : "like" }}
+    </span>
+    <span> {{ likes?.length }}</span>
+  </div>
+  <div class="posts">
+    <div class="post">
+      <div class="header">
+        <p>{{ post.poster.firstName }}</p>
+        <p>{{ post.datePosted | slice : 0 : 10 }}</p>
+      </div>
+      <div class="body">
+        <p>
+          {{ post.postBox }}
+        </p>
+      </div>
+    </div>
+    <div class="post" *ngFor="let comment of post.comments">
+      <div class="header">
+        <p>{{ comment.userId.firstName }}</p>
+        <p>{{ comment.date | slice : 0 : 10 }}</p>
+      </div>
+      <div class="body">
+        <p>
+          {{ comment.comment }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="new-comment" *ngIf="isCommentEnabled">
+    <div class="textbox">
+      <textarea
+        name="newComment"
+        id="newComment"
+        rows="5"
+        #newComment
+      ></textarea>
+    </div>
+    <div class="bottom">
+      <button (click)="postComment(newComment.value)">comment</button>
+    </div>
+  </div>
+</div>

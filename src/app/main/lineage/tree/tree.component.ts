@@ -24,6 +24,7 @@ export class TreeComponent implements OnInit, OnDestroy {
     this.treeSub.unsubscribe();
     this.treeService.resetNode();
   }
+  
   deleteNode() {
     if (this.tree._id) {
       this.treeService.deleteNode(this.tree._id);

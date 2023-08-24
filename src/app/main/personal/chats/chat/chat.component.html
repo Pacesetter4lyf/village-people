@@ -2,7 +2,7 @@
 <div
   class="d-flex border border-danger"
   *ngFor="let chat of chatDetails"
-  [ngClass]="chat.sentByUser ? ' ps-3' : 'justify-content-end pe-3'"
+  [ngClass]="!chat.sentByUser ? ' ps-3' : 'justify-content-end pe-3'"
 >
   <div class="chat mb-1">
     <div class="">{{ chat.from }} - {{ chat.createdAt.substring(0, 10) }}</div>

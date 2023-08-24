@@ -3,11 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DisplayUserModel } from 'src/app/main/personal/display-user.model';
 import {
-  BasicDetailsInterface,
   IndividualService,
 } from 'src/app/main/personal/individual.service';
 import { ResourceService } from '../resource.service';
-
+import { Resource } from '../resource.model';
 @Component({
   selector: 'app-recordings',
   templateUrl: './recordings.component.html',
@@ -15,7 +14,7 @@ import { ResourceService } from '../resource.service';
 })
 export class RecordingsComponent implements OnInit {
   mediaEditable: boolean = true;
-  audios: BasicDetailsInterface['resource'];
+  audios: Resource[];
   audiosSub: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -25,9 +24,7 @@ export class RecordingsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.activatedRoute.snapshot.data.isEditable === false) {
-      this.mediaEditable = false;
-    }
+    this.mediaEditable = this.resourceService.getMediaEditable();
     this.resourceService.addMediaContentType.next('audio');
 
     this.audiosSub = this.resourceService.resources.subscribe(

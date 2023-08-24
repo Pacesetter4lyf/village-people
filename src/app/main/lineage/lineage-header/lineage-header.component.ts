@@ -19,8 +19,9 @@ export class LineageHeaderComponent {
     'Admin',
     'Media',
     'Search',
-    'Funds',
+    // 'Funds',
     'Birthdays',
-    'Discussions',
+    // 'Discussions',
+    'Forum',
   ];
 }

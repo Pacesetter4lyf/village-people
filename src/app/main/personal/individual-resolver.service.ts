@@ -7,12 +7,11 @@ import {
 import { DisplayUserModel } from './display-user.model';
 
 import {
-  BasicDetailsInterface,
   IndividualService,
   respType,
 } from './individual.service';
-
-export const IndividualResolver: ResolveFn<BasicDetailsInterface> = (
+import {Individual} from './individual.model'
+export const IndividualResolver: ResolveFn<Individual> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ) => {

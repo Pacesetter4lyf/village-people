@@ -1,25 +1,28 @@
 <div class="row">
-  <div class="col border border-primary rounded" *ngFor="let text of texts">
+  <div
+    class="col-md-6 border border-primary rounded"
+    *ngFor="let text of texts"
+  >
     <h6>{{ text.name }}</h6>
     <div class="row">
-      <div class="col " >
+      <div class="col-md-10">
         <p name="" id="" rows="5" class="w-100 form-control" readonly>
           {{ text.text }}
         </p>
       </div>
       <div
-        class="col-md-auto justify-content-between d-flex mt-1 flex-md-column"
+        class="col-md-2 border  justify-content-between p-0 d-flex mt-1 flex-md-column"
         *ngIf="mediaEditable"
       >
         <button
-          class="btn btn-primary"
+          class="btn btn-sm btn-primary"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
           (click)="onEdit(text._id)"
         >
           edit
         </button>
-        <button class="btn btn-danger" (click)="onDelete(text._id)">
+        <button class="btn btn-sm btn-danger" (click)="onDelete(text._id)">
           delete
         </button>
       </div>

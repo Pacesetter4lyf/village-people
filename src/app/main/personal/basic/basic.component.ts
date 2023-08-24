@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  BasicDetailsInterface,
-  IndividualService,
-} from '../individual.service';
+import { IndividualService } from '../individual.service';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DisplayUserModel } from '../display-user.model';
+import { Individual } from '../individual.model';
+import { BasicDetailsInterface } from '../individual.model';
 
 @Component({
   selector: 'app-basic',
@@ -32,10 +31,19 @@ export class BasicComponent implements OnInit, OnDestroy {
     if (viewMode === 'user-creating') {
       this.viewMode = false;
     }
-    this.isEditable =
-      viewMode === 'user-creating' ||
-      viewMode === 'user-viewing' ||
-      viewMode === 'self';
+
+    this.individualService.displayMode.subscribe((mode) => {
+      if (
+        mode === 'user-creating' ||
+        mode === 'user-viewing' ||
+        mode === 'self' ||
+        mode === 'registering'
+      ) {
+        this.isEditable = true;
+      } else {
+        this.isEditable = false;
+      }
+    });
   }
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
@@ -75,5 +83,6 @@ export class BasicComponent implements OnInit, OnDestroy {
     };
     this.individualService.sendBasicDetails(this.basicDetails);
     console.log(form.value, this.basicDetails);
+    this.viewMode = !this.viewMode;
   }
 }

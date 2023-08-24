@@ -1,5 +1,8 @@
 <form #education="ngForm" (ngSubmit)="onSubmit(education)">
-  <div class="mb-3 row">
+  <div
+    class="mb-3 row"
+    *ngIf="isEditable || (data.primarySchool && !isEditable)"
+  >
     <label for="staticEmail" class="col-4 col-form-label">Primary School</label>
     <div class="col-8">
       <input
@@ -14,7 +17,10 @@
     </div>
   </div>
 
-  <div class="mb-3 row">
+  <div
+    class="mb-3 row"
+    *ngIf="isEditable || (data.secondarySchool && !isEditable)"
+  >
     <label for="secondary" class="col-4 col-form-label">Secondary /High</label>
     <div class="col-8">
       <input
@@ -28,7 +34,10 @@
     </div>
   </div>
 
-  <div class="mb-3 row">
+  <div
+    class="mb-3 row"
+    *ngIf="isEditable || (data.tertiarySchool && !isEditable)"
+  >
     <label for="staticEmail" class="col-4 col-form-label"
       >Tertiary /College</label
     >

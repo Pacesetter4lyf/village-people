@@ -30,14 +30,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.individualService.displayMode.subscribe(
       (mode) => (this.displayMode = mode)
     );
-    this.resourceService.viewingIndividual.next(true);
-    this.userSub = this.individualService.displayUser.subscribe((user) => {
-      this.resourceService.initializeResources('individual');
-    });
   }
 
   ngOnDestroy() {
     this.clickSub.unsubscribe();
-    this.userSub.unsubscribe();
   }
 }

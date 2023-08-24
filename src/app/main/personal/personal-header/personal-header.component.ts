@@ -15,13 +15,12 @@ export class PersonalHeaderComponent implements OnInit {
     'Basic',
     'Education',
     'Bibliography',
-    'Recordings',
-    'Pictures',
-    'Videos',
-    'Posts',
-    'Chats',
+    'Media',
     'Settings',
+    // 'Chats',
   ];
+  mode: string;
+  isRegistered: boolean;
 
   onTabChange(something: PointerEvent) {
     this.individualService.tabClickEvent.emit(something);
@@ -29,10 +28,11 @@ export class PersonalHeaderComponent implements OnInit {
   }
   ngOnInit() {
     this.individualService.displayMode.subscribe((mode) => {
+      this.mode = mode;
       // console.log(mode);
       if (mode === 'self') {
         this.tabs = [...this.allTabs];
-      } else if (mode === 'user-creating') {
+      } else if (mode === 'user-creating' || mode === 'registering') {
         this.tabs = [this.allTabs[0]];
       } else if (mode === 'user-viewing') {
         const newTabs = [...this.allTabs];

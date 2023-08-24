@@ -1,0 +1,55 @@
+.chat-container{
+    & p{
+        margin: 0;
+    };
+    overflow-y: auto;
+    position: fixed;
+    width: 300px;
+    font-size: 90%;
+    bottom: 0px;
+    right: 0px;
+    border: 1px solid blue;
+    background-color: whitesmoke;
+    &.expanded{
+        border: 5px;
+        max-height: 300px;
+   }
+   .top{
+        display: flex;
+        justify-content: flex-end;
+        border-bottom: 1px solid white;
+        background-color: blue;
+        z-index: 2;
+        padding: 5px;
+        position: sticky;
+        top: 0px;
+        height: 30px;
+        .fas{
+            color: white;
+            padding: 1px;
+            border: 1px solid white;
+            border-radius: 50%;
+        };
+        &.inActualChat{
+            justify-content: space-between
+        }
+    }
+   .body{
+        max-height: 300px;
+        &.expanded{
+            border: 5px; 
+       };
+       .chat{
+        padding-inline: 5px;
+       }
+       .actual-chats{
+            min-height: 260px;
+            padding: 5px;
+            
+       }
+   }
+
+}
+
+
+

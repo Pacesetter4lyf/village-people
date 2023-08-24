@@ -14,6 +14,12 @@ export class ChatComponent implements OnInit {
     private route: ActivatedRoute,
     private chatService: ChatService
   ) {}
+
+  chatDetails: Chat[];
+  userId: string;
+  to: string;
+  @ViewChild('message') message: ElementRef;
+
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.userId = params['id'];
@@ -33,12 +39,9 @@ export class ChatComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.to = params.firstName;
     });
-  }
 
-  chatDetails: Chat[];
-  userId: string;
-  to: string;
-  @ViewChild('message') message: ElementRef;
+    
+  }
 
   sendMessage() {
     // check that the user i am sending to isnt deleted: replicate this in the backend

@@ -1,0 +1,73 @@
+<div class="creating" *ngIf="commentFields">
+  <form #myForm="ngForm" (ngSubmit)="savePost(myForm.value)">
+    <div class="settings">
+      <input
+        type="text"
+        placeholder="title"
+        name="title"
+        [(ngModel)]="commentFields.title"
+      />
+      <div class="post-for">
+        <div class="person">
+          <input
+            type="checkbox"
+            id="personSelector"
+            name="isForPerson"
+            [(ngModel)]="commentFields.isForPerson"
+            required
+          />
+          <label for="personSelector">for person</label>
+          <select
+            type="select"
+            id="personId"
+            name="personId"
+            [(ngModel)]="commentFields.personId"
+            *ngIf="commentFields.isForPerson"
+          >
+            <option></option>
+            <option *ngFor="let member of members" value="{{ member.id }}">
+              {{ member.firstName }}
+            </option>
+          </select>
+          <!-- <label for="personName">name</label> -->
+        </div>
+        <div class="lineage_visibility" *ngIf="commentFields.isForPerson">
+          <input
+            type="checkbox"
+            name="isVisibleByLineage"
+            id="visibliltySelector"
+            [(ngModel)]="commentFields.isNotVisibleByLineage"
+          />
+          <label for="visibilitySelector">off lineage visibility</label>
+        </div>
+      </div>
+      <div class="comment-switch">
+        <input
+          type="checkbox"
+          name="commentSwitch"
+          id="commentSwitch"
+          [(ngModel)]="commentFields.isCommentsTurnedOff"
+        />
+        <label for="commentSwitch">turn off comments</label>
+      </div>
+    </div>
+    <div class="text-area">
+      <textarea
+        name="postBox"
+        id="postBox"
+        rows="6"
+        [(ngModel)]="commentFields.postBox"
+      ></textarea>
+    </div>
+    <div class="file-upload">
+      <div class="file-display">
+        <!-- image, audio, video -->
+      </div>
+      <input type="file" name="file" id="file" ngModel />
+    </div>
+    <div class="bottom">
+      <button class="button" (click)="cancel()">cancel</button>
+      <button class="button" type="submit">create</button>
+    </div>
+  </form>
+</div>

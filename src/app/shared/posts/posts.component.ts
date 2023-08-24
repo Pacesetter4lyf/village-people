@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IndividualService } from 'src/app/main/personal/individual.service';
 import { ResourceService } from '../resource.service';
+import { Resource } from '../resource.model';
 
 @Component({
   selector: 'app-posts',
@@ -11,7 +12,7 @@ import { ResourceService } from '../resource.service';
 })
 export class PostsComponent implements OnInit, OnDestroy {
   mediaEditable: boolean = true;
-  texts;
+  texts: Resource[];
   textSub: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -19,9 +20,7 @@ export class PostsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if (this.activatedRoute.snapshot.data.isEditable === false) {
-      this.mediaEditable = false;
-    }
+    this.mediaEditable = this.resourceService.getMediaEditable();
 
     this.resourceService.addMediaContentType.next('text');
 

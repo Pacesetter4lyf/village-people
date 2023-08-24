@@ -36,7 +36,6 @@ import { AuthComponent } from './auth/auth.component';
 import { canActivateFn } from './auth/auth-guard.service';
 import { AuthService } from './auth/auth.service';
 import { AppendComponent } from './main/lineage/append/append.component';
-import { RelationshipComponent } from './main/personal/settings/relationship/relationship.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { AuthInterceptorService } from './auth/auth-inteceptor.service';
 import { IndividualResolver } from './main/personal/individual-resolver.service';
@@ -52,92 +51,231 @@ import {
 } from './main/personal/individual-guard.service';
 import { LinkComponent } from './main/lineage/link/link.component';
 import { AdminComponent } from './main/lineage/admin/admin.component';
-
+import { MediaComponent } from './main/personal/media/media.component';
+import { ForumComponent } from './main/lineage/forum/forum.component';
+import { MatterComponent } from './main/lineage/forum/matter/matter.component';
+import { DiscussionEditComponent } from './main/lineage/forum/discussion-edit/discussion-edit.component';
+import { ChatSmallComponent } from './main/chat/chat.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 const appRoutes: Routes = [
   { path: '', component: LandingComponent },
   {
-    path: 'lineage',
-    component: LineageComponent,
+    path: 'main',
+    component: MainComponent,
     canActivate: [canActivateFn],
-    resolve: [IndividualResolver, ResourceResolver],
     children: [
-      { path: '', redirectTo: 'tree', pathMatch: 'full' },
-      { path: 'tree', component: TreeComponent },
-      { path: 'link', component: LinkComponent },
-      { path: 'discussions', component: DiscussionComponent },
-      { path: 'discussions/:single', component: SingleComponent },
-      { path: 'birthdays', component: BirthdaysComponent },
-      { path: 'funds', component: FundsComponent },
-      { path: 'admin', component: AdminComponent },
       {
-        path: 'media',
-        component: GalleryComponent,
-        data: { isEditable: false },
+        path: 'lineage',
+        component: LineageComponent,
+        canActivate: [canActivateFn],
+        resolve: [IndividualResolver],
         children: [
+          { path: '', redirectTo: 'tree', pathMatch: 'full' },
+          { path: 'tree', component: TreeComponent },
+          { path: 'link', component: LinkComponent },
+          // { path: 'discussions', component: DiscussionComponent },
+          // { path: 'discussions/:single', component: SingleComponent },
+          // { path: 'funds', component: FundsComponent },
+          { path: 'forum', component: ForumComponent },
+          { path: 'forum/new', component: DiscussionEditComponent },
+          { path: 'forum/:id', component: MatterComponent },
+          { path: 'forum/:id/edit', component: DiscussionEditComponent },
+          { path: 'birthdays', component: BirthdaysComponent },
+          { path: 'admin', component: AdminComponent },
           {
-            path: 'posts',
-            component: PostsComponent,
-            data: { isEditable: false },
+            path: 'media',
+            component: GalleryComponent,
+            children: [
+              {
+                path: 'posts',
+                component: PostsComponent,
+              },
+              {
+                path: 'audios',
+                component: RecordingsComponent,
+              },
+              {
+                path: 'photos',
+                component: PicturesComponent,
+              },
+              {
+                path: 'videos',
+                component: VideosComponent,
+              },
+              {
+                path: '',
+                redirectTo: 'posts',
+                pathMatch: 'full',
+              },
+            ],
           },
-          {
-            path: 'audios',
-            component: RecordingsComponent,
-            data: { isEditable: false },
-          },
-          {
-            path: 'photos',
-            component: PicturesComponent,
-            data: { isEditable: false },
-          },
-          {
-            path: 'videos',
-            component: VideosComponent,
-            data: { isEditable: false },
-          },
-          {
-            path: '',
-            redirectTo: 'posts',
-            pathMatch: 'full',
-          },
+          { path: 'search', component: SearchComponent },
         ],
       },
-      { path: 'search', component: SearchComponent },
+      {
+        path: 'individual',
+        component: PersonalComponent,
+        canActivate: [canActivateFn],
+        resolve: [IndividualResolver],
+        children: [
+          { path: 'basic', component: BasicComponent },
+          { path: 'education', component: EducationComponent },
+          { path: 'bibliography', component: BibliographyComponent },
+          {
+            path: 'media',
+            component: MediaComponent,
+            children: [
+              {
+                path: 'posts',
+                component: PostsComponent,
+              },
+              {
+                path: 'audios',
+                component: RecordingsComponent,
+              },
+              {
+                path: 'photos',
+                component: PicturesComponent,
+              },
+              {
+                path: 'videos',
+                component: VideosComponent,
+              },
+              {
+                path: '',
+                redirectTo: 'posts',
+                pathMatch: 'full',
+              },
+            ],
+          },
+          // {
+          //   path: 'chats',
+          //   component: ChatsComponent,
+          //   resolve: [chatGuard],
+          //   children: [{ path: ':id', component: ChatComponent }],
+          // },
+          {
+            path: 'settings',
+            component: SettingsComponent,
+            resolve: [settingsGuard],
+            children: [
+              { path: 'info', component: ChatsComponent },
+              { path: 'media', component: ChatsComponent },
+              { path: 'relationship', component: ChatsComponent },
+              { path: 'merge', component: ChatsComponent },
+            ],
+          },
+          { path: '', redirectTo: 'basic', pathMatch: 'full' },
+        ],
+      },
+      { path: '', redirectTo: 'individual', pathMatch: 'full' },
     ],
   },
+  // {
+  //   path: 'lineage',
+  //   component: LineageComponent,
+  //   canActivate: [canActivateFn],
+  //   resolve: [IndividualResolver],
+  //   children: [
+  //     { path: '', redirectTo: 'tree', pathMatch: 'full' },
+  //     { path: 'tree', component: TreeComponent },
+  //     { path: 'link', component: LinkComponent },
+  //     // { path: 'discussions', component: DiscussionComponent },
+  //     // { path: 'discussions/:single', component: SingleComponent },
+  //     // { path: 'funds', component: FundsComponent },
+  //     { path: 'forum', component: ForumComponent },
+  //     { path: 'forum/new', component: DiscussionEditComponent },
+  //     { path: 'forum/:id', component: MatterComponent },
+  //     { path: 'forum/:id/edit', component: DiscussionEditComponent },
+  //     { path: 'birthdays', component: BirthdaysComponent },
+  //     { path: 'admin', component: AdminComponent },
+  //     {
+  //       path: 'media',
+  //       component: GalleryComponent,
+  //       children: [
+  //         {
+  //           path: 'posts',
+  //           component: PostsComponent,
+  //         },
+  //         {
+  //           path: 'audios',
+  //           component: RecordingsComponent,
+  //         },
+  //         {
+  //           path: 'photos',
+  //           component: PicturesComponent,
+  //         },
+  //         {
+  //           path: 'videos',
+  //           component: VideosComponent,
+  //         },
+  //         {
+  //           path: '',
+  //           redirectTo: 'posts',
+  //           pathMatch: 'full',
+  //         },
+  //       ],
+  //     },
+  //     { path: 'search', component: SearchComponent },
+  //   ],
+  // },
 
-  {
-    path: 'individual',
-    component: PersonalComponent,
-    canActivate: [canActivateFn],
-    resolve: [IndividualResolver],
-    children: [
-      { path: 'basic', component: BasicComponent },
-      { path: 'education', component: EducationComponent },
-      { path: 'bibliography', component: BibliographyComponent },
-      { path: 'recordings', component: RecordingsComponent },
-      { path: 'pictures', component: PicturesComponent },
-      { path: 'videos', component: VideosComponent },
-      { path: 'posts', component: PostsComponent },
-      {
-        path: 'chats',
-        component: ChatsComponent,
-        resolve: [chatGuard],
-        children: [{ path: ':id', component: ChatComponent }],
-      },
-      {
-        path: 'settings',
-        component: SettingsComponent,
-        resolve: [settingsGuard],
-        children: [
-          { path: 'info', component: ChatsComponent },
-          { path: 'media', component: ChatsComponent },
-          { path: 'relationship', component: ChatsComponent },
-          { path: 'merge', component: ChatsComponent },
-        ],
-      },
-      { path: '', redirectTo: 'basic', pathMatch: 'full' },
-    ],
-  },
+  // {
+  //   path: 'individual',
+  //   component: PersonalComponent,
+  //   canActivate: [canActivateFn],
+  //   resolve: [IndividualResolver],
+  //   children: [
+  //     { path: 'basic', component: BasicComponent },
+  //     { path: 'education', component: EducationComponent },
+  //     { path: 'bibliography', component: BibliographyComponent },
+  //     {
+  //       path: 'media',
+  //       component: MediaComponent,
+  //       children: [
+  //         {
+  //           path: 'posts',
+  //           component: PostsComponent,
+  //         },
+  //         {
+  //           path: 'audios',
+  //           component: RecordingsComponent,
+  //         },
+  //         {
+  //           path: 'photos',
+  //           component: PicturesComponent,
+  //         },
+  //         {
+  //           path: 'videos',
+  //           component: VideosComponent,
+  //         },
+  //         {
+  //           path: '',
+  //           redirectTo: 'posts',
+  //           pathMatch: 'full',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       path: 'chats',
+  //       component: ChatsComponent,
+  //       resolve: [chatGuard],
+  //       children: [{ path: ':id', component: ChatComponent }],
+  //     },
+  //     {
+  //       path: 'settings',
+  //       component: SettingsComponent,
+  //       resolve: [settingsGuard],
+  //       children: [
+  //         { path: 'info', component: ChatsComponent },
+  //         { path: 'media', component: ChatsComponent },
+  //         { path: 'relationship', component: ChatsComponent },
+  //         { path: 'merge', component: ChatsComponent },
+  //       ],
+  //     },
+  //     { path: '', redirectTo: 'basic', pathMatch: 'full' },
+  //   ],
+  // },
   { path: 'auth', component: AuthComponent },
   { path: '**', component: LandingComponent },
 ];
@@ -169,9 +307,9 @@ const appRoutes: Routes = [
     PostsComponent,
     SingleComponent,
     ChatsComponent,
+    ChatSmallComponent,
     AuthComponent,
     AppendComponent,
-    RelationshipComponent,
     LoadingSpinnerComponent,
     ModalComponent,
     ButtonComponent,
@@ -179,6 +317,10 @@ const appRoutes: Routes = [
     LinkComponent,
     AdminComponent,
     ChatComponent,
+    MediaComponent,
+    ForumComponent,
+    MatterComponent,
+    DiscussionEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -188,6 +330,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes),
     UcWidgetModule,
+    FontAwesomeModule,
   ],
   providers: [
     IndividualService,

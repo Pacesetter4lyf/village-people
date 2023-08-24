@@ -18,27 +18,10 @@
       >
         Media
       </button>
-      <button
-        type="button"
-        class="list-group-item list-group-item-action"
-        (click)="onChange('relationships')"
-        [ngClass]="'relationships' === selected ? 'active' : ''"
-      >
-        Relationships
-      </button>
-      <hr />
-      <button
-        type="button"
-        class="list-group-item list-group-item-action"
-        (click)="onChange('merge')"
-        [ngClass]="'merge' === selected ? 'active' : ''"
-      >
-        Merge
-      </button>
     </div>
   </div>
   <div class="col-9">
-    <div *ngIf="selected === 'info' || selected === 'media'">
+    <div>
       <div class="div" *ngIf="selected === 'media'">
         <nav class="nav nav-pills nav-justified">
           <a
@@ -65,22 +48,41 @@
         </div>
         <hr class="m-0" />
         <div class="row" *ngFor="let viewable of viewables">
-          <div class="col-6">{{ viewable }}</div>
+          <div class="col-6">{{ viewable.name }}</div>
           <div class="col-6 d-flex justify-content-around">
             <div class="form-check">
               <input
                 class="form-check-input"
                 type="checkbox"
                 value=""
-                id="flexCheckDefault"
+                [checked]="viewable.value === 'lineage'"
+                [ngModel]="viewable.value === 'lineage'"
+                id="lineageCheckBox"
+                #lineage
+                (change)="
+                  logChange('lineage', viewable.id, lineage.checked, $event)
+                "
               />
+              <!-- <input
+                class="form-check-input"
+                type="checkbox"
+                [checked]="viewable.value === 'lineage'"
+                id="lineageCheckbox"
+                (change)="handleCheckboxChange('lineage', viewable.id, $event)"
+              /> -->
             </div>
             <div class="form-check">
               <input
                 class="form-check-input"
                 type="checkbox"
                 value=""
-                id="flexCheckDefault"
+                [checked]="viewable.value === 'public'"
+                [ngModel]="viewable.value === 'public'"
+                id="publicCheckBox"
+                #public
+                (change)="
+                  logChange('public', viewable.id, public.checked, $event)
+                "
               />
             </div>
           </div>
@@ -91,46 +93,6 @@
         <div class="col"></div>
         <div class="col"></div>
       </div> -->
-    </div>
-
-    <div class="validate" *ngIf="selected === 'merge'">
-      <div class="mb-3 row">
-        <label for="staticEmail" class="col-sm-3 col-form-label"
-          >generate code</label
-        >
-        <div class="col-sm-6">
-          <input
-            type="text"
-            readonly
-            class="form-control-plaintext border"
-            id="staticEmail"
-            value="email@example.com"
-          />
-        </div>
-        <div class="col-3">
-          <button class="btn btn-primary">generate code</button>
-        </div>
-      </div>
-      <div class="mb-3 row">
-        <label for="staticEmail" class="col-sm-3 col-form-label"
-          >validate code</label
-        >
-        <div class="col-sm-6">
-          <input
-            type="text"
-            class="form-control border"
-            id="staticEmail"
-            value="email@example.com"
-          />
-        </div>
-        <div class="col-3">
-          <button class="btn btn-primary">validate code</button>
-        </div>
-      </div>
-    </div>
-    <!-- the relationship section -->
-    <div class="relationship" *ngIf="selected === 'relationships'">
-      <app-relationship></app-relationship>
     </div>
   </div>
 </div>

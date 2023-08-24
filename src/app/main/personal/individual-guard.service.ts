@@ -14,6 +14,7 @@ import { IndividualService } from './individual.service';
 export const chatGuard = () => {
   const individualService = inject(IndividualService);
   const router = inject(Router);
+  return of(true);
 
   return individualService.displayMode.pipe(
     switchMap((mode) => {
@@ -36,6 +37,8 @@ export const settingsGuard = () => {
   return true;
 };
 
+// this will ensure that the user or
+// anyone cannot go to the other pages if a user is being created atm
 export const IndividualGuard = () => {
   const individualService = inject(IndividualService);
   const router = inject(Router);
@@ -55,7 +58,10 @@ export const IndividualGuard = () => {
     .subscribe();
   console.log('Clicked link ', page);
   const mode = individualService.displayMode.value;
-  if (page !== 'basic' && mode === 'user-creating') {
+  if (
+    page !== 'basic' &&
+    (mode === 'user-creating' || mode === 'registering')
+  ) {
     return router.navigate(['individual', 'basic']);
   }
   return true;

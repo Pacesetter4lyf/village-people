@@ -23,3 +23,7 @@ tr:nth-child(even) {
 a {
     text-decoration: underline;
   }
+
+  .form-select{
+    background-image: none;
+  }

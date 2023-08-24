@@ -1,11 +1,6 @@
 import {
-  ApplicationRef,
-  ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
-  Input,
-  NgZone,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -13,14 +8,12 @@ import {
 import { FormGroup, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DisplayUserModel } from 'src/app/main/personal/display-user.model';
-import {
-  BasicDetailsInterface,
-  IndividualService,
-} from 'src/app/main/personal/individual.service';
+import { IndividualService } from 'src/app/main/personal/individual.service';
 // import uploadcare from 'uploadcare-widget/uploadcare.lang.en.min.js';
 import uploadcare from 'uploadcare-widget/uploadcare.full.min.js';
 import { ResourceService } from '../resource.service';
 declare var window: any;
+import { Resource } from '../resource.model';
 
 @Component({
   selector: 'app-modal',
@@ -40,7 +33,7 @@ export class ModalComponent implements OnInit, OnDestroy {
   showModalSub: Subscription;
 
   //
-  displayable: BasicDetailsInterface['resource'][0];
+  displayable: Resource;
 
   constructor(
     private individualService: IndividualService,
@@ -67,10 +60,9 @@ export class ModalComponent implements OnInit, OnDestroy {
       if (mode === 'create') {
         this.displayable = this.resourceService.emptyData;
       } else {
-        this.displayable =
-          this.individualService.displayUser.value.resource.find(
-            (d) => d._id === mode
-          );
+        this.displayable = this.resourceService.userResources.find(
+          (d) => d._id === mode
+        );
         this.resourceForm.controls['name'].setValue(this.displayable.name);
         this.resourceForm.controls['description'].setValue(
           this.displayable.description

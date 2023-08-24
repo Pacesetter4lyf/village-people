@@ -1,0 +1,50 @@
+<div class="forum">
+  <div class="matters" *ngIf="!isCreating">
+    <div class="forum-top-row">
+      <!-- <button class="button" (click)="createPost()" >create post</button> -->
+      <a [routerLink]="'new'">create post</a>
+    </div>
+    <div class="select-options">
+      <div class="created-by-me">
+        <input
+          type="checkbox"
+          id="createdByMe"
+          [(ngModel)]="createdByMe"
+          (change)="showCreatedByMe()"
+        />
+        <label for="createdByMe">created by me</label>
+      </div>
+      <div class="created-for-me">
+        <input
+          type="checkbox"
+          id="createdForMe"
+          (change)="showCreatedForMe()"
+          [(ngModel)]="createdForMe"
+        />
+        <label for="createdForMe">created for me</label>
+      </div>
+      <div class="created-for-person">
+        <label for="personSelector">created for</label>
+        <select
+          type="select"
+          (change)="createdForChanged()"
+          [(ngModel)]="createdFor"
+        >
+          <option [value]=""></option>
+          <option *ngFor="let member of membersList" [value]="member.id">
+            {{ member.firstName }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="forum-topics">
+      <div class="forum-topic" *ngFor="let post of posts" [routerLink]="[post.id]">
+        <p class="title">{{ post.title }}</p>
+        |
+        <p clas="name">{{ post.poster.firstName }}</p>
+        |
+        <p class="date">{{ post.datePosted | slice : 0 : 10 }}</p>
+      </div>
+    </div>
+  </div>
+</div>

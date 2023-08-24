@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IndividualService } from 'src/app/main/personal/individual.service';
 import { ResourceService } from '../resource.service';
+import { Resource } from '../resource.model';
 
 @Component({
   selector: 'app-videos',
@@ -11,7 +12,7 @@ import { ResourceService } from '../resource.service';
 })
 export class VideosComponent implements OnInit {
   mediaEditable: boolean = true;
-  videos;
+  videos: Resource[];
   videosSub: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -19,9 +20,8 @@ export class VideosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.activatedRoute.snapshot.data.isEditable === false) {
-      this.mediaEditable = false;
-    }
+    this.mediaEditable = this.resourceService.getMediaEditable();
+
     this.resourceService.addMediaContentType.next('video');
 
     this.videosSub = this.resourceService.resources.subscribe(

@@ -15,6 +15,7 @@ import {
   throwError,
 } from 'rxjs';
 import { TreeService } from '../tree/tree.service';
+import { ChatService } from '../../personal/chats/chat.service';
 
 export interface personRowInterface {
   id: string;
@@ -26,6 +27,7 @@ export interface personRowInterface {
   husband: string;
   lineage: number[];
   status: string;
+  user: boolean | string;
 }
 export interface codeRowInterface {
   id: string;
@@ -68,7 +70,8 @@ export class AdminService {
     private individualService: IndividualService,
     private lineageService: LineageService,
     private http: HttpClient,
-    private treeService: TreeService
+    private treeService: TreeService,
+    private chatService: ChatService
   ) {
     this.fetchMembersList();
     this.fetchCodes();
@@ -76,6 +79,8 @@ export class AdminService {
   }
 
   // trying out the different method
+  private isDataLoaded: boolean = false;
+
   private errorSubject: BehaviorSubject<string> = new BehaviorSubject<string>(
     ''
   );
@@ -89,8 +94,13 @@ export class AdminService {
 
   public currentLineage: string;
 
-  fetchMembersList() {
-    this.http
+  fetchMembersList(): Observable<personRowInterface[]> {
+    if (this.isDataLoaded && this.cachedPersonList.length > 0) {
+      // If data is already loaded and not empty, return the cached data
+      return of(this.cachedPersonList);
+    }
+
+    return this.http
       .get<respType<personRowInterface[]>>(
         'http://localhost:3001/api/v1/userdata/members'
       )
@@ -103,22 +113,9 @@ export class AdminService {
         tap((data) => {
           this.cachedPersonList = data;
           this.personListObservable.next(this.cachedPersonList);
+          this.isDataLoaded = true;
         })
-      )
-      .subscribe({
-        // next: (value: personRowInterface[]) => {
-        //   this.personListObservable.next(value);
-        // },
-        error: (error: any) => {
-          this.errorSubject.next(
-            'An error occurred while processing the data.'
-          );
-          console.error('Error fetching data:', error);
-        },
-        complete: () => {
-          // Handle completion
-        },
-      });
+      );
   }
   fetchCodes() {
     this.http
@@ -135,7 +132,7 @@ export class AdminService {
         next: (value: respType<codeRowInterface[]>) => {
           this.cachedCodeList = value.data.data;
           this.codeListObservable.next(this.cachedCodeList);
-          console.log(this.cachedCodeList);
+          // console.log(this.cachedCodeList);
         },
         error: (error: any) => {
           this.errorSubject.next(
@@ -279,10 +276,19 @@ export class AdminService {
 
   changeMemberStatus(action: string, id: string, lineage?: number) {
     this.http
-      .get(`http://localhost:3001/api/v1/userdata/member/${id}/${lineage}/${action}`)
+      .get(
+        `http://localhost:3001/api/v1/userdata/member/${id}/${lineage}/${action}`
+      )
       .subscribe((response) => {
         this.fetchCodes();
         this.fetchMembersList();
       });
+  }
+  switchToSelf() {
+    this.individualService.switchToSelf();
+  }
+
+  openChat(id: string, name: string){
+    this.chatService.triggerChat(id, name)
   }
 }

@@ -1,0 +1,110 @@
+.matter{
+    & p{
+        margin-bottom: 0.5px;
+    };
+    padding: 5px;
+    border: 1px dotted blue;
+    .top-row{
+        display: flex;
+        justify-content: space-between;
+        gap: 10%;
+        .title{
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+            white-space: nowrap;
+            font-weight: bold;
+            @media(max-width: 320px){
+                & {
+                    flex-direction: column;
+                    font-size: 80%;
+                  }
+            };
+            @media(max-width: 760px){
+                & {
+                    font-size: 90%;
+                  }
+            }
+        };
+        & button{
+            font-size: 0.7rem;
+            border-radius: 20%;
+            border: 1px solid blue;
+            background-color: blue;;
+        };
+        .admin-options{
+            position: relative;
+            .pop-over{
+                &.visible{
+                    display: flex;
+                    flex-direction: column;
+                    position: absolute;
+                    top: 30px;
+                    right: 10px;
+                    border: 1px solid blue;
+                    gap: 1px;
+                    background-color: blue;
+                };
+                &.not-visible{
+                    display:none;
+                };
+                & *{
+                    background-color: cornflowerblue;
+                    cursor: pointer;
+                    white-space: nowrap;
+                    padding-inline: 5px;
+                }
+            }
+        }
+    }
+    .admin-row{
+        display: none;
+        justify-content: space-between;
+        & button{
+            font-size: 0.7rem;
+            border-radius: 20%;
+            border: 1px solid blue;
+            background-color: blue;;
+        }
+    };
+    .likes{
+        & span{
+            cursor: pointer;
+            
+        };
+        & + span{
+            color: blue;
+        };
+        .like{
+            /* background-color: blue;
+            border-radius: 30%; */
+            font-size: 90%;
+            /* padding: 3px; */
+            text-decoration: underline;
+            
+        }
+    };
+    .posts{
+        .post{
+            border: 1px dotted blue;
+            font-size: 80%;
+            margin-block: 0.5rem;
+            .header{
+                display: flex;
+                justify-content: space-between;
+                border: 1px dotted blue;
+            }
+        }
+    }
+    .new-comment{
+        .textbox{
+            & textarea{
+                width: 100%;
+            }
+        };
+        .bottom{
+            display: flex;
+            justify-content: end;
+        }
+    }
+}

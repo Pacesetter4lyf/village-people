@@ -1,0 +1,42 @@
+.creating{
+    width: 70%;
+    margin-inline: auto;
+    border: 1px solid #ccc;
+    padding: 5px;
+    .settings {
+        & input[type="text"]{
+            width: 100%
+        };
+        & .post-for{
+            display: flex;
+            justify-content: space-between;
+            margin-block: 5px;
+            & >div{
+                display: flex;
+                gap: 6px;
+            }
+        };
+        .comment-switch{
+            display: flex;
+            gap: 5px;
+        }
+    };
+    .text-area{ 
+        & textarea{
+            width: 100%
+        }
+    };
+    .file-upload{
+        margin-bottom: 5px;
+        & input{
+            font-size: 70%;
+            padding: 1px;
+            border-bottom: 1px solid blue
+        }
+    }
+    .bottom{
+       display: flex;
+       justify-content: space-between;
+    }
+
+}

@@ -67,7 +67,10 @@
       </select>
     </div>
   </div>
-  <div class="row">
+  <div
+    class="row"
+    *ngIf="isEditable || (basicDetails.dateOfBirth && !isEditable)"
+  >
     <label for="email" class="col-4 col-form-label">Date of Birth</label>
     <div class="col-8 col-md-3">
       <input
@@ -75,13 +78,16 @@
         for="dob"
         type="date"
         [ngClass]="viewMode ? 'form-control-plaintext' : 'form-control'"
-        [ngModel]="basicDetails.dateOfBirth.substring(0, 10)"
+        [ngModel]="basicDetails?.dateOfBirth?.substring(0, 10)"
         [readOnly]="viewMode"
         placeholder="1992-09-29"
       />
     </div>
   </div>
-  <div class="row">
+  <div
+    class="row"
+    *ngIf="isEditable || (basicDetails.phoneNumber && !isEditable)"
+  >
     <label for="phone number" class="col-4 col-form-label">Phone Number</label>
     <div class="col-8 col-md-3">
       <input
@@ -94,7 +100,7 @@
       />
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="isEditable || (basicDetails.facebook && !isEditable)">
     <label for="facebook" class="col-4 col-form-label">Facebook Address</label>
     <div class="col-8 col-md-3">
       <input
@@ -107,7 +113,7 @@
       />
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="isEditable || (basicDetails.address && !isEditable)">
     <label for="facebook" class="col-4 col-form-label">Address</label>
     <div class="col-8 col-md-7">
       <input

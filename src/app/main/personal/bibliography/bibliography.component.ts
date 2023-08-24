@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import {
-  BasicDetailsInterface,
-  IndividualService,
-} from '../individual.service';
+import { IndividualService } from '../individual.service';
+import { BasicDetailsInterface } from '../individual.model';
 
 @Component({
   selector: 'app-bibliography',
@@ -12,6 +10,7 @@ import {
   styleUrls: ['./bibliography.component.css'],
 })
 export class BibliographyComponent {
+  isEditable = false;
   viewMode = true;
   data: BasicDetailsInterface;
   userSub: Subscription;
@@ -24,6 +23,18 @@ export class BibliographyComponent {
     this.userSub = this.individualService.displayUser.subscribe(
       (user) => (this.data = user)
     );
+
+    this.individualService.displayMode.subscribe((mode) => {
+      if (
+        mode === 'user-creating' ||
+        mode === 'user-viewing' ||
+        mode === 'self'
+      ) {
+        this.isEditable = true;
+      } else {
+        this.isEditable = false;
+      }
+    });
   }
   ngOnDestroy() {
     this.userSub.unsubscribe();

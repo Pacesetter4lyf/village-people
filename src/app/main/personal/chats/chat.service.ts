@@ -16,12 +16,19 @@ export class ChatService {
   chats: ChatParent[];
   chatsChanged = new Subject<ChatParent[]>();
   chatChanged = new Subject<Chat>();
+  userId: string;
+  newChatIdAndName = new Subject<{ id: string; name: string; chat: Chat[] }>();
 
   constructor(
     private http: HttpClient,
     private individualService: IndividualService
   ) {
     this.getChats();
+
+    this.individualService.actualUser.subscribe((user) => {
+      this.userId = user._id;
+      console.log('sd', this.userId);
+    });
   }
 
   getChats() {
@@ -50,7 +57,7 @@ export class ChatService {
       );
   }
   sendMessage(message: { to: string; message: string }) {
-    let from = this.individualService.displayUser.value._id;
+    let from = this.individualService.actualUser.value._id;
     let userMessage = { ...message, from };
     this.http
       .post<GetChatsI<Chat>>(`http://localhost:3001/api/v1/chat/`, {
@@ -62,5 +69,14 @@ export class ChatService {
           console.log(resp.data.data);
         }
       });
+  }
+
+  triggerChat(id: string, name: string) {
+    this.getChat2(id).subscribe((chat) => {
+      if (!chat || !chat.length) {
+        chat = [];
+      }
+      this.newChatIdAndName.next({ id, name, chat });
+    });
   }
 }

@@ -7,11 +7,9 @@ import {
 } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DisplayUserModel } from 'src/app/main/personal/display-user.model';
-import {
-  BasicDetailsInterface,
-  IndividualService,
-} from 'src/app/main/personal/individual.service';
+import { IndividualService } from 'src/app/main/personal/individual.service';
 import { ResourceService } from '../resource.service';
+import { Resource } from '../resource.model';
 
 @Component({
   selector: 'app-pictures',
@@ -21,7 +19,7 @@ import { ResourceService } from '../resource.service';
 export class PicturesComponent implements OnInit {
   mediaEditable: boolean = true;
   imagesSub: Subscription;
-  images: BasicDetailsInterface['resource'];
+  images: Resource[];
   constructor(
     private activatedRoute: ActivatedRoute,
     private resourceService: ResourceService,
@@ -29,9 +27,7 @@ export class PicturesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.activatedRoute.snapshot.data.isEditable === false) {
-      this.mediaEditable = false;
-    }
+    this.mediaEditable = this.resourceService.getMediaEditable();
     this.resourceService.addMediaContentType.next('image');
 
     this.imagesSub = this.resourceService.resources.subscribe(

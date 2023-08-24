@@ -63,11 +63,18 @@
             <button>remove</button>
           </td>
           <td>
-            <a
+            <!-- <a
               [routerLink]="['/individual', 'chats', member.id]"
               [queryParams]="{ firstName: member.firstName }"
               class="link-primary"
+              (click)="openChat(member.id, member.firstName)"
               >message</a
+            > -->
+            <span
+              class="link-primary"
+              role="button"
+              (click)="openChat(member.id, member.firstName)"
+              >message</span
             >
           </td>
           <td style="font-size: 0.7rem" (click)="viewNode(member.id)">
