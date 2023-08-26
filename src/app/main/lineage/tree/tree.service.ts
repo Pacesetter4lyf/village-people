@@ -18,14 +18,14 @@ export class TreeService {
     private lineageService: LineageService,
     private http: HttpClient
   ) {
-    this.nodeId = this.individualService.actualUser.value._id;
+    this.nodeId = this.individualService.actualUser.value?._id;
   }
 
   changeNode(nodeId?: string) {
     this.nodeId = nodeId;
   }
   resetNode() {
-    this.nodeId = this.individualService.actualUser.value._id;
+    this.nodeId = this.individualService.actualUser.value?._id;
   }
 
   fetchTreeNode(nodeId?: string) {

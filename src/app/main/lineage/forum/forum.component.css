@@ -1,4 +1,4 @@
-.matters{
+/* .matters{
     .forum-top-row{
         display: flex;
         justify-content: flex-end;
@@ -38,7 +38,51 @@
     }
 }
 
-/* unnested version */
+
+.forum-top-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 5px;
+}
+
+.forum-top-row .button {
+  color: blue;
+}
+
+.select-options {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 5px;
+}
+
+.select-options .created-by-me,
+.select-options .created-for-me,
+.select-options .created-for-person {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.forum-topics {}
+
+.forum-topics .forum-topic {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2px;
+  border: 1px dotted blue;
+  border-radius: 5px;
+  gap: 10px;
+}
+
+.forum-topics .forum-topic p {
+  margin: 0px !important;
+}
+
+.forum-topics .forum-topic :hover {
+  cursor: pointer;
+} */
+
+
 .matters {}
 
 .forum-top-row {

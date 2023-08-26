@@ -1,4 +1,4 @@
-.creating{
+/* .creating{
     width: 70%;
     margin-inline: auto;
     border: 1px solid #ccc;
@@ -39,4 +39,51 @@
        justify-content: space-between;
     }
 
-}
+} */
+
+.creating {
+    width: 70%;
+    margin-inline: auto;
+    border: 1px solid #ccc;
+    padding: 5px;
+  }
+  
+  .creating .settings input[type="text"] {
+    width: 100%;
+  }
+  
+  .creating .settings .post-for {
+    display: flex;
+    justify-content: space-between;
+    margin-block: 5px;
+  }
+  
+  .creating .settings .post-for > div {
+    display: flex;
+    gap: 6px;
+  }
+  
+  .creating .settings .comment-switch {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .creating .text-area textarea {
+    width: 100%;
+  }
+  
+  .creating .file-upload {
+    margin-bottom: 5px;
+  }
+  
+  .creating .file-upload input {
+    font-size: 70%;
+    padding: 1px;
+    border-bottom: 1px solid blue;
+  }
+  
+  .creating .bottom {
+    display: flex;
+    justify-content: space-between;
+  }
+  

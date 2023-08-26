@@ -124,11 +124,12 @@ export class AuthService {
   }
   signout() {
     this.user.next(null);
-    this.router.navigate(['']);
+    // this.router.navigate(['']);
     localStorage.removeItem('user');
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
     }
+    console.log('authing')
     this.router.navigate(['auth']);
   }
 

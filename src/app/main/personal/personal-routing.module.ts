@@ -16,7 +16,7 @@ import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   {
-    path: 'individual',
+    path: '',
     component: PersonalComponent,
     canActivate: [canActivateFn],
     resolve: [IndividualResolver],

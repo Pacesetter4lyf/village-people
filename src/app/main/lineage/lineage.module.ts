@@ -16,6 +16,7 @@ import { SearchComponent } from './search/search.component';
 import { TreeComponent } from './tree/tree.component';
 import { LineageRoutingModule } from './lineage-routing.module';
 
+
 @NgModule({
   declarations: [
     LineageHeaderComponent,

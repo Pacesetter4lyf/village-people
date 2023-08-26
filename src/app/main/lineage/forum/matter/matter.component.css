@@ -1,4 +1,4 @@
-.matter{
+/* .matter{
     & p{
         margin-bottom: 0.5px;
     };
@@ -76,10 +76,7 @@
             color: blue;
         };
         .like{
-            /* background-color: blue;
-            border-radius: 30%; */
             font-size: 90%;
-            /* padding: 3px; */
             text-decoration: underline;
             
         }
@@ -107,4 +104,65 @@
             justify-content: end;
         }
     }
+} */
+
+.matter {}
+
+.matter p {
+  margin-bottom: 0.5px;
 }
+
+.matter {
+  padding: 5px;
+  border: 1px dotted blue;
+}
+
+.matter .top-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10%;
+}
+
+.matter .top-row .title {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+@media (max-width: 320px) {
+  .matter .top-row .title {
+    flex-direction: column;
+    font-size: 80%;
+  }
+}
+
+@media (max-width: 760px) {
+  .matter .top-row .title {
+    font-size: 90%;
+  }
+}
+
+.matter .top-row button {
+  font-size: 0.7rem;
+  border-radius: 20%;
+  border: 1px solid blue;
+  background-color: blue;
+}
+
+.matter .top-row .admin-options {
+  position: relative;
+}
+
+.matter .top-row .admin-options .pop-over.visible {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  border: 1px solid blue;
+  gap: 1px;
+  background-color: blue;
+}
+

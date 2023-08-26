@@ -1,4 +1,4 @@
-.chat-container{
+/* .chat-container{
     & p{
         margin: 0;
     };
@@ -49,7 +49,66 @@
        }
    }
 
+} */
+
+/* without nesting */
+
+.chat-container p {
+    margin: 0;
 }
 
+.chat-container {
+    overflow-y: auto;
+    position: fixed;
+    width: 300px;
+    font-size: 90%;
+    bottom: 0px;
+    right: 0px;
+    border: 1px solid blue;
+    background-color: whitesmoke;
+}
 
+.chat-container.expanded {
+    border: 5px;
+    max-height: 300px;
+}
 
+.chat-container .top {
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid white;
+    background-color: blue;
+    z-index: 2;
+    padding: 5px;
+    position: sticky;
+    top: 0px;
+    height: 30px;
+}
+
+.chat-container .top .fas {
+    color: white;
+    padding: 1px;
+    border: 1px solid white;
+    border-radius: 50%;
+}
+
+.chat-container .top.inActualChat {
+    justify-content: space-between;
+}
+
+.chat-container .body {
+    max-height: 300px;
+}
+
+.chat-container .body.expanded {
+    border: 5px;
+}
+
+.chat-container .body .chat {
+    padding-inline: 5px;
+}
+
+.chat-container .body .actual-chats {
+    min-height: 260px;
+    padding: 5px;
+}

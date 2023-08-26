@@ -39,7 +39,7 @@ export class PersonalHeaderComponent implements OnInit {
         newTabs.splice(7, 1);
         this.tabs = newTabs;
       } else {
-        this.tabs = this.allTabs.slice(0, 7);
+        this.tabs = this.allTabs.slice(0, 4);
       }
     });
   }
