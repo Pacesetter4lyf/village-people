@@ -14,6 +14,7 @@ export class ChatSmallComponent {
   faCoffee = faCoffee;
   expanded: boolean = false;
   isInActualChat: boolean = false;
+  actualUserId: string;
 
   // actual chat variables
   chatDetails: Chat[];
@@ -34,13 +35,10 @@ export class ChatSmallComponent {
     private router: Router
   ) {}
   ngOnInit() {
-    this.chatService.getChats();
+    // this.chatService.getChats();
     this.chatService.chatsChanged.subscribe((chatParents) => {
       this.chatParents = chatParents;
       console.log(chatParents);
-      if (this.chatParents[0]) {
-        // this.viewChat(this.chatParents[0]?.to);
-      }
     });
 
     // from the single chat.
@@ -61,6 +59,10 @@ export class ChatSmallComponent {
       this.name = idNameChat.name;
       this.chatDetails = idNameChat.chat;
     });
+
+    this.chatService.userId.subscribe(
+      (actualUser) => (this.actualUserId = actualUser)
+    );
   }
 
   viewChat(id: string) {

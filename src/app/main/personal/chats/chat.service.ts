@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject, map } from 'rxjs';
+import { Subject, map, take } from 'rxjs';
 import { IndividualService } from '../individual.service';
 import { Chat, ChatParent } from './chat.model';
 
@@ -16,18 +16,21 @@ export class ChatService {
   chats: ChatParent[];
   chatsChanged = new Subject<ChatParent[]>();
   chatChanged = new Subject<Chat>();
-  userId: string;
+  userId = new Subject<string>();
   newChatIdAndName = new Subject<{ id: string; name: string; chat: Chat[] }>();
 
   constructor(
     private http: HttpClient,
     private individualService: IndividualService
   ) {
-    this.getChats();
-
-    this.individualService.actualUser.subscribe((user) => {
-      this.userId = user._id;
-      console.log('sd', this.userId);
+    this.individualService.actualUser.pipe().subscribe((user) => {
+      if (user) {
+        this.getChats();
+        this.userId.next(user?._id);
+        console.log('sd', user?._id);
+      }else{
+        this.userId.next(null);
+      }
     });
   }
 

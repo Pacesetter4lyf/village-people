@@ -1,4 +1,4 @@
-<div class="chat-container" [ngClass]="{ expanded: expanded }" >
+<div class="chat-container" [ngClass]="{ expanded: expanded }"  *ngIf="actualUserId">
   <div class="top" [ngClass]="{ inActualChat: isInActualChat }">
     <i
       class="fas fa-arrow-left back"
