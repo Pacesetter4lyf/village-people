@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 // import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+// import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent, SafePipe } from './app.component';
@@ -16,6 +16,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
+import { StoreModule } from '@ngrx/store';
+import { actualUserReducer } from './store/actual-user.reducer';
 
 @NgModule({
   declarations: [
@@ -28,13 +30,15 @@ import { AuthModule } from './auth/auth.module';
   ],
   imports: [
     BrowserModule,
-    // CommonModule,
     HttpClientModule,
     UcWidgetModule,
     FontAwesomeModule,
     SharedModule, // basically for resources
     AuthModule,
     AppRoutingModule,
+    StoreModule.forRoot({
+      actualUser:  actualUserReducer
+    }, {}),
   ],
   providers: [
     IndividualService,

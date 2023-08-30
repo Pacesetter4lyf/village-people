@@ -17,6 +17,9 @@ import {
 import { TreeService } from '../tree/tree.service';
 import { ChatService } from '../../personal/chats/chat.service';
 
+import { environment } from 'src/environments/environment';
+const apiUrl = environment.apiUrl;
+
 export interface personRowInterface {
   id: string;
   firstName: string;
@@ -101,9 +104,7 @@ export class AdminService {
     }
 
     return this.http
-      .get<respType<personRowInterface[]>>(
-        'http://localhost:3001/api/v1/userdata/members'
-      )
+      .get<respType<personRowInterface[]>>(`${apiUrl}/userdata/members`)
       .pipe(
         catchError((error) => {
           this.errorSubject.next('Error fetching data from the server.');
@@ -119,9 +120,7 @@ export class AdminService {
   }
   fetchCodes() {
     this.http
-      .get<respType<codeRowInterface[]>>(
-        'http://localhost:3001/api/v1/joincode'
-      )
+      .get<respType<codeRowInterface[]>>(`${apiUrl}/joincode`)
       .pipe(
         catchError((error) => {
           this.errorSubject.next('Error fetching data from the server.');
@@ -179,14 +178,11 @@ export class AdminService {
     // if (nodeTo) payload = {...payload, [nodeTo]: nodeTo}
 
     this.http
-      .post<respType<personRowInterface[]>>(
-        'http://localhost:3001/api/v1/joincode',
-        {
-          userData: id,
-          mode: joinType === 'replace' ? 'replace' : appendMode,
-          nodeTo: nodeTo,
-        }
-      )
+      .post<respType<personRowInterface[]>>(`${apiUrl}/joincode`, {
+        userData: id,
+        mode: joinType === 'replace' ? 'replace' : appendMode,
+        nodeTo: nodeTo,
+      })
       .subscribe((response) => {
         console.log(response.data.data);
         this.fetchCodes();
@@ -194,18 +190,16 @@ export class AdminService {
     //emit event that makes the get code run anew
   }
   cancelCode(id: string) {
-    this.http
-      .delete(`http://localhost:3001/api/v1/joincode/${id}`)
-      .subscribe((response) => {
-        console.log('response is ', response);
-        this.fetchCodes();
-      });
+    this.http.delete(`${apiUrl}/joincode/${id}`).subscribe((response) => {
+      console.log('response is ', response);
+      this.fetchCodes();
+    });
   }
 
   findPeople(lastName: string) {
     this.http
       .get<respType<personRowInterface[]>>(
-        `http://localhost:3001/api/v1/userdata/findpeople?lastName=${lastName}`
+        `${apiUrl}/userdata/findpeople?lastName=${lastName}`
       )
       .subscribe((response) => {
         console.log(response.data.data);
@@ -219,7 +213,7 @@ export class AdminService {
   ) {
     this.http
       .patch<respType<codeRowInterface[]>>(
-        `http://localhost:3001/api/v1/joincode/${nodeFrom.id}`,
+        `${apiUrl}/joincode/${nodeFrom.id}`,
         {
           fromId: nodeFrom.userData.id,
           nodeTo: nodeTo.id,
@@ -242,9 +236,7 @@ export class AdminService {
   // when you put in a code and wants to find the person to which you will be attaching
   seeSourceNode(code: string) {
     this.http
-      .get<respType<codeRowInterface>>(
-        `http://localhost:3001/api/v1/joincode/code/${code}`
-      )
+      .get<respType<codeRowInterface>>(`${apiUrl}/joincode/code/${code}`)
       .subscribe((response) => {
         console.log(response.data.data);
         this.foundCode.next(response.data.data);
@@ -257,7 +249,7 @@ export class AdminService {
       status: status,
     };
     this.http
-      .patch(`http://localhost:3001/api/v1/joincode/${id}`, payload)
+      .patch(`${apiUrl}/joincode/${id}`, payload)
       .subscribe((response) => {
         this.fetchCodes();
       });
@@ -265,9 +257,7 @@ export class AdminService {
 
   beginMerge(id: string) {
     this.http
-      .get<respType<string>>(
-        `http://localhost:3001/api/v1/joincode/merge/${id}`
-      )
+      .get<respType<string>>(`${apiUrl}/joincode/merge/${id}`)
       .subscribe((response) => {
         console.log(response.data.data);
         this.fetchCodes();
@@ -276,9 +266,7 @@ export class AdminService {
 
   changeMemberStatus(action: string, id: string, lineage?: number) {
     this.http
-      .get(
-        `http://localhost:3001/api/v1/userdata/member/${id}/${lineage}/${action}`
-      )
+      .get(`${apiUrl}/userdata/member/${id}/${lineage}/${action}`)
       .subscribe((response) => {
         this.fetchCodes();
         this.fetchMembersList();
@@ -288,7 +276,7 @@ export class AdminService {
     this.individualService.switchToSelf();
   }
 
-  openChat(id: string, name: string){
-    this.chatService.triggerChat(id, name)
+  openChat(id: string, name: string) {
+    this.chatService.triggerChat(id, name);
   }
 }

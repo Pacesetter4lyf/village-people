@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { respType } from 'src/app/shared/types/response.type';
 import { IndividualService } from '../personal/individual.service';
 
+import { environment } from 'src/environments/environment';
+const apiUrl = environment.apiUrl;
+
 export interface itemInterface {
   firstName: string;
   lastName: string;
@@ -33,15 +36,14 @@ export class LineageService {
 
   getSearch(text: string) {
     // get the user by id
-    //
     return this.http.get<respType<itemInterface[]>>(
-      `http://localhost:3001/api/v1/userdata/search/${text}`
+      `${apiUrl}/userdata/search/${text}`
     );
   }
 
   getRelationship(A: string, B: string) {
     return this.http.get<respType<string>>(
-      `http://localhost:3001/api/v1/userdata/relationship/${A}/${B}`
+      `${apiUrl}/userdata/relationship/${A}/${B}`
     );
   }
 
@@ -53,7 +55,7 @@ export class LineageService {
     linkNode: boolean
   ) {
     return this.http.patch<respType<string>>(
-      `http://localhost:3001/api/v1/userdata/relationship/${a}/${b}`,
+      `${apiUrl}/userdata/relationship/${a}/${b}`,
       {
         relationship: relationship,
         set: set,

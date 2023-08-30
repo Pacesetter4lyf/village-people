@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { respType } from 'src/app/shared/types/response.type';
+import { environment } from 'src/environments/environment';
+const apiUrl = environment.apiUrl;
 
 interface BirthdayInterface {
   firstName: string;
@@ -21,9 +23,7 @@ export class BirthdaysComponent implements OnInit {
   constructor(private http: HttpClient) {}
   ngOnInit() {
     this.http
-      .get<respType<BirthdayInterface[]>>(
-        `http://localhost:3001/api/v1/userdata/birthdays`
-      )
+      .get<respType<BirthdayInterface[]>>(`${apiUrl}/userdata/birthdays`)
       .subscribe((resp) => {
         const data = resp.data.data;
         const newData = data.map((birthday) => {

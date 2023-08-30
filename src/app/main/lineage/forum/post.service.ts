@@ -9,6 +9,9 @@ import { PostModel } from './post.model';
 import { AdminService, personRowInterface } from '../admin/admin.service';
 import { Individual } from '../../personal/individual.model';
 
+import { environment } from 'src/environments/environment';
+const apiUrl = environment.apiUrl;
+
 @Injectable({ providedIn: 'root' })
 export class PostService {
   posts: PostModel[] = [];
@@ -39,7 +42,7 @@ export class PostService {
 
   savePost(postDetails: PostModel, isEditing: boolean) {
     return this.http
-      .post<respType<PostModel>>(`http://localhost:3001/api/v1/post`, {
+      .post<respType<PostModel>>(`${apiUrl}/post`, {
         postDetails,
         isEditing,
       })
@@ -59,14 +62,12 @@ export class PostService {
 
   private fetchPosts() {
     console.log('fetching posts', this.posts);
-    return this.http
-      .get<respType<PostModel[]>>(`http://localhost:3001/api/v1/post`)
-      .pipe(
-        map((response) => response.data.data),
-        tap((data) => {
-          this.posts = [...data];
-        })
-      );
+    return this.http.get<respType<PostModel[]>>(`${apiUrl}/post`).pipe(
+      map((response) => response.data.data),
+      tap((data) => {
+        this.posts = [...data];
+      })
+    );
   }
 
   getPost(id: string) {
@@ -75,20 +76,18 @@ export class PostService {
       this.post = post;
       return of(post);
     } else {
-      return this.http
-        .get<respType<PostModel>>(`http://localhost:3001/api/v1/post/${id}`)
-        .pipe(
-          map((response) => response.data.data),
-          tap((data) => {
-            this.post = data;
-            console.log('post ', this.post);
-          })
-        );
+      return this.http.get<respType<PostModel>>(`${apiUrl}/post/${id}`).pipe(
+        map((response) => response.data.data),
+        tap((data) => {
+          this.post = data;
+          console.log('post ', this.post);
+        })
+      );
     }
   }
   postComment(id: string, comment: string) {
     return this.http
-      .patch<respType<PostModel>>(`http://localhost:3001/api/v1/post/${id}`, {
+      .patch<respType<PostModel>>(`${apiUrl}/post/${id}`, {
         comment,
       })
       .pipe(
@@ -107,12 +106,9 @@ export class PostService {
   }
   editLike(id: string, like: string) {
     return this.http
-      .patch<respType<string[]>>(
-        `http://localhost:3001/api/v1/post/like/${id}`,
-        {
-          like: like,
-        }
-      )
+      .patch<respType<string[]>>(`${apiUrl}/post/like/${id}`, {
+        like: like,
+      })
       .pipe(
         map((response) => response.data.data),
         tap((data) => {
@@ -125,13 +121,10 @@ export class PostService {
 
   patchPost(id: string, todo: string, value: boolean) {
     return this.http
-      .patch<respType<PostModel>>(
-        `http://localhost:3001/api/v1/post/patchpost/${id}`,
-        {
-          todo,
-          value,
-        }
-      )
+      .patch<respType<PostModel>>(`${apiUrl}/post/patchpost/${id}`, {
+        todo,
+        value,
+      })
       .pipe(
         map((response) => response.data.data),
         tap((data) => {

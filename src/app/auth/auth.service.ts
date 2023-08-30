@@ -4,8 +4,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { User } from './user.model';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
+const apiUrl = environment.apiUrl;
 export interface AuthResponseData {
   status: string;
   token: string;
@@ -33,7 +35,7 @@ export class AuthService {
 
   login(email: string, password: string) {
     return this.http
-      .post<AuthResponseData>('http://localhost:3001/api/v1/users/login', {
+      .post<AuthResponseData>(`${apiUrl}/users/login`, {
         email,
         password,
       })
@@ -53,7 +55,7 @@ export class AuthService {
   }
   signup(email: string, password: string) {
     return this.http
-      .post<AuthResponseData>('http://localhost:3001/api/v1/users/signup', {
+      .post<AuthResponseData>(`${apiUrl}/users/signup`, {
         email,
         password,
       })
@@ -129,7 +131,7 @@ export class AuthService {
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
     }
-    console.log('authing')
+    console.log('authing');
     this.router.navigate(['auth']);
   }
 

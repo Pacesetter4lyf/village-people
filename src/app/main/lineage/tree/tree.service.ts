@@ -6,6 +6,8 @@ import { respType } from 'src/app/shared/types/response.type';
 import { IndividualService } from '../../personal/individual.service';
 import { LineageService } from '../lineage.service';
 import { TreeInterface, TreeModel } from './tree.model';
+import { environment } from 'src/environments/environment';
+const apiUrl = environment.apiUrl;
 
 @Injectable({ providedIn: 'root' })
 export class TreeService {
@@ -34,9 +36,7 @@ export class TreeService {
     }
 
     this.http
-      .get<respType<TreeInterface>>(
-        `http://localhost:3001/api/v1/userdata/tree/${nodeId}`
-      )
+      .get<respType<TreeInterface>>(`${apiUrl}/userdata/tree/${nodeId}`)
       .subscribe((value) => {
         console.log('patch', value);
         if (value.status === 'success') {
@@ -53,9 +53,7 @@ export class TreeService {
   }
 
   deleteNode(id: string) {
-    this.http
-      .delete<respType<string>>(`http://localhost:3001/api/v1/userdata/${id}`)
-      .subscribe();
+    this.http.delete<respType<string>>(`${apiUrl}/userdata/${id}`).subscribe();
     this.resetNode();
     this.fetchTreeNode();
   }

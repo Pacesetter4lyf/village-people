@@ -6,6 +6,9 @@ import { Resource } from 'src/app/shared/resource.model';
 import { HttpClient } from '@angular/common/http';
 import { respType } from 'src/app/shared/types/response.type';
 
+import { environment } from 'src/environments/environment';
+const apiUrl = environment.apiUrl;
+
 export interface SettingsInterface {
   name: string;
   value: string;
@@ -33,7 +36,7 @@ export class SettingsService {
   getUserFields() {
     return this.http
       .get<respType<{ [key: string]: string }[]>>(
-        `http://localhost:3001/api/v1/userdata/settings/${this.displayId}`
+        `${apiUrl}/userdata/settings/${this.displayId}`
       )
       .pipe(map((response) => response.data.data));
   }
@@ -51,8 +54,8 @@ export class SettingsService {
     const visibility = checked ? checkboxName : 'self';
     const url =
       infoOrMedia === 'info'
-        ? 'http://localhost:3001/api/v1/userdata/settings/'
-        : 'http://localhost:3001/api/v1/resource/';
+        ? `${apiUrl}/userdata/settings/`
+        : `${apiUrl}/resource/`;
     const destinationId = infoOrMedia === 'info' ? this.displayId : id;
     const visibilityName = infoOrMedia === 'info' ? name : 'viewableBy';
 

@@ -4,6 +4,9 @@ import { Subject, map, take } from 'rxjs';
 import { IndividualService } from '../individual.service';
 import { Chat, ChatParent } from './chat.model';
 
+import { environment } from 'src/environments/environment';
+const apiUrl = environment.apiUrl;
+
 export interface GetChatsI<T> {
   data: {
     data?: T;
@@ -28,7 +31,7 @@ export class ChatService {
         this.getChats();
         this.userId.next(user?._id);
         console.log('sd', user?._id);
-      }else{
+      } else {
         this.userId.next(null);
       }
     });
@@ -37,7 +40,7 @@ export class ChatService {
   getChats() {
     // if chats, return it else fetch it, save it and return it
     this.http
-      .get<GetChatsI<ChatParent[]>>(`http://localhost:3001/api/v1/chat/`)
+      .get<GetChatsI<ChatParent[]>>(`${apiUrl}/chat/`)
       .subscribe((resp) => {
         this.chats = resp.data.data;
         this.chatsChanged.next(this.chats);
@@ -50,20 +53,18 @@ export class ChatService {
 
   getChat2(id: string) {
     // if chats, return it else fetch it, save it and return it
-    return this.http
-      .get<GetChatsI<Chat[]>>(`http://localhost:3001/api/v1/chat/${id}`)
-      .pipe(
-        map((response) => {
-          console.log(response);
-          return response.data.data;
-        })
-      );
+    return this.http.get<GetChatsI<Chat[]>>(`${apiUrl}/chat/${id}`).pipe(
+      map((response) => {
+        console.log(response);
+        return response.data.data;
+      })
+    );
   }
   sendMessage(message: { to: string; message: string }) {
     let from = this.individualService.actualUser.value._id;
     let userMessage = { ...message, from };
     this.http
-      .post<GetChatsI<Chat>>(`http://localhost:3001/api/v1/chat/`, {
+      .post<GetChatsI<Chat>>(`${apiUrl}/chat/`, {
         ...userMessage,
       })
       .subscribe((resp) => {

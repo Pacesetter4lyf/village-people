@@ -6,6 +6,9 @@ import { Router } from '@angular/router';
 import { TreeService } from '../tree/tree.service';
 import { IndividualService } from '../../personal/individual.service';
 
+import { environment } from 'src/environments/environment';
+const apiUrl = environment.apiUrl;
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -27,23 +30,20 @@ export class SearchComponent {
   ) {}
 
   onSubmit() {
-    // console.log(this.searchText);
     if (!this.searchText) return;
     const params = new HttpParams().set(
       'searchOutside',
       (!this.searchInside).toString()
     );
-    // .get<respType<any>>(`http://localhost:3001/api/v1/userdata/`, { params })
     this.http
       .get<respType<itemInterface[]>>(
-        `http://localhost:3001/api/v1/userdata/search/${this.searchText}`,
+        `${apiUrl}/userdata/search/${this.searchText}`,
         { params }
       )
       .subscribe((resp) => {
         this.selectedEntry = null;
         this.selectedIndex = null;
         this.foundEntries = resp.data.data;
-        console.log('foundEntries ', this.foundEntries);
       });
   }
 
@@ -53,15 +53,14 @@ export class SearchComponent {
   }
 
   toggleLineageSelector() {
-    // console.log('hello', this.searchInside)
     this.onSubmit();
   }
 
   showTree(id: string) {
-    console.log(id);
     this.treeService.changeNode(id);
     this.router.navigate(['lineage', 'tree']);
   }
+  
   showDetails(id: string) {
     this.individualService.showDetails(id);
     this.router.navigate(['individual']);

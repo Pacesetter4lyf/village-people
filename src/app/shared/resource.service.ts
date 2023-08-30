@@ -14,7 +14,9 @@ import {
 import { AuthService } from 'src/app/auth/auth.service';
 import { IndividualService } from 'src/app/main/personal/individual.service';
 import { Resource } from './resource.model';
-import { Individual } from '.././main/personal/individual.model';
+
+import { environment } from 'src/environments/environment';
+const apiUrl = environment.apiUrl;
 
 @Injectable({ providedIn: 'root' })
 export class ResourceService {
@@ -40,10 +42,6 @@ export class ResourceService {
   ) {
     this.resources = new BehaviorSubject<Resource[]>([this.emptyData]);
 
-    // this.individualService.displayUser.subscribe(
-    //   (user) => (this.displayUserId = user._id)
-    // );
-
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
@@ -59,7 +57,7 @@ export class ResourceService {
         mode === 'user-created-not-owned'
       ) {
         this.mediaEditable = true;
-      }else{
+      } else {
         this.mediaEditable = false;
       }
       console.log('mode changed ', mode);
@@ -114,7 +112,7 @@ export class ResourceService {
   };
 
   fetchAllResources() {
-    return this.http.get<any>(`http://localhost:3001/api/v1/resource/`).pipe(
+    return this.http.get<any>(`${apiUrl}/resource/`).pipe(
       take(1),
       map((resp) => resp.data.data),
       tap((resp) => {
@@ -129,16 +127,13 @@ export class ResourceService {
     // const displayUserId = this.individualService.getDisplayUser()._id;
     const userId = this.individualService.getDisplayUser()._id;
     this.displayUserId = userId;
-    return this.http
-      .get<any>(`http://localhost:3001/api/v1/resource/user/${userId}`)
-      .pipe(
-        tap((data) => {
-          this.userResources = data.data.data;
-          this.resources.next(data.data.data);
-        }),
-        map((resp) => resp.data.data)
-      );
-   
+    return this.http.get<any>(`${apiUrl}/resource/user/${userId}`).pipe(
+      tap((data) => {
+        this.userResources = data.data.data;
+        this.resources.next(data.data.data);
+      }),
+      map((resp) => resp.data.data)
+    );
   }
 
   saveResourceToDb(fileDetails: {
@@ -157,7 +152,7 @@ export class ResourceService {
     if (this.mode.value === 'create') {
       return this.http
         .post<any>(
-          `http://localhost:3001/api/v1/resource`,
+          `${apiUrl}/resource`,
 
           newdata
         )
@@ -171,7 +166,7 @@ export class ResourceService {
     } else {
       return this.http
         .patch<any>(
-          `http://localhost:3001/api/v1/resource/${fileDetails.resourceId}`,
+          `${apiUrl}/resource/${fileDetails.resourceId}`,
 
           newdata
         )
@@ -200,7 +195,7 @@ export class ResourceService {
 
   deleteResource(resourceId: string) {
     return this.http
-      .delete<any>(`http://localhost:3001/api/v1/resource/${resourceId}`)
+      .delete<any>(`${apiUrl}/resource/${resourceId}`)
       .subscribe((response) => {
         const resources = this.lineageResources.filter(
           (resource) => resource._id !== resourceId
@@ -210,10 +205,6 @@ export class ResourceService {
       });
   }
 
-  // getMyResources(): Observable<Resource[]> {
-  //   if (this.userResources) return of(this.userResources);
-  //   return this.fetchUserResources();
-  // }
   getDUResources(): Observable<Resource[]> {
     return this.fetchUserResources();
   }

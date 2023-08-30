@@ -13,6 +13,9 @@ import { throwError, Subject, BehaviorSubject, of } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { BasicDetailsInterface } from './individual.model';
 
+import { environment } from 'src/environments/environment';
+const apiUrl = environment.apiUrl;
+
 export interface respType<T> {
   data: {
     data?: T;
@@ -80,7 +83,7 @@ export class IndividualService {
       }
       return this.http
         .post<respType<Individual>>(
-          `http://localhost:3001/api/v1/userdata/createUser`,
+          `${apiUrl}/userdata/createUser`,
           basicFormData
         )
         .subscribe((value) => {
@@ -95,7 +98,7 @@ export class IndividualService {
 
     return this.http
       .patch<respType<Individual>>(
-        `http://localhost:3001/api/v1/userdata/${displayUserId}`,
+        `${apiUrl}/userdata/${displayUserId}`,
 
         basicFormData
       )
@@ -116,7 +119,7 @@ export class IndividualService {
     }
     if (mode === 'registering') {
       this.displayMode.next('self');
-      this.authService.setRegistered(user._id)
+      this.authService.setRegistered(user._id);
     }
   }
 
@@ -138,9 +141,7 @@ export class IndividualService {
 
     if (userId) {
       return this.http
-        .get<respType<Individual>>(
-          `http://localhost:3001/api/v1/userdata/${userId}`
-        )
+        .get<respType<Individual>>(`${apiUrl}/userdata/${userId}`)
         .pipe(
           catchError(this.handleError),
           map((response) => response.data.data),
@@ -188,9 +189,7 @@ export class IndividualService {
 
   getUserWithId(id: string) {
     return this.http
-      .get<respType<BasicDetailsInterface>>(
-        `http://localhost:3001/api/v1/userdata/${id}`
-      )
+      .get<respType<BasicDetailsInterface>>(`${apiUrl}/userdata/${id}`)
       .pipe(
         catchError(this.handleError),
         map((response) => response.data.data),

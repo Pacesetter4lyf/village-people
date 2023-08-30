@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AdminComponent } from './admin/admin.component';
 import { AppendComponent } from './append/append.component';
@@ -15,7 +15,6 @@ import { LinkComponent } from './link/link.component';
 import { SearchComponent } from './search/search.component';
 import { TreeComponent } from './tree/tree.component';
 import { LineageRoutingModule } from './lineage-routing.module';
-
 
 @NgModule({
   declarations: [
@@ -32,6 +31,12 @@ import { LineageRoutingModule } from './lineage-routing.module';
     AdminComponent,
     AppendComponent,
   ],
-  imports: [RouterModule, FormsModule, CommonModule, LineageRoutingModule],
+  imports: [
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    LineageRoutingModule,
+  ],
 })
 export class LineageModule {}
