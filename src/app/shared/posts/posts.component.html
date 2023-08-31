@@ -6,12 +6,12 @@
     <h6>{{ text.name }}</h6>
     <div class="row">
       <div class="col-md-10">
-        <p name="" id="" rows="5" class="w-100 form-control" readonly>
+        <p>
           {{ text.text }}
         </p>
       </div>
       <div
-        class="col-md-2 border  justify-content-between p-0 d-flex mt-1 flex-md-column"
+        class="col-md-2 border justify-content-between p-0 d-flex mt-1 flex-md-column"
         *ngIf="mediaEditable"
       >
         <button

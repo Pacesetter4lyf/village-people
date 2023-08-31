@@ -13,6 +13,8 @@ export interface TreeInterface {
   bibliography: string;
   father: string;
   mother: string;
+  createdBy: string;
+  userId: string;
   child: dependentType[];
   husbands: dependentType[];
   wives: dependentType[];
@@ -28,6 +30,8 @@ export class TreeModel implements TreeInterface {
     public bibliography: string,
     public father: string,
     public mother: string,
+    public createdBy: string,
+    public userId: string,
     public sibling: dependentType[],
     public husbands: dependentType[],
     public wives: dependentType[],

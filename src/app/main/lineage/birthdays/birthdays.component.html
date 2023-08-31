@@ -17,7 +17,14 @@
           <td>{{ birthday.dateOfBirth }}</td>
           <td>{{ birthday.daysRemaining }}</td>
           <td>{{ birthday.daysPassed }}</td>
-          <td><a [routerLink]="['/main/individual']">See</a></td>
+          <!-- <td><a [routerLink]="['/main/individual']">See</a></td> -->
+          <td>
+            <span
+              (click)="showDetails(birthday.id)"
+              style="cursor: pointer; color: blue; text-decoration: underline"
+              >See</span
+            >
+          </td>
         </tr>
       </table>
     </div>

@@ -49,19 +49,6 @@ export class ResourceService {
         // React to route changes, perform necessary actions based on the route
         this.handleRouteChange();
       });
-
-    this.individualService.displayMode.subscribe((mode) => {
-      if (
-        mode === 'self' ||
-        mode === 'user-viewing' ||
-        mode === 'user-created-not-owned'
-      ) {
-        this.mediaEditable = true;
-      } else {
-        this.mediaEditable = false;
-      }
-      console.log('mode changed ', mode);
-    });
   }
 
   getMediaEditable() {
@@ -86,6 +73,18 @@ export class ResourceService {
     if (view === 'lineage') {
       this.mediaEditable = false;
     } else {
+      this.individualService.displayMode.pipe(take(1)).subscribe((mode) => {
+        if (
+          mode === 'self' ||
+          mode === 'user-viewing' ||
+          mode === 'user-created-not-owned'
+        ) {
+          this.mediaEditable = true;
+        } else {
+          this.mediaEditable = false;
+        }
+        console.log('mode changed ', mode);
+      });
       // if individual, media editable is listened to in the initialization
       this.resources.next([new Resource()]); // have something while it refreshes: optional
     }

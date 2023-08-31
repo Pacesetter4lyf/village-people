@@ -54,7 +54,7 @@
           (click)="nodeSelected(child.id)"
           [ngClass]="{ 'rounded-5': child.gender !== 'Male' }"
         >
-          <p>{{ child.firstName }}-{{ child.lastName }}</p>
+          <p>{{ child.firstName }}</p>
         </div>
       </div>
     </div>
@@ -89,7 +89,11 @@
           <button class="btn btn-primary" (click)="seeDetails()">
             See details
           </button>
-          <button class="align-self-center fs-6" (dblclick)="deleteNode()">
+          <button
+            *ngIf="isDeleteable"
+            class="align-self-center fs-6"
+            (dblclick)="deleteNode()"
+          >
             delete
           </button>
           <button

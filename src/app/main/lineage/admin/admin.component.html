@@ -652,6 +652,7 @@
       <li
         *ngFor="let item of navItems; let i = index"
         (click)="itemClicked(item)"
+        data-bs-dismiss="offcanvas"
       >
         {{ item }}
       </li>

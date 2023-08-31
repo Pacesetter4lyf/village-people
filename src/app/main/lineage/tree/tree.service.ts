@@ -7,6 +7,7 @@ import { IndividualService } from '../../personal/individual.service';
 import { LineageService } from '../lineage.service';
 import { TreeInterface, TreeModel } from './tree.model';
 import { environment } from 'src/environments/environment';
+import { Individual } from '../../personal/individual.model';
 const apiUrl = environment.apiUrl;
 
 @Injectable({ providedIn: 'root' })
@@ -14,6 +15,7 @@ export class TreeService {
   tree: TreeModel;
   treeChanged = new Subject<TreeModel>();
   nodeId: string;
+  individual: Individual;
   constructor(
     private router: Router,
     private individualService: IndividualService,
@@ -21,6 +23,8 @@ export class TreeService {
     private http: HttpClient
   ) {
     this.nodeId = this.individualService.actualUser.value?._id;
+
+    this.individual = this.individualService.actualUser.value;
   }
 
   changeNode(nodeId?: string) {
@@ -45,6 +49,8 @@ export class TreeService {
         }
       });
     console.log('nodeId ', nodeId);
+
+
   }
 
   showDetails() {

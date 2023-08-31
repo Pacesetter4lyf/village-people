@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { respType } from 'src/app/shared/types/response.type';
 import { environment } from 'src/environments/environment';
+import { IndividualService } from '../../personal/individual.service';
 const apiUrl = environment.apiUrl;
 
 interface BirthdayInterface {
@@ -20,7 +22,11 @@ interface BirthdayInterface {
 })
 export class BirthdaysComponent implements OnInit {
   birthdays: BirthdayInterface[];
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private individualService: IndividualService
+  ) {}
   ngOnInit() {
     this.http
       .get<respType<BirthdayInterface[]>>(`${apiUrl}/userdata/birthdays`)
@@ -63,5 +69,10 @@ export class BirthdaysComponent implements OnInit {
       : targetMonthDay.getTime() - new Date().getTime();
 
     return Math.abs(Math.floor(timeDiff / (1000 * 60 * 60 * 24)));
+  }
+
+  showDetails(id: string) {
+    this.individualService.showDetails(id)
+    this.router.navigate(['/individual'])
   }
 }
