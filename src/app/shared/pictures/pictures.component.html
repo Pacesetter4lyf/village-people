@@ -3,7 +3,7 @@
     <div class="card">
       <img
         [src]="image.url"
-        class="card-img-top object-fit-scale"
+        class="card-img-top img-fluid"
         alt="{{ image.name }}"
         height="250px"
         width="100%"
@@ -25,7 +25,7 @@
             >
           </div>
           <div class="div" *ngIf="!mediaEditable">
-            By - {{ image.user.firstName }} - {{ image.user.lastName }}
+            {{ image.user.firstName }} - {{ image.user.lastName }}
           </div>
         </div>
       </div>

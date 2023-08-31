@@ -1,3 +1,6 @@
+<div class="d-flex gap-3" *ngIf="videos.length === 0">
+  <p><strong>There are not any Videos yet</strong></p>
+</div>
 <div class="row">
   <div class="col-md-4 col-sm-6" *ngFor="let video of videos">
     <div>

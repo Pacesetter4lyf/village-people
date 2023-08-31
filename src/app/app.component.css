@@ -6,7 +6,9 @@
 
 .main{
     min-height: 100vh; 
+    background-color: whitesmoke;
 }
+
 .chat{
     z-index: 2;
     position: fixed;
