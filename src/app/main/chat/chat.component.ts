@@ -31,8 +31,6 @@ export class ChatSmallComponent {
 
   constructor(
     private chatService: ChatService,
-    private route: ActivatedRoute,
-    private router: Router
   ) {}
   ngOnInit() {
     // this.chatService.getChats();

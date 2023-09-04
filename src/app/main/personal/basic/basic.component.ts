@@ -71,7 +71,7 @@ export class BasicComponent implements OnInit, OnDestroy {
       address,
     } = form.value;
 
-    this.basicDetails = {
+    const infoToSend  = {
       firstName,
       lastName,
       gender,
@@ -81,8 +81,7 @@ export class BasicComponent implements OnInit, OnDestroy {
       address,
       photo: this.photo,
     };
-    this.individualService.sendBasicDetails(this.basicDetails);
-    console.log(form.value, this.basicDetails);
+    this.individualService.sendBasicDetails(infoToSend);
     this.viewMode = !this.viewMode;
   }
 }

@@ -35,6 +35,7 @@
           class="form-select"
           aria-label="Default select example"
           (change)="lineageChanged()"
+          style="padding: 0px;"
         >
           <option *ngFor="let lineage of userLineage" value="{{ lineage }}">
             {{ lineage }}
