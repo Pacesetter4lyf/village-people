@@ -1,22 +1,15 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Individual } from './individual.model';
-import {
-  catchError,
-  exhaustMap,
-  take,
-  map,
-  tap,
-  switchMap,
-  first,
-} from 'rxjs/operators';
-import { throwError, Subject, BehaviorSubject, of } from 'rxjs';
+import { catchError, take, map, tap, first } from 'rxjs/operators';
+import { throwError, BehaviorSubject, of } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { BasicDetailsInterface } from './individual.model';
 
 import { environment } from 'src/environments/environment';
 import { Store } from '@ngrx/store';
 import * as fromApp from 'src/app/store/app.reducer';
+import * as AuthActions from 'src/app/auth/store/auth.actions';
 const apiUrl = environment.apiUrl;
 
 export interface respType<T> {
@@ -129,7 +122,8 @@ export class IndividualService {
     }
     if (mode === 'registering') {
       this.displayMode.next('self');
-      this.authService.setRegistered(user._id);
+      // this.authService.setRegistered(user._id);
+      this.store.dispatch(new AuthActions.UpdateRegistration(user._id));
     }
   }
 

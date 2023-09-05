@@ -4,6 +4,7 @@ import { AuthService } from '../auth/auth.service';
 import { Subscription, map } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
+import * as AuthActions from '../auth/store/auth.actions';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -13,7 +14,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private userSub: Subscription;
 
   constructor(
-    private authService: AuthService,
     private router: Router,
     private store: Store<fromApp.AppState>
   ) {}
@@ -23,7 +23,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(map((authState) => authState.user))
       .subscribe((user) => {
         this.signedIn = !!user;
-        console.log('signedIn', this.signedIn, user);
       });
   }
   ngOnDestroy() {
@@ -34,6 +33,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.router.navigate(['auth']);
       return;
     }
-    this.authService.signout();
+    this.store.dispatch(new AuthActions.Logout());
   }
 }

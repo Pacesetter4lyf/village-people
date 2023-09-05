@@ -1,9 +1,12 @@
+import { Store } from '@ngrx/store';
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Route, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import {  Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { IndividualService } from '../main/personal/individual.service';
-import { AuthService, AuthResponseData } from './auth.service';
+import { AuthService } from './auth.service';
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from './store/auth.actions';
 
 @Component({
   selector: 'app-auth',
@@ -11,17 +14,21 @@ import { AuthService, AuthResponseData } from './auth.service';
   styleUrls: ['./auth.component.css'],
 })
 export class AuthComponent {
+  storeSub: Subscription;
   isLoginMode = true;
   isLoading = false;
   error: string = null;
   constructor(
-    private router: Router,
-    private authService: AuthService,
-    private individualService: IndividualService
+    private individualService: IndividualService,
+    private store: Store<fromApp.AppState>
   ) {}
 
   ngOnInit() {
     this.individualService.displayUser.next(null);
+    this.storeSub = this.store.select('auth').subscribe((authState) => {
+      this.isLoading = authState.loading;
+      this.error = authState.authError;
+    });
   }
 
   onSubmit(form: NgForm) {
@@ -30,26 +37,17 @@ export class AuthComponent {
     }
     const email = form.value.email;
     const password = form.value.password;
-    this.isLoading = true;
-    const subObj = {
-      next: (resData: AuthResponseData) => {
-        console.log(resData);
-        this.router.navigate(['individual']);
-        this.error = null;
-      },
-      error: (error: Error) => {
-        console.log(error);
-        this.error = error.message;
-      },
-    };
 
     if (this.isLoginMode) {
-      this.authService.login(email, password).subscribe(subObj);
+      this.store.dispatch(new AuthActions.LoginStart({ email, password }));
     } else {
-      this.authService.signup(email, password).subscribe(subObj);
+      this.store.dispatch(new AuthActions.SignupStart({ email, password }));
     }
 
-    this.isLoading = false;
     form.reset();
+  }
+
+  ngOnDestroy() {
+    this.storeSub.unsubscribe();
   }
 }
