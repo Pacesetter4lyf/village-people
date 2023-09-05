@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject, map, take } from 'rxjs';
 import { IndividualService } from '../personal/individual.service';
-import { Chat, ChatParent } from '../personal/chats/chat.model';
+import { Chat, ChatParent } from './chat.model';
 
 import { environment } from 'src/environments/environment';
 const apiUrl = environment.apiUrl;
