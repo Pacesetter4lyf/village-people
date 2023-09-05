@@ -34,8 +34,6 @@ export class AuthComponent {
     const subObj = {
       next: (resData: AuthResponseData) => {
         console.log(resData);
-        this.authService.signedIn = true;
-        this.authService.signedInEmitter.next(this.authService.signedIn);
         this.router.navigate(['individual']);
         this.error = null;
       },

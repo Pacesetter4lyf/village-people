@@ -1,14 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from './auth.service';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 
 export const canActivateFn = () => {
-  const authService = inject(AuthService);
   const router = inject(Router);
+  const store = inject(Store);
 
-  console.log(authService.signedIn);
-  return authService.user.pipe(
+  return store.select('auth').pipe(
+    take(1),
+    map((authState) => authState.user),
     map((user) => {
       const isAuth = !!user;
       if (isAuth) return true;

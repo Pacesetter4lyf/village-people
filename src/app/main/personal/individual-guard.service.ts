@@ -1,30 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
   GuardsCheckEnd,
-  NavigationEnd,
   Router,
-  RouterStateSnapshot,
 } from '@angular/router';
-import { from, of } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import {  take, tap } from 'rxjs/operators';
 import { IndividualService } from './individual.service';
-
-export const chatGuard = () => {
-  const individualService = inject(IndividualService);
-  const router = inject(Router);
-  return of(true);
-
-  return individualService.displayMode.pipe(
-    switchMap((mode) => {
-      if (mode !== 'self') {
-        return from(router.navigate(['individual', 'basic']));
-      }
-      return of(true);
-    })
-  );
-};
 
 export const settingsGuard = () => {
   const individualService = inject(IndividualService);

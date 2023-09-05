@@ -8,12 +8,15 @@ import {
   map,
   tap,
   switchMap,
+  first,
 } from 'rxjs/operators';
 import { throwError, Subject, BehaviorSubject, of } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { BasicDetailsInterface } from './individual.model';
 
 import { environment } from 'src/environments/environment';
+import { Store } from '@ngrx/store';
+import * as fromApp from 'src/app/store/app.reducer';
 const apiUrl = environment.apiUrl;
 
 export interface respType<T> {
@@ -44,20 +47,27 @@ export class IndividualService {
   actualUser = new BehaviorSubject<Individual>(null);
   isRegistered = new BehaviorSubject<boolean>(false);
 
-  constructor(private http: HttpClient, private authService: AuthService) {
-    this.authService.user.subscribe((user) => {
-      if (!user) {
-        this.displayMode.next(null);
-        this.displayUser.next(null);
-        this.actualUser.next(null);
-      } else {
-        if (user.isRegistered) {
-          this.displayMode.next('self');
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private store: Store<fromApp.AppState>
+  ) {
+    this.store
+      .select('auth')
+      .pipe(map((authState) => authState.user))
+      .subscribe((user) => {
+        if (!user) {
+          this.displayMode.next(null);
+          this.displayUser.next(null);
+          this.actualUser.next(null);
         } else {
-          this.displayMode.next('registering');
+          if (user.isRegistered) {
+            this.displayMode.next('self');
+          } else {
+            this.displayMode.next('registering');
+          }
         }
-      }
-    });
+      });
   }
 
   sendBasicDetails(data: BasicDetailsInterface) {
@@ -128,8 +138,10 @@ export class IndividualService {
     if (!userId) {
       if (this.displayUser.value) return; // no user id but there is already a user
       self = true;
-      this.authService.user
+      this.store
+        .select('auth')
         .pipe(
+          map((authState) => authState.user),
           take(1),
           map((user) => {
             userId = user.isRegistered;
@@ -137,7 +149,15 @@ export class IndividualService {
         )
         .subscribe();
     }
-    console.log('is reg', this.authService.user.value.isRegistered);
+
+    // the below is just to log
+    this.store
+      .select('auth')
+      .pipe(
+        map((authState) => authState.user),
+        first()
+      )
+      .subscribe((state) => console.log(state));
 
     if (userId) {
       return this.http

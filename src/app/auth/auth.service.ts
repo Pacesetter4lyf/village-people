@@ -6,6 +6,9 @@ import { throwError } from 'rxjs';
 import { User } from './user.model';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from './store/auth.actions';
 
 const apiUrl = environment.apiUrl;
 export interface AuthResponseData {
@@ -26,12 +29,14 @@ export interface AuthResponseData {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  user = new BehaviorSubject<User>(null);
-  tokenExpirationTimer: any;
+  // user = new BehaviorSubject<User>(null);
+  private tokenExpirationTimer: any;
 
-  signedIn = true;
-  signedInEmitter = new Subject<boolean>();
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private store: Store<fromApp.AppState>
+  ) {}
 
   login(email: string, password: string) {
     return this.http
@@ -81,7 +86,16 @@ export class AuthService {
     isRegistered: string
   ) {
     const user = new User(email, id, token, expiration, isRegistered);
-    this.user.next(user);
+    // this.user.next(user);
+    this.store.dispatch(
+      new AuthActions.Login({
+        email: user.email,
+        userId: user.id,
+        token: user.token,
+        expirationDate: expiration,
+        isRegistered: user.isRegistered,
+      })
+    );
     this.autoLogout(expiration.getTime() - new Date().getTime());
     localStorage.setItem('user', JSON.stringify(user));
   }
@@ -112,7 +126,16 @@ export class AuthService {
       user._isRegistered
     );
     if (loadedUser.token) {
-      this.user.next(loadedUser);
+      // this.user.next(loadedUser);
+      this.store.dispatch(
+        new AuthActions.Login({
+          email: loadedUser.email,
+          userId: loadedUser.id,
+          token: loadedUser.token,
+          expirationDate: new Date(user._tokenExpirationDate),
+          isRegistered: loadedUser.isRegistered,
+        })
+      );
       this.autoLogout(
         new Date(user._tokenExpirationDate).getTime() - new Date().getTime()
       );
@@ -125,8 +148,8 @@ export class AuthService {
     }, expirationDuration);
   }
   signout() {
-    this.user.next(null);
-    // this.router.navigate(['']);
+    // this.user.next(null);
+    this.store.dispatch(new AuthActions.Logout());
     localStorage.removeItem('user');
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
@@ -147,7 +170,16 @@ export class AuthService {
       id
     );
     if (loadedUser.token) {
-      this.user.next(loadedUser);
+      // this.user.next(loadedUser);
+      this.store.dispatch(
+        new AuthActions.Login({
+          email: loadedUser.email,
+          userId: loadedUser.id,
+          token: loadedUser.token,
+          expirationDate: new Date(user._tokenExpirationDate),
+          isRegistered: loadedUser.isRegistered,
+        })
+      );
       this.autoLogout(
         new Date(user._tokenExpirationDate).getTime() - new Date().getTime()
       );

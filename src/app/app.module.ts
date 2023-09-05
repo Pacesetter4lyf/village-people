@@ -18,6 +18,8 @@ import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
 import { StoreModule } from '@ngrx/store';
 import { actualUserReducer } from './store/actual-user.reducer';
+import { authReducer } from './auth/store/auth.reducer';
+import * as fromApp from './store/app.reducer';
 
 @NgModule({
   declarations: [
@@ -36,9 +38,7 @@ import { actualUserReducer } from './store/actual-user.reducer';
     SharedModule, // basically for resources
     AuthModule,
     AppRoutingModule,
-    StoreModule.forRoot({
-      actualUser:  actualUserReducer
-    }, {}),
+    StoreModule.forRoot(fromApp.AppReducer, {}),
   ],
   providers: [
     IndividualService,

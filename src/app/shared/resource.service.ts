@@ -16,6 +16,8 @@ import { IndividualService } from 'src/app/main/personal/individual.service';
 import { Resource } from './resource.model';
 
 import { environment } from 'src/environments/environment';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../store/app.reducer';
 const apiUrl = environment.apiUrl;
 
 @Injectable({ providedIn: 'root' })
@@ -38,7 +40,8 @@ export class ResourceService {
     private individualService: IndividualService,
     private http: HttpClient,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private store: Store<fromApp.AppState>
   ) {
     this.resources = new BehaviorSubject<Resource[]>([this.emptyData]);
 
@@ -97,7 +100,15 @@ export class ResourceService {
       this.fetchUserResources().subscribe((data) => {});
       this.viewingIndividual.next(true);
     } else {
-      if (!this.authService.user.value.isRegistered) {
+      let isRegistered: string;
+      this.store
+        .select('auth')
+        .pipe(
+          take(1),
+          map((authState) => authState.user)
+        )
+        .subscribe((user) => (isRegistered = user.isRegistered));
+      if (!isRegistered) {
         this.resources.next([this.emptyData]);
       } else if (this.lineageResources)
         this.resources.next(this.lineageResources);
