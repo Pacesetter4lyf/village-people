@@ -92,11 +92,11 @@ export class AuthService {
       return throwError(() => Error(error));
     }
     switch (errorRes.error.error.message) {
-      case 'xx':
-        error = 'xx';
+      case 'Incorrect email or password':
+        error = 'Incorrect email or password';
         break;
-      case 'yy':
-        error = '';
+      default:
+        error = 'An unknown error occured';
     }
     return throwError(() => Error(error));
   }
