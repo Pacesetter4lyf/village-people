@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
-import { ChatService } from '../personal/chats/chat.service';
+import { ChatService } from './chat.service';
 import { Chat, ChatParent } from '../personal/chats/chat.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
@@ -29,9 +29,7 @@ export class ChatSmallComponent {
 
   chatParents: ChatParent[];
 
-  constructor(
-    private chatService: ChatService,
-  ) {}
+  constructor(private chatService: ChatService) {}
   ngOnInit() {
     // this.chatService.getChats();
     this.chatService.chatsChanged.subscribe((chatParents) => {

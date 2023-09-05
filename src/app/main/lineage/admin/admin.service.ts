@@ -15,7 +15,7 @@ import {
   throwError,
 } from 'rxjs';
 import { TreeService } from '../tree/tree.service';
-import { ChatService } from '../../personal/chats/chat.service';
+import { ChatService } from '../../chat/chat.service';
 
 import { environment } from 'src/environments/environment';
 const apiUrl = environment.apiUrl;
