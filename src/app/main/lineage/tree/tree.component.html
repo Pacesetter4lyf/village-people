@@ -1,5 +1,5 @@
 <div class="row mt-3 tree" *ngIf="tree">
-  <div class="col-lg-6 border p-3">
+  <div class="col-lg-6 border p-3 old_tree" *ngIf="false">
     <div class="d-flex">
       <div class="d-flex position-relative">
         <div class="bg-primary p-2" (click)="nodeSelected(tree.father?.id)">
@@ -59,6 +59,71 @@
       </div>
     </div>
   </div>
+  <div class="tree col-lg-6 border p-3" id="FamilyTreeDiv">
+    <div class="gparents">
+      <div class="names desc">
+        <span
+          class="father entity bg-primary"
+          (click)="nodeSelected(tree.father?.id)"
+          >{{ tree.father?.firstName }}-{{ tree.father?.lastName }}</span
+        >
+        <span class="spacer"></span>
+        <span
+          class="mother entity rounded-5"
+          (click)="nodeSelected(tree.mother?.id)"
+          >{{ tree.mother?.firstName }}-{{ tree.mother?.lastName }}</span
+        >
+      </div>
+      <div class="me_row">
+        <div
+          class="names desc"
+          [ngClass]="{ no_child: tree.child.length === 0 }"
+        >
+          <span
+            class="father entity bg-danger"
+            [ngClass]="{ 'rounded-5': tree.gender !== 'Male' }"
+            >{{ tree.firstName }}</span
+          >
+          <span class="spacer"></span>
+          <span
+            class="mother entity"
+            *ngIf="tree.gender === 'Male'"
+            [ngClass]="{ 'rounded-5': tree.gender === 'Male' }"
+            (click)="nodeSelected(tree.wife[0]?.id)"
+            >{{ tree.wife[0]?.firstName }}</span
+          >
+          <span
+            class="mother entity"
+            *ngIf="tree.gender === 'Female'"
+            [ngClass]="{ 'rounded-5': tree.gender === 'Male' }"
+            (click)="nodeSelected(tree.husband[0]?.id)"
+            >{{ tree.husband[0]?.firstName }}-{{
+              tree.husband[0]?.lastName
+            }}</span
+          >
+        </div>
+      </div>
+    </div>
+    <div
+      class="children"
+      *ngIf="tree.child.length"
+      [ngClass]="{
+        two_or_less: tree.child.length === 2,
+        one_or_less: tree.child.length === 1
+      }"
+    >
+      <div class="names">
+        <div class="entity_parent" *ngFor="let child of tree.child">
+          <span
+            class="entity"
+            (click)="nodeSelected(child.id)"
+            [ngClass]="{ 'rounded-5': child.gender !== 'Male' }"
+            >{{ child.firstName }}</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="col-lg-6">
     <div class="row">
@@ -109,7 +174,7 @@
       <div class="col-md-6">
         <div class="details">
           <p>
-            {{ tree.bibliography?.split(' ').slice(0,20).join(' ') }}
+            {{ tree.bibliography?.split(" ").slice(0, 20).join(" ") }}
           </p>
           <div class="">
             <div class="d-flex justify-content-between">

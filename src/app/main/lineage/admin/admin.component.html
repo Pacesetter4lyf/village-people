@@ -326,6 +326,7 @@
           </tr>
         </table>
       </div>
+      <!-- the below isnt displayed -->
       <div class="col-md-6 d-none">
         <div class="append-replace-box mt-3 border">
           <span>You want to take over the other Node</span>
@@ -515,7 +516,7 @@
         <div class="">
           <input type="text" #codeInput />
           <button (click)="seeSourceNode(codeInput.value)">see node</button>
-          <button>update sender</button>
+          <button (click)="sendRequestToExternal('codeSearched')" >update sender</button>
         </div>
       </div>
 

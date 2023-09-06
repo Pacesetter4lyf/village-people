@@ -199,7 +199,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.adminService.findPeople(lastName);
     }
   }
-  sendRequestToExternal() {
+  sendRequestToExternal(codeSearched?: string) {
     //here send t4 and t5. i.e. send t5 details to t4 who is the guest
     // it also shows up in your list of sent requests
     console.log(
@@ -208,6 +208,13 @@ export class AdminComponent implements OnInit, OnDestroy {
       'nodeToBeMerged',
       this.codesList[this.t5SelectedRow]
     );
+    if (codeSearched) {
+      this.adminService.sendRequestToExternal(
+        this.foundPersonFromCode,
+        this.membersList[this.tMembersApplyCode]
+      );
+      return;
+    }
     this.adminService.sendRequestToExternal(
       this.codesList[this.t5SelectedRow],
       this.peopleFound[this.t4SelectedRow]
