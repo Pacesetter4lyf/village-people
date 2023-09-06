@@ -35,66 +35,67 @@ div > p{
 
 /* THe new test tree */
 
-#FamilyTreeDiv{
-    & *, ::after, ::before {
-        box-sizing: content-box!important;
-      };
-    overflow-x: scroll;
+#FamilyTreeDiv *::after,
+#FamilyTreeDiv *::before {
+  box-sizing: content-box!important;
 }
-.names{
-    display: inline-flex;
-    position: relative;
-    gap: 0px;
-    margin-block: 5px;
-  }
-  .entity{
-    border: 5px;
-    background-color: #0d6efd;
-    padding: 5px;
-    width: 120px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    /* display: inline-block */
-    font-size: 0.8rem;
-  }
-  
-  .spacer{
-    width: 30px;
-    height: 2px;
-    border: 1px solid aqua;
-    background-color: aqua;
-    position: relative;
-    top: 15px
-  }
-  
-  .gparents{
-    .me_row{
-      position: relative;
-      left: 70px
-    }
-  }
-  
-  .children {
-    &.two_or_less{
-        position: relative;
-        left: 80px
-    };
-    &.one_or_less{
-        position: relative;
-        left: 120px;
-    };
-    .names{
-      gap: 5px; 
-      padding-top: 0px;
-      position: relative;
-      .entity_parent{
-        padding-top: 20px;
-      }
-    }
-  }
-  
-  
+
+#FamilyTreeDiv {
+  overflow-x: scroll;
+}
+
+.names {
+  display: inline-flex;
+  position: relative;
+  gap: 0px;
+  margin-block: 5px;
+}
+
+.entity {
+  border: 5px;
+  background-color: #0d6efd;
+  padding: 5px;
+  width: 120px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.spacer {
+  width: 30px;
+  height: 2px;
+  border: 1px solid aqua;
+  background-color: aqua;
+  position: relative;
+  top: 15px;
+}
+
+.gparents .me_row {
+  position: relative;
+  left: 70px;
+}
+
+.children.two_or_less {
+  position: relative;
+  left: 80px;
+}
+
+.children.one_or_less {
+  position: relative;
+  left: 120px;
+}
+
+.children .names {
+  gap: 5px;
+  padding-top: 0px;
+  position: relative;
+}
+
+.children .names .entity_parent {
+  padding-top: 20px;
+}
+
   .desc::before{
     content: '';
     position: absolute;
