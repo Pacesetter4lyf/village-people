@@ -20,6 +20,7 @@ import * as fromApp from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
+import { chatEffects } from './main/chat/store/chat.effects';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { environment } from 'src/environments/environment';
     AuthModule,
     AppRoutingModule,
     StoreModule.forRoot(fromApp.AppReducer, {}),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, chatEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
   ],
   providers: [

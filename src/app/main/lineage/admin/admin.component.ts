@@ -7,6 +7,9 @@ import {
 import { Subscription, switchMap } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import * as ChatActions from '../../chat/store/chat.actions';
+import { Store } from '@ngrx/store';
+import * as appState from 'src/app/store/app.reducer';
 
 @Component({
   selector: 'app-admin',
@@ -17,7 +20,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   constructor(
     private adminService: AdminService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private store: Store<appState.AppState>
   ) {
     this.form = this.formBuilder.group({
       lastName: [''],
@@ -296,7 +300,11 @@ export class AdminComponent implements OnInit, OnDestroy {
     });
   }
 
-  openChat(id: string, name: string){
-    this.adminService.openChat(id, name)
+  openChat(id: string, name: string) {
+    // this.adminService.openChat(id, name)
+
+    this.store.dispatch(
+      new ChatActions.ConversationOpenInitiated({ id, name })
+    );
   }
 }

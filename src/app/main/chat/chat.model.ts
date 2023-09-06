@@ -1,6 +1,3 @@
-import { Injectable } from '@angular/core';
-
-@Injectable({ providedIn: 'root' })
 export class Chat {
   constructor(
     public from: string,
@@ -11,7 +8,6 @@ export class Chat {
   ) {}
 }
 
-@Injectable({ providedIn: 'root' })
 export class ChatParent {
   constructor(
     public name: string,

@@ -1,4 +1,8 @@
-<div class="chat-container" [ngClass]="{ expanded: expanded }"  *ngIf="actualUserId">
+<div
+  class="chat-container"
+  [ngClass]="{ expanded: expanded }"
+  *ngIf="actualUserId"
+>
   <div class="top" [ngClass]="{ inActualChat: isInActualChat }">
     <i
       class="fas fa-arrow-left back"
@@ -11,8 +15,6 @@
       [ngClass]="expanded ? 'fa-arrow-down' : 'fa-arrow-up'"
     ></i>
   </div>
-  <!-- <i class="fas fa-camera"></i>
-    <fa-icon [icon]="faCoffee"></fa-icon> -->
 
   <div class="body" *ngIf="expanded">
     <div class="chat-list" *ngIf="!isInActualChat">
@@ -20,7 +22,7 @@
         class="chat mb-1 border border-primary"
         role="button"
         *ngFor="let chat of chatParents"
-        (click)="viewChat(chat.to)"
+        (click)="viewChat(chat.to, chat.name)"
       >
         <div class="d-flex justify-content-between">
           <p>

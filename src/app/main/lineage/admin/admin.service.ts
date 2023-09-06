@@ -4,6 +4,9 @@ import { IndividualService } from '../../personal/individual.service';
 import { LineageService } from '../lineage.service';
 import { HttpClient } from '@angular/common/http';
 import { respType } from 'src/app/shared/types/response.type';
+import { TreeService } from '../tree/tree.service';
+
+import { environment } from 'src/environments/environment';
 import {
   BehaviorSubject,
   Observable,
@@ -14,10 +17,7 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-import { TreeService } from '../tree/tree.service';
-import { ChatService } from '../../chat/chat.service';
 
-import { environment } from 'src/environments/environment';
 const apiUrl = environment.apiUrl;
 
 export interface personRowInterface {
@@ -74,7 +74,6 @@ export class AdminService {
     private lineageService: LineageService,
     private http: HttpClient,
     private treeService: TreeService,
-    private chatService: ChatService
   ) {
     this.fetchMembersList();
     this.fetchCodes();
@@ -276,7 +275,4 @@ export class AdminService {
     this.individualService.switchToSelf();
   }
 
-  openChat(id: string, name: string) {
-    this.chatService.triggerChat(id, name);
-  }
 }

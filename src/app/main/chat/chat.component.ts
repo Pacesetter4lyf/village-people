@@ -1,9 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { ChatService } from './chat.service';
-import { Chat, ChatParent } from '../personal/chats/chat.model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { take } from 'rxjs';
+import { Chat, ChatParent } from './chat.model';
+import { take, Subscription } from 'rxjs';
+import * as fromApp from 'src/app/store/app.reducer';
+import { Store } from '@ngrx/store';
+import * as ChatActions from './store/chat.actions';
 
 @Component({
   selector: 'app-chat-small',
@@ -11,49 +13,30 @@ import { take } from 'rxjs';
   styleUrls: ['./chat.component.css'],
 })
 export class ChatSmallComponent {
-  faCoffee = faCoffee;
   expanded: boolean = false;
   isInActualChat: boolean = false;
   actualUserId: string;
-
   // actual chat variables
+  chatParents: ChatParent[];
   chatDetails: Chat[];
   userId: string;
-  to: string;
-  @ViewChild('message') message: ElementRef;
   name: string;
+  @ViewChild('message') message: ElementRef;
+  storeSub: Subscription;
 
-  topClicked() {
-    this.expanded = !this.expanded;
-  }
-
-  chatParents: ChatParent[];
-
-  constructor(private chatService: ChatService) {}
+  constructor(
+    private chatService: ChatService,
+    private store: Store<fromApp.AppState>
+  ) {}
   ngOnInit() {
-    // this.chatService.getChats();
-    this.chatService.chatsChanged.subscribe((chatParents) => {
-      this.chatParents = chatParents;
-      console.log(chatParents);
-    });
-
-    // from the single chat.
-    this.chatService.chatChanged.subscribe((chat) => {
-      chat.sentByUser = true;
-      this.chatDetails = [...this.chatDetails, chat];
-
-      // to modify the LHS with the recent chat
-      this.chatService.getChats();
-    });
-
-    // added to single chat to start new chats\
-    this.chatService.newChatIdAndName.subscribe((idNameChat) => {
-      this.isInActualChat = true;
-      this.expanded = true;
-
-      this.userId = idNameChat.id;
-      this.name = idNameChat.name;
-      this.chatDetails = idNameChat.chat;
+    this.store.dispatch(new ChatActions.GetChatList());
+    this.storeSub = this.store.select('chat').subscribe((chat) => {
+      this.chatParents = chat.chatList;
+      this.expanded = chat.expanded;
+      this.isInActualChat = chat.isInActualChat;
+      this.chatDetails = chat.chats;
+      this.userId = chat.chatRecipientId;
+      this.name = chat.chatRecipientName;
     });
 
     this.chatService.userId.subscribe(
@@ -61,36 +44,37 @@ export class ChatSmallComponent {
     );
   }
 
-  viewChat(id: string) {
-    this.isInActualChat = true;
-    this.userId = id;
+  topClicked() {
+    if (this.expanded) {
+      this.store.dispatch(new ChatActions.MinimizeChat());
+    } else {
+      this.store.dispatch(new ChatActions.OpenChatUi());
+    }
+  }
 
-    this.name = this.chatService.getParent(id).name;
-    // modification
-    this.chatService
-      .getChat2(id)
-      .pipe(take(1))
-      .subscribe((chat) => {
-        this.chatDetails = chat;
-      });
+  viewChat(id: string, name: string) {
+    this.store.dispatch(
+      new ChatActions.ConversationOpenInitiated({ id, name })
+    );
   }
+
   back() {
-    this.isInActualChat = false;
+    this.store.dispatch(new ChatActions.GoBack());
   }
+
   // child component begins
   sendMessage() {
     // check that the user i am sending to isnt deleted: replicate this in the backend
-    const chatParent = this.chatService.getParent(this.userId);
+    const chatParent = this.chatParents.find((ch) => ch.to === this.userId);
     if (chatParent?.name === 'deleted user') {
       alert('user has been deleted');
       return;
     }
-
     let value = this.message.nativeElement.value;
     let to = this.userId;
     let message = { to: to, message: value };
     if (value.length < 2) return;
-    this.chatService.sendMessage(message);
+    this.store.dispatch(new ChatActions.SendMessage(message));
     this.message.nativeElement.value = '';
   }
 }
