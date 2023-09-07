@@ -30,7 +30,7 @@ export class TreeComponent implements OnInit, OnDestroy {
       }
     });
 
-    console.log('tree ', this.tree);
+    // console.log('tree ', this.tree);
   }
   ngOnDestroy() {
     this.treeSub.unsubscribe();

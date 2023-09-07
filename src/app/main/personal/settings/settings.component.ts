@@ -105,8 +105,8 @@ export class SettingsComponent implements OnInit {
   }
 
   handleCheckboxChange(checkboxName: any, id: any, checked: any) {
-    console.log('new value ', checked, checkboxName);
-    console.log(checkboxName, id, checked);
-    console.log(this.viewables);
+    // console.log('new value ', checked, checkboxName);
+    // console.log(checkboxName, id, checked);
+    // console.log(this.viewables);
   }
 }

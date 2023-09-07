@@ -68,7 +68,7 @@ export class IndividualService {
     Object.keys(data).map((key) => {
       if (data[key] !== null && data[key] !== '') {
         basicFormData.append(key, data[key]);
-        console.log(key, data[key]);
+        // console.log(key, data[key]);
       }
     });
 
@@ -90,7 +90,7 @@ export class IndividualService {
           basicFormData
         )
         .subscribe((value) => {
-          console.log(value);
+          // console.log(value);
           if (value.status === 'success') {
             this.displayUser.next(value.data.user);
             if (displayMode === 'self') this.actualUser.next(value.data.user);
@@ -106,7 +106,7 @@ export class IndividualService {
         basicFormData
       )
       .subscribe((value) => {
-        console.log('patch', value);
+        // console.log('patch', value);
         if (value.status === 'success') {
           this.displayUser.next(value.data.user);
           if (displayMode === 'self') this.actualUser.next(value.data.user);
@@ -144,15 +144,7 @@ export class IndividualService {
         .subscribe();
     }
 
-    // the below is just to log
-    this.store
-      .select('auth')
-      .pipe(
-        map((authState) => authState.user),
-        first()
-      )
-      .subscribe((state) => console.log(state));
-
+ 
     if (userId) {
       return this.http
         .get<respType<Individual>>(`${apiUrl}/userdata/${userId}`)
@@ -160,13 +152,13 @@ export class IndividualService {
           catchError(this.handleError),
           map((response) => response.data.data),
           tap<Individual>((response) => {
-            console.log('user ', this.displayUser);
+            // console.log('user ', this.displayUser);
             this.displayUser.next(response);
             if (self) this.actualUser.next(response);
           })
         );
     } else {
-      console.log('here');
+      // console.log('here');
       const emptyData: Individual = this.emptyUser();
       this.displayUser.next(emptyData);
       return of<Individual>(emptyData);
@@ -209,7 +201,7 @@ export class IndividualService {
         map((response) => response.data.data),
         tap<Individual>((response) => {
           this.displayUser.next(response);
-          console.log('view resp ', response);
+          // console.log('view resp ', response);
           if (this.displayUser.value?.createdBy === this.actualUser.value._id) {
             this.displayMode.next('user-viewing');
           } else {
@@ -234,7 +226,7 @@ export class IndividualService {
       this.displayUser.next(this.actualUser.value);
       return;
     }
-    console.log('now getting user');
+    // console.log('now getting user');
     this.getUserWithId(id);
     // set esit mode to false
   }

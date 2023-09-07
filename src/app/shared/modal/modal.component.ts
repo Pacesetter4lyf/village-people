@@ -90,7 +90,7 @@ export class ModalComponent implements OnInit, OnDestroy {
   }
 
   async onSubmit() {
-    console.log(this.resourceForm.value);
+    // console.log(this.resourceForm.value);
     let url: string;
     if (this.contentType !== 'text' && this.file) {
       let upload = uploadcare.fileFrom('object', this.file);

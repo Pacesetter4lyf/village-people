@@ -41,7 +41,7 @@ export class EducationComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    console.log(form.value);
+    // console.log(form.value);
     this.individualService.sendBasicDetails({
       primarySchool: form.value.primarySchool
         ? (form.value.primarySchool as string)

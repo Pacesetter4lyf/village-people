@@ -28,7 +28,7 @@ export const IndividualGuard = () => {
     .pipe(
       take(1),
       tap((event) => {
-        console.log('hello ... ', event);
+        // console.log('hello ... ', event);
         if (event instanceof GuardsCheckEnd) {
           //   console.log('Clicked link:', event);
           page = event.urlAfterRedirects.split('/').pop();

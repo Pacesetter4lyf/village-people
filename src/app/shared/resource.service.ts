@@ -70,7 +70,7 @@ export class ResourceService {
         } else {
           this.mediaEditable = false;
         }
-        console.log('mode changed ', mode);
+        // console.log('mode changed ', mode);
       });
       // if individual, media editable is listened to in the initialization
       this.resources.next([new Resource()]); // have something while it refreshes: optional
@@ -98,7 +98,7 @@ export class ResourceService {
         this.resources.next(this.lineageResources);
       else {
         this.fetchAllResources().subscribe((response) => {
-          console.log(response);
+          // console.log(response);
         });
       }
       this.viewingIndividual.next(false);
@@ -110,7 +110,7 @@ export class ResourceService {
       take(1),
       map((resp) => resp.data.data),
       tap((resp) => {
-        console.log('response', resp);
+        // console.log('response', resp);
         this.lineageResources = resp;
         this.resources.next(resp);
       })
@@ -142,7 +142,7 @@ export class ResourceService {
       ['user']: this.individualService.displayUser.value._id,
       resourceType: this.addMediaContentType.value,
     };
-    console.log('new data', newdata);
+    // console.log('new data', newdata);
     if (this.mode.value === 'create') {
       return this.http
         .post<any>(
@@ -155,7 +155,7 @@ export class ResourceService {
           if (this.lineageResources)
             this.lineageResources.push(response.data.data);
           this.resources.next(this.userResources);
-          console.log(response);
+          // console.log(response);
         });
     } else {
       return this.http
@@ -178,7 +178,7 @@ export class ResourceService {
             this.lineageResources[indexToUpdate] = response.data.data;
           }
           this.resources.next(this.userResources);
-          console.log(response);
+          // console.log(response);
         });
     }
 

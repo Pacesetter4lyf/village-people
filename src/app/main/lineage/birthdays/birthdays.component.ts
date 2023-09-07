@@ -45,7 +45,7 @@ export class BirthdaysComponent implements OnInit {
         });
 
         this.birthdays = newData;
-        console.log(this.birthdays);
+        // console.log(this.birthdays);
       });
   }
 

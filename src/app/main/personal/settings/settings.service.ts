@@ -25,7 +25,7 @@ export class SettingsService {
     private http: HttpClient
   ) {
     this.individualService.displayUser.subscribe((data) => {
-      console.log('user changed in settings');
+      // console.log('user changed in settings');
       if (data) {
         this.displayId = data._id;
       }

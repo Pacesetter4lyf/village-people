@@ -42,13 +42,13 @@ export class TreeService {
     this.http
       .get<respType<TreeInterface>>(`${apiUrl}/userdata/tree/${nodeId}`)
       .subscribe((value) => {
-        console.log('patch', value);
+        // console.log('patch', value);
         if (value.status === 'success') {
           this.tree = value.data.data;
           this.treeChanged.next(this.tree);
         }
       });
-    console.log('nodeId ', nodeId);
+    // console.log('nodeId ', nodeId);
 
 
   }

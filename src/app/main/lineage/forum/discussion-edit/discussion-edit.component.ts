@@ -45,7 +45,7 @@ export class DiscussionEditComponent implements OnInit {
   }
 
   savePost(formValues: any) {
-    console.log('form values', formValues, this.commentFields);
+    // console.log('form values', formValues, this.commentFields);
     const {
       isCommentsTurnedOff,
       file,
@@ -61,7 +61,7 @@ export class DiscussionEditComponent implements OnInit {
       title.trim() === '' ||
       title === null
     ) {
-      console.log(title);
+      // console.log(title);
       return;
     }
 

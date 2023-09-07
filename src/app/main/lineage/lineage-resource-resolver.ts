@@ -12,7 +12,6 @@ export const ResourceResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ) => {
-  // console.log('ello');
   let lineageResources = inject(ResourceService).lineageResources;
   if (lineageResources) {
     return true;

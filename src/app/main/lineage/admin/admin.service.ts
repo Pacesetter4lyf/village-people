@@ -145,7 +145,7 @@ export class AdminService {
   }
 
   getMembers(): Observable<personRowInterface[]> {
-    console.log('in the get members method');
+    // console.log('in the get members method');
     return this.personListObservable;
   }
 
@@ -183,14 +183,14 @@ export class AdminService {
         nodeTo: nodeTo,
       })
       .subscribe((response) => {
-        console.log(response.data.data);
+        // console.log(response.data.data);
         this.fetchCodes();
       });
     //emit event that makes the get code run anew
   }
   cancelCode(id: string) {
     this.http.delete(`${apiUrl}/joincode/${id}`).subscribe((response) => {
-      console.log('response is ', response);
+      // console.log('response is ', response);
       this.fetchCodes();
     });
   }
@@ -201,7 +201,7 @@ export class AdminService {
         `${apiUrl}/userdata/findpeople?lastName=${lastName}`
       )
       .subscribe((response) => {
-        console.log(response.data.data);
+        // console.log(response.data.data);
         this.findResult.next(response.data.data);
       });
   }
@@ -219,7 +219,7 @@ export class AdminService {
         }
       )
       .subscribe((response) => {
-        console.log(response.data.data);
+        // console.log(response.data.data);
         // this.fetchCodes();
       });
     this.fetchCodes();
@@ -237,7 +237,7 @@ export class AdminService {
     this.http
       .get<respType<codeRowInterface>>(`${apiUrl}/joincode/code/${code}`)
       .subscribe((response) => {
-        console.log(response.data.data);
+        // console.log(response.data.data);
         this.foundCode.next(response.data.data);
       });
   }
@@ -258,7 +258,7 @@ export class AdminService {
     this.http
       .get<respType<string>>(`${apiUrl}/joincode/merge/${id}`)
       .subscribe((response) => {
-        console.log(response.data.data);
+        // console.log(response.data.data);
         this.fetchCodes();
       });
   }

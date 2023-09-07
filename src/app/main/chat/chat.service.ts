@@ -18,7 +18,7 @@ export class ChatService {
     this.individualService.actualUser.pipe().subscribe((user) => {
       if (user) {
         this.userId.next(user?._id);
-        console.log('sd', user?._id);
+        // console.log('sd', user?._id);
       } else {
         this.userId.next(null);
       }

@@ -27,7 +27,7 @@ export class ForumComponent implements OnInit {
     this.postService.getPosts().subscribe((data) => {
       this.allPosts = [...data];
       this.posts = [...data];
-      console.log(data);
+      // console.log(data);
     });
 
     this.postService.membersList.pipe(take(2)).subscribe((data) => {

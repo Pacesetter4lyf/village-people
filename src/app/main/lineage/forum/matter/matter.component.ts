@@ -51,7 +51,7 @@ export class MatterComponent implements OnInit {
     this.adminOf = this.postService.adminOf;
 
     this.postEmitter.subscribe((post) => {
-      console.log('returned ', post);
+      // console.log('returned ', post);
       this.loaded = true;
       this.likes = post.likes;
       this.isLiked = post.likes?.includes(this.postService.userId);
@@ -64,7 +64,7 @@ export class MatterComponent implements OnInit {
       this.postService.getPost(this.id).subscribe((post) => {
         this.post = post;
         this.postEmitter.next(post);
-        console.log('here');
+        // console.log('here');
         // this.loaded = true;
         // this.likes = this.post.likes;
         // this.isLiked = this.post.likes?.includes(this.postService.userId);
@@ -86,11 +86,11 @@ export class MatterComponent implements OnInit {
         }
       });
     });
-    console.log('here2');
+    // console.log('here2');
   }
 
   postComment(value: string) {
-    console.log(value, 'comment');
+    // console.log(value, 'comment');
     if (value) {
       this.postService.postComment(this.id, value).subscribe((data) => {
         this.post = data;

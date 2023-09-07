@@ -61,7 +61,7 @@ export class PostService {
   }
 
   private fetchPosts() {
-    console.log('fetching posts', this.posts);
+    // console.log('fetching posts', this.posts);
     return this.http.get<respType<PostModel[]>>(`${apiUrl}/post`).pipe(
       map((response) => response.data.data),
       tap((data) => {
@@ -80,7 +80,7 @@ export class PostService {
         map((response) => response.data.data),
         tap((data) => {
           this.post = data;
-          console.log('post ', this.post);
+          // console.log('post ', this.post);
         })
       );
     }
@@ -93,7 +93,7 @@ export class PostService {
       .pipe(
         map((response) => response.data.data),
         tap((data) => {
-          console.log('data ...', data);
+          // console.log('data ...', data);
           // this.post = data;
           const postIndex = this.posts.findIndex((post) => post.id === id);
           if (postIndex) {

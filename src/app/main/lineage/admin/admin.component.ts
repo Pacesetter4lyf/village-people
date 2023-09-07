@@ -82,12 +82,11 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.itemSelected = item;
   }
 
-  controlledByChanged() {
-    console.log(this.controlledBy);
-  }
+  // controlledByChanged() {
+  //   console.log(this.controlledBy);
+  // }
 
   ngOnInit() {
-    console.log('Hello here');
     this.allMembersSub = this.adminService
       .fetchMembersList()
       .pipe(
@@ -187,14 +186,12 @@ export class AdminComponent implements OnInit, OnDestroy {
     // to merge a node, the nodeTo will become the owner and user of the node
     // the userData is archived and instances of userDataId is
     // replaced with the incoming, i.e the nodeTo
-    console.log(id);
     this.adminService.beginMerge(id);
   }
 
   findPeople() {
     const values = this.form.value;
     let { lastName } = values;
-    console.log('form values', values);
     if (lastName) {
       this.adminService.findPeople(lastName);
     }
@@ -221,13 +218,13 @@ export class AdminComponent implements OnInit, OnDestroy {
     );
   }
   generateCode2(formValues: any) {
-    console.log('form values ', formValues);
+    // console.log('form values ', formValues);
     const { replace_append, append } = formValues;
-    console.log(
-      replace_append === 'append' && !append,
-      this.t4SelectedRow === undefined,
-      !replace_append
-    );
+    // console.log(
+    //   replace_append === 'append' && !append,
+    //   this.t4SelectedRow === undefined,
+    //   !replace_append
+    // );
     if (
       (replace_append === 'append' && !append) ||
       this.t4SelectedRow === undefined ||
@@ -243,7 +240,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   seeSourceNode(code: string) {
-    console.log('code ', code);
+    // console.log('code ', code);
     this.adminService.seeSourceNode(code);
   }
 
@@ -259,7 +256,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     }
   }
   lineageChanged() {
-    console.log('lineage has changed');
+    // console.log('lineage has changed');
     if (this.currentLineage === 'all')
       this.filteredMembersList = [...this.membersList];
     else {
@@ -283,7 +280,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     // the node we want to remove
     const target = this.membersList.filter((members) => members.id === id)[0]; // sould e find
     // find the node, and then if we admin the node
-    console.log(target);
+    // console.log(target);
     if (target && target.lineage.filter((item) => adminOf.includes(item))) {
       if (action === 'remove') {
         this.adminService.changeMemberStatus(

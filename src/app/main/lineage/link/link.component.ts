@@ -65,12 +65,12 @@ export class LinkComponent {
       toSearch = this.textB.nativeElement.value;
     }
     if (!toSearch.trim()) return;
-    console.log('hello', toSearch);
+    // console.log('hello', toSearch);
     this.searchSubscribtion = this.lineageService
       .getSearch(toSearch)
       .subscribe((data) => {
         text === 'A' ? (this.A = data.data.data) : (this.B = data.data.data);
-        console.log(data);
+        // console.log(data);
       });
   }
 
