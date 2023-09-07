@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { User } from '../user.model';
 import { AuthService } from '../auth.service';
 const apiUrl = environment.apiUrl;
@@ -207,6 +208,7 @@ export class AuthEffects {
     private actions$: Actions,
     private http: HttpClient,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private activatedRoute: ActivatedRoute
   ) {}
 }
