@@ -26,7 +26,7 @@ export class Individual implements BasicDetailsInterface {
     public id: string = '',
     public firstName: string = '',
     public lastName: string = '',
-    public photo: string | File = '',
+    public photo: string | File = 'undefined',
     public nickname: string = '',
     public dateOfBirth: string = '',
     public phoneNumber: string = '',

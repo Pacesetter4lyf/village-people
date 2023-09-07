@@ -74,10 +74,11 @@ export class IndividualService {
 
     const displayUserId = this.displayUser.value._id;
     const displayMode = this.displayMode.value;
+
     if (!displayUserId) {
       // we are having an empty display user
       // determine whether in self mode or user-creating
-      if (displayMode === 'self' || 'registering') {
+      if (displayMode === 'self' || displayMode === 'registering') {
         basicFormData.append('mode', 'self');
       } else {
         basicFormData.append('mode', 'other');
@@ -144,7 +145,6 @@ export class IndividualService {
         .subscribe();
     }
 
- 
     if (userId) {
       return this.http
         .get<respType<Individual>>(`${apiUrl}/userdata/${userId}`)
