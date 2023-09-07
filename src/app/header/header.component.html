@@ -3,7 +3,7 @@
   [ngStyle]="{ zIndex: '3' }"
 >
   <div class="container-fluid">
-    <a class="navbar-brand" [routerLink]="'/'" role="button">Village People</a>
+    <a class="navbar-brand" [routerLink]="'/'" role="button">ClanHub</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -28,7 +28,7 @@
                 >Contact us</a
               >
             </li>
-            <li class="nav-item" routerLinkActive="active">
+            <li class="nav-item" [routerLinkActive]="active">
               <a class="nav-link" routerLink="/about">About</a>
             </li>
           </ul>

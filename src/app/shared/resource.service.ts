@@ -44,28 +44,12 @@ export class ResourceService {
     private store: Store<fromApp.AppState>
   ) {
     this.resources = new BehaviorSubject<Resource[]>([this.emptyData]);
-
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        this.currentRoute = event.url;
-        // React to route changes, perform necessary actions based on the route
-        this.handleRouteChange();
-      });
   }
 
   getMediaEditable() {
     return this.mediaEditable;
   }
 
-  handleRouteChange() {
-    // Your logic to handle route changes here...
-    const nav = this.currentRoute.split('/').slice(1);
-    const first = nav.at(0);
-    const last = nav.at(-1);
-    console.log('Current route:', first, last);
-    // Perform actions specific to the route or fetch data based on the route, etc.
-  }
 
   setResource(view: 'individual' | 'lineage') {
     // determine what resource to show

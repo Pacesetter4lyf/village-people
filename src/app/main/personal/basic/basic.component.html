@@ -2,8 +2,13 @@
   <div class="row">
     <div class="col-sm-6 col-md-4">
       <div class="mt-3">
-        <label for="formFile" class="form-label">Profile Picture</label>
-        <div>
+        <label
+          *ngIf="basicDetails.photo !== 'undefined'"
+          for="formFile"
+          class="form-label"
+          >Profile Picture</label
+        >
+        <div *ngIf="basicDetails.photo !== 'undefined'">
           <img
             [src]="basicDetails.photo"
             alt="img-thumbnail"
