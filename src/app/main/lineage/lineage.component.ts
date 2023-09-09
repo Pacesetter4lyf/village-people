@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ResourceService } from 'src/app/shared/resource.service';
+import { AdminService } from './admin/admin.service';
 
 @Component({
   selector: 'app-lineage',

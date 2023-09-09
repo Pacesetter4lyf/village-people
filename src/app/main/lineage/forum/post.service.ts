@@ -24,15 +24,11 @@ export class PostService {
   adminOf: number[];
 
   constructor(
-    private router: Router,
-    private Service: IndividualService,
-    private lineageService: LineageService,
     private http: HttpClient,
-    private activatedRoute: ActivatedRoute,
     private adminService: AdminService,
     private individualService: IndividualService
   ) {
-    adminService.fetchMembersList().subscribe((data) => {
+    this.adminService.personListObservable.subscribe((data) => {
       this.membersList.next(data);
     });
 

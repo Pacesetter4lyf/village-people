@@ -87,8 +87,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit() {
-    this.allMembersSub = this.adminService
-      .fetchMembersList()
+    this.adminService.fetchMembersList();
+    this.allMembersSub = this.adminService.personListObservable
       .pipe(
         switchMap((members) => {
           this.membersList = [...members];

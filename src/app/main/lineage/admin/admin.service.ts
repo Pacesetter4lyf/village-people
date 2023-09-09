@@ -73,7 +73,7 @@ export class AdminService {
     private individualService: IndividualService,
     private lineageService: LineageService,
     private http: HttpClient,
-    private treeService: TreeService,
+    private treeService: TreeService
   ) {
     this.fetchMembersList();
     this.fetchCodes();
@@ -86,7 +86,7 @@ export class AdminService {
   private errorSubject: BehaviorSubject<string> = new BehaviorSubject<string>(
     ''
   );
-  private personListObservable = new BehaviorSubject<personRowInterface[]>([]);
+  public personListObservable = new BehaviorSubject<personRowInterface[]>([]);
   private codeListObservable = new BehaviorSubject<codeRowInterface[]>([]);
   private cachedPersonList: personRowInterface[];
   private cachedCodeList: codeRowInterface[];
@@ -96,13 +96,13 @@ export class AdminService {
 
   public currentLineage: string;
 
-  fetchMembersList(): Observable<personRowInterface[]> {
-    if (this.isDataLoaded && this.cachedPersonList.length > 0) {
-      // If data is already loaded and not empty, return the cached data
-      return of(this.cachedPersonList);
-    }
+  fetchMembersList(){
+    // if (this.isDataLoaded && this.cachedPersonList.length > 0) {
+    //   // If data is already loaded and not empty, return the cached data
+    //   return of(this.cachedPersonList);
+    // }
 
-    return this.http
+    this.http
       .get<respType<personRowInterface[]>>(`${apiUrl}/userdata/members`)
       .pipe(
         catchError((error) => {
@@ -115,8 +115,10 @@ export class AdminService {
           this.personListObservable.next(this.cachedPersonList);
           this.isDataLoaded = true;
         })
-      );
+      ).subscribe();
   }
+
+
   fetchCodes() {
     this.http
       .get<respType<codeRowInterface[]>>(`${apiUrl}/joincode`)
@@ -201,7 +203,7 @@ export class AdminService {
         `${apiUrl}/userdata/findpeople?lastName=${lastName}`
       )
       .subscribe((response) => {
-        // console.log(response.data.data);
+        console.log(response.data.data);
         this.findResult.next(response.data.data);
       });
   }
@@ -274,5 +276,4 @@ export class AdminService {
   switchToSelf() {
     this.individualService.switchToSelf();
   }
-
 }
