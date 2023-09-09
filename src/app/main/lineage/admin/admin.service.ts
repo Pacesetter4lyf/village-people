@@ -48,6 +48,7 @@ export interface codeRowInterface {
     };
   };
   generatedBy: string;
+  sentBy: string;
   mode: string;
   code: string;
   status: string;
@@ -209,15 +210,18 @@ export class AdminService {
   }
 
   sendRequestToExternal(
-    nodeFrom: codeRowInterface,
-    nodeTo: personRowInterface
+    codeId: string,
+    nodeFrom: string, //codeRowInterface,
+    nodeTo: string //personRowInterface
   ) {
     this.http
       .patch<respType<codeRowInterface[]>>(
-        `${apiUrl}/joincode/${nodeFrom.id}`,
+        `${apiUrl}/joincode/${codeId}`,
         {
-          fromId: nodeFrom.userData.id,
-          nodeTo: nodeTo.id,
+          fromId: nodeFrom,
+          nodeTo: nodeTo,
+          // fromId: nodeFrom.userData.id,
+          // nodeTo: nodeTo.id,
         }
       )
       .subscribe((response) => {
@@ -261,6 +265,7 @@ export class AdminService {
       .get<respType<string>>(`${apiUrl}/joincode/merge/${id}`)
       .subscribe((response) => {
         // console.log(response.data.data);
+        this.fetchMembersList();
         this.fetchCodes();
       });
   }

@@ -35,12 +35,10 @@ export class AdminComponent implements OnInit, OnDestroy {
     'all members',
     'generate code',
     'generated codes',
-    '-',
     'find people',
-    'incoming requests',
-    'request status', // cancelled and completed
-    'sent requests',
     'apply code',
+    'incoming requests',
+    'sent requests',
     'archived',
   ];
   itemSelected: string = this.navItems[0];
@@ -108,12 +106,13 @@ export class AdminComponent implements OnInit, OnDestroy {
 
         this.sentRequest = this.codesList.filter((item) => {
           return (
-            item.nodeTo && item.generatedBy === this.adminService.getMyId()
+            item.nodeTo &&
+            (item.sentBy === this.adminService.getMyId() )
           );
         });
         this.incomingRequest = this.codesList.filter((item) => {
           return (
-            item.nodeTo && item.generatedBy !== this.adminService.getMyId()
+            item.nodeTo && item.sentBy !== this.adminService.getMyId()
           );
         });
         //requestStatusList
@@ -199,22 +198,25 @@ export class AdminComponent implements OnInit, OnDestroy {
   sendRequestToExternal(codeSearched?: string) {
     //here send t4 and t5. i.e. send t5 details to t4 who is the guest
     // it also shows up in your list of sent requests
+
+    if (codeSearched) {
+      this.adminService.sendRequestToExternal(
+        this.foundPersonFromCode.id,
+        this.foundPersonFromCode.userData.id,
+        this.membersList[this.tMembersApplyCode].id
+      );
+      return;
+    }
     console.log(
       'recipient ',
       this.peopleFound[this.t4SelectedRow],
       'nodeToBeMerged',
       this.codesList[this.t5SelectedRow]
     );
-    if (codeSearched) {
-      this.adminService.sendRequestToExternal(
-        this.foundPersonFromCode,
-        this.membersList[this.tMembersApplyCode]
-      );
-      return;
-    }
     this.adminService.sendRequestToExternal(
-      this.codesList[this.t5SelectedRow],
-      this.peopleFound[this.t4SelectedRow]
+      this.codesList[this.t5SelectedRow].id,
+      this.codesList[this.t5SelectedRow].userData.id,
+      this.peopleFound[this.t4SelectedRow].id
     );
   }
   generateCode2(formValues: any) {
