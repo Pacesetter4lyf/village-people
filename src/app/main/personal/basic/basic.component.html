@@ -30,9 +30,10 @@
   </div>
 
   <div class="row">
-    <label for="email" class="col-4 col-form-label">Firstname</label>
+    <label for="firstName" class="col-4 col-form-label">Firstname</label>
     <div class="col-8 col-md-3">
       <input
+        id="firstName"
         name="firstName"
         for="firstName"
         type="text"
@@ -47,6 +48,7 @@
     <label for="email" class="col-4 col-form-label">Lastname</label>
     <div class="col-8 col-md-3">
       <input
+        id="email"
         name="lastName"
         for="lastName"
         type="text"
@@ -60,6 +62,7 @@
     <label for="gender" class="col-4 col-form-label">Gender</label>
     <div class="col-8 col-md-3">
       <select
+        id="gender"
         class="form-select form-select-sm"
         aria-label=".form-select-sm example"
         name="gender"
@@ -76,9 +79,10 @@
     class="row"
     *ngIf="isEditable || (basicDetails.dateOfBirth && !isEditable)"
   >
-    <label for="email" class="col-4 col-form-label">Date of Birth</label>
+    <label for="dateOfBirth" class="col-4 col-form-label">Date of Birth</label>
     <div class="col-8 col-md-3">
       <input
+        id="dateOfBirth"
         name="dateOfBirth"
         for="dob"
         type="date"
@@ -93,9 +97,10 @@
     class="row"
     *ngIf="isEditable || (basicDetails.phoneNumber && !isEditable)"
   >
-    <label for="phone number" class="col-4 col-form-label">Phone Number</label>
+    <label for="phoneNumber" class="col-4 col-form-label">Phone Number</label>
     <div class="col-8 col-md-3">
       <input
+        id="phoneNumber"
         name="phoneNumber"
         for="phoneNumber"
         type="number"
@@ -109,6 +114,7 @@
     <label for="facebook" class="col-4 col-form-label">Facebook Address</label>
     <div class="col-8 col-md-3">
       <input
+        id="facebook"
         name="facebook"
         for="facebook"
         type="text"
@@ -119,9 +125,10 @@
     </div>
   </div>
   <div class="row" *ngIf="isEditable || (basicDetails.address && !isEditable)">
-    <label for="facebook" class="col-4 col-form-label">Address</label>
+    <label for="address" class="col-4 col-form-label">Address</label>
     <div class="col-8 col-md-7">
       <input
+        id="address"
         name="address"
         for="address"
         type="text"

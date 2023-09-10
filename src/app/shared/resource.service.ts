@@ -50,7 +50,6 @@ export class ResourceService {
     return this.mediaEditable;
   }
 
-
   setResource(view: 'individual' | 'lineage') {
     // determine what resource to show
     // determine whether resource can be edited or not
@@ -133,16 +132,26 @@ export class ResourceService {
   saveResourceToDb(fileDetails: {
     description: string;
     name: string;
-    url: string;
+    file: File;
     text: string;
     resourceId?: string;
   }) {
-    const newdata = {
-      ...fileDetails,
-      ['user']: this.individualService.displayUser.value._id,
-      resourceType: this.addMediaContentType.value,
-    };
-    // console.log('new data', newdata);
+    // const newdata = {
+    //   ...fileDetails,
+    //   ['user']: this.individualService.displayUser.value._id,
+    //   resourceType: this.addMediaContentType.value,
+    // };
+
+    const newdata = new FormData();
+    newdata.append('description', fileDetails.description);
+    newdata.append('name', fileDetails.name);
+    newdata.append('text', fileDetails.text);
+    newdata.append('file', fileDetails.file);
+    newdata.append('resourceId', fileDetails.resourceId);
+    newdata.append('user', this.individualService.displayUser.value._id);
+    newdata.append('resourceType', this.addMediaContentType.value);
+
+    console.log('new data', newdata);
     if (this.mode.value === 'create') {
       return this.http
         .post<any>(
@@ -191,11 +200,13 @@ export class ResourceService {
     return this.http
       .delete<any>(`${apiUrl}/resource/${resourceId}`)
       .subscribe((response) => {
-        const resources = this.lineageResources.filter(
+        this.lineageResources = this.lineageResources?.filter(
           (resource) => resource._id !== resourceId
         );
-        this.lineageResources = resources;
-        this.initializeResources('individual');
+        this.userResources = this.userResources.filter(
+          (resource) => resource._id !== resourceId
+        );
+        this.resources.next(this.userResources);
       });
   }
 

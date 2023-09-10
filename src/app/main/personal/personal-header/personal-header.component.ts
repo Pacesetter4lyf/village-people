@@ -14,7 +14,7 @@ export class PersonalHeaderComponent implements OnInit {
   allTabs: string[] = [
     'Basic',
     'Education',
-    'Bibliography',
+    'Biography',
     'Media',
     'Settings',
     // 'Chats',

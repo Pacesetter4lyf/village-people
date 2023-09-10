@@ -91,24 +91,33 @@ export class ModalComponent implements OnInit, OnDestroy {
 
   async onSubmit() {
     // console.log(this.resourceForm.value);
-    let url: string;
-    if (this.contentType !== 'text' && this.file) {
-      let upload = uploadcare.fileFrom('object', this.file);
-      await upload.done((fileInfo: { cdnUrl: string }) => {
-        console.log('Your file has been uploaded. URL: ' + fileInfo.cdnUrl);
-        this.fileUrl = fileInfo.cdnUrl;
-        url = fileInfo.cdnUrl;
-        // this.displayable.url = fileInfo.cdnUrl
-      });
-      this.file = null;
-      this.fileInput.nativeElement.value = '';
-    }
+    // let url: string;
+    // if (this.contentType !== 'text' && this.file) {
+    //   let upload = uploadcare.fileFrom('object', this.file);
+    //   await upload.done((fileInfo: { cdnUrl: string }) => {
+    //     console.log('Your file has been uploaded. URL: ' + fileInfo.cdnUrl);
+    //     this.fileUrl = fileInfo.cdnUrl;
+    //     url = fileInfo.cdnUrl;
+    //     // this.displayable.url = fileInfo.cdnUrl
+    //   });
+    //   this.file = null;
+    //   this.fileInput.nativeElement.value = '';
+    // }
 
     const { description, name, text } = this.resourceForm.value;
+    //
+    // const formData = new FormData();
+    // formData.append("description", description)
+    // formData.append("name", name)
+    // formData.append("text", text)
+    // formData.append("url", this.file)
+    // formData.append("resourceId", this.displayable._id)
+    // this.resourceService.saveResourceToDb(formData );
+    //
     this.resourceService.saveResourceToDb({
       description,
       name,
-      url,
+      file: this.file,
       text,
       resourceId: this.displayable._id,
     });

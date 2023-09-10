@@ -23,7 +23,7 @@ const routes: Routes = [
     children: [
       { path: 'basic', component: BasicComponent },
       { path: 'education', component: EducationComponent },
-      { path: 'bibliography', component: BibliographyComponent },
+      { path: 'biography', component: BibliographyComponent },
       {
         path: 'media',
         component: MediaComponent,

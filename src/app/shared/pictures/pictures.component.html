@@ -13,7 +13,7 @@
         <p class="card-text">{{ image.description }}</p>
         <div class="div">
           <div class="d-flex justify-content-between" *ngIf="mediaEditable">
-            <a href="#" class="btn btn-primary" (click)="onDelete(image._id)"
+            <a class="btn btn-primary" (click)="onDelete(image._id)"
               >Delete</a
             >
             <a
