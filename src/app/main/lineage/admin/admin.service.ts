@@ -97,7 +97,7 @@ export class AdminService {
 
   public currentLineage: string;
 
-  fetchMembersList(){
+  fetchMembersList() {
     // if (this.isDataLoaded && this.cachedPersonList.length > 0) {
     //   // If data is already loaded and not empty, return the cached data
     //   return of(this.cachedPersonList);
@@ -116,9 +116,9 @@ export class AdminService {
           this.personListObservable.next(this.cachedPersonList);
           this.isDataLoaded = true;
         })
-      ).subscribe();
+      )
+      .subscribe();
   }
-
 
   fetchCodes() {
     this.http
@@ -215,15 +215,13 @@ export class AdminService {
     nodeTo: string //personRowInterface
   ) {
     this.http
-      .patch<respType<codeRowInterface[]>>(
-        `${apiUrl}/joincode/${codeId}`,
-        {
-          fromId: nodeFrom,
-          nodeTo: nodeTo,
-          // fromId: nodeFrom.userData.id,
-          // nodeTo: nodeTo.id,
-        }
-      )
+      .patch<respType<codeRowInterface[]>>(`${apiUrl}/joincode/${codeId}`, {
+        fromId: nodeFrom,
+        nodeTo: nodeTo,
+        newRequest: true,
+        // fromId: nodeFrom.userData.id,
+        // nodeTo: nodeTo.id,
+      })
       .subscribe((response) => {
         // console.log(response.data.data);
         // this.fetchCodes();
