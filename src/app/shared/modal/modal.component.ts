@@ -123,5 +123,6 @@ export class ModalComponent implements OnInit, OnDestroy {
     });
     this.resourceForm.reset();
     this.myModal.hide();
+    this.file = null;
   }
 }
