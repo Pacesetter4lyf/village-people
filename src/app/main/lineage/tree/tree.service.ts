@@ -1,13 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { respType } from 'src/app/shared/types/response.type';
 import { IndividualService } from '../../personal/individual.service';
 import { LineageService } from '../lineage.service';
 import { TreeInterface, TreeModel } from './tree.model';
 import { environment } from 'src/environments/environment';
 import { Individual } from '../../personal/individual.model';
+import { Store } from '@ngrx/store';
+import * as frmApp from 'src/app/store/app.reducer';
+import * as IndividualActions from '../../personal/store/individual.actions';
 const apiUrl = environment.apiUrl;
 
 @Injectable({ providedIn: 'root' })
@@ -16,15 +19,18 @@ export class TreeService {
   treeChanged = new Subject<TreeModel>();
   nodeId: string;
   individual: Individual;
+  storeSub: Subscription;
+
   constructor(
     private router: Router,
     private individualService: IndividualService,
-    private lineageService: LineageService,
-    private http: HttpClient
+    private http: HttpClient,
+    private store: Store<frmApp.AppState>
   ) {
-    this.nodeId = this.individualService.actualUser.value?._id;
-
-    this.individual = this.individualService.actualUser.value;
+    this.storeSub = this.store.select('individual').subscribe((individual) => {
+      this.nodeId = individual.actualUser._id;
+      this.individual = individual.actualUser;
+    });
   }
 
   changeNode(nodeId?: string) {
@@ -49,12 +55,19 @@ export class TreeService {
         }
       });
     // console.log('nodeId ', nodeId);
-
-
   }
 
   showDetails() {
-    this.individualService.showDetails(this.tree._id);
+    // this.individualService.showDetails(this.tree._id);
+  
+
+    this.store.dispatch(
+      IndividualActions.beginDataFetch({
+        id: this.tree._id,
+        isSelf: this.nodeId === this.tree._id,
+      })
+    );
+
     this.router.navigate(['individual']);
   }
 

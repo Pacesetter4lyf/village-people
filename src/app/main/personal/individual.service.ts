@@ -19,7 +19,7 @@ export interface respType<T> {
   };
   status: string;
 }
-type DisplayModeType =
+export type DisplayModeType =
   | 'registering'
   | 'self'
   | 'user-creating'

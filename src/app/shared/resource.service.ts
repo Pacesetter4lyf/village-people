@@ -39,95 +39,10 @@ export class ResourceService {
   constructor(
     private individualService: IndividualService,
     private http: HttpClient,
-    private authService: AuthService,
-    private router: Router,
-    private store: Store<fromApp.AppState>
   ) {
     this.resources = new BehaviorSubject<Resource[]>([this.emptyData]);
   }
 
-  getMediaEditable() {
-    return this.mediaEditable;
-  }
-
-  setResource(view: 'individual' | 'lineage') {
-    // determine what resource to show
-    // determine whether resource can be edited or not
-    // a user/admin can edit his document
-    // a user cannot edit other peoples document
-    // you cant edit doc from lineage
-    if (view === 'lineage') {
-      this.mediaEditable = false;
-    } else {
-      this.individualService.displayMode.pipe(take(1)).subscribe((mode) => {
-        if (
-          mode === 'self' ||
-          mode === 'user-viewing' ||
-          mode === 'user-created-not-owned'
-        ) {
-          this.mediaEditable = true;
-        } else {
-          this.mediaEditable = false;
-        }
-        // console.log('mode changed ', mode);
-      });
-      // if individual, media editable is listened to in the initialization
-      this.resources.next([new Resource()]); // have something while it refreshes: optional
-    }
-    this.initializeResources(view);
-  }
-
-  // this block will set the resources for either the individual or lineage
-  initializeResources = async (view: 'individual' | 'lineage') => {
-    if (view === 'individual') {
-      this.fetchUserResources().subscribe((data) => {});
-      this.viewingIndividual.next(true);
-    } else {
-      let isRegistered: string;
-      this.store
-        .select('auth')
-        .pipe(
-          take(1),
-          map((authState) => authState.user)
-        )
-        .subscribe((user) => (isRegistered = user.isRegistered));
-      if (!isRegistered) {
-        this.resources.next([this.emptyData]);
-      } else if (this.lineageResources)
-        this.resources.next(this.lineageResources);
-      else {
-        this.fetchAllResources().subscribe((response) => {
-          // console.log(response);
-        });
-      }
-      this.viewingIndividual.next(false);
-    }
-  };
-
-  fetchAllResources() {
-    return this.http.get<any>(`${apiUrl}/resource/`).pipe(
-      take(1),
-      map((resp) => resp.data.data),
-      tap((resp) => {
-        // console.log('response', resp);
-        this.lineageResources = resp;
-        this.resources.next(resp);
-      })
-    );
-  }
-  // to fetch the display user resource
-  fetchUserResources() {
-    // const displayUserId = this.individualService.getDisplayUser()._id;
-    const userId = this.individualService.getDisplayUser()._id;
-    this.displayUserId = userId;
-    return this.http.get<any>(`${apiUrl}/resource/user/${userId}`).pipe(
-      tap((data) => {
-        this.userResources = data.data.data;
-        this.resources.next(data.data.data);
-      }),
-      map((resp) => resp.data.data)
-    );
-  }
 
   saveResourceToDb(fileDetails: {
     description: string;
@@ -211,6 +126,6 @@ export class ResourceService {
   }
 
   getDUResources(): Observable<Resource[]> {
-    return this.fetchUserResources();
+    return null;
   }
 }

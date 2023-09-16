@@ -1,12 +1,12 @@
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import * as AuthActions from './chat.actions';
+import * as ChatActions from './chat.actions';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { Chat, ChatParent } from '../chat.model';
-import * as ChatActions from './chat.actions';
+
 
 const apiUrl = environment.apiUrl;
 
@@ -47,7 +47,7 @@ export class chatEffects {
           .get<GetChatsI<Chat[]>>(`${apiUrl}/chat/${data.payload.id}`)
           .pipe(
             map((responseData) => {
-              return new AuthActions.LoadActualChat({
+              return new ChatActions.LoadActualChat({
                 actualChat: responseData.data.data,
               });
             }),
@@ -71,7 +71,7 @@ export class chatEffects {
           })
           .pipe(
             map((responseData) => {
-              return new AuthActions.UpdateCurrentChat({
+              return new ChatActions.UpdateCurrentChat({
                 chat: responseData.data.data,
               });
             }),
@@ -92,5 +92,8 @@ export class chatEffects {
     );
   });
 
-  constructor(private actions$: Actions, private http: HttpClient) {}
+  constructor(
+    private actions$: Actions,
+    private http: HttpClient,
+  ) {}
 }

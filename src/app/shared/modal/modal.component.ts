@@ -6,14 +6,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormGroup, NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { DisplayUserModel } from 'src/app/main/personal/display-user.model';
-import { IndividualService } from 'src/app/main/personal/individual.service';
-// import uploadcare from 'uploadcare-widget/uploadcare.lang.en.min.js';
-import uploadcare from 'uploadcare-widget/uploadcare.full.min.js';
+import { Subscription, take } from 'rxjs';
 import { ResourceService } from '../resource.service';
-declare var window: any;
 import { Resource } from '../resource.model';
+import * as frmApp from 'src/app/store/app.reducer';
+import * as ResourceActions from '../store/resource.actions';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-modal',
@@ -25,59 +23,40 @@ export class ModalComponent implements OnInit, OnDestroy {
   @ViewChild('resourceForm', { static: true }) resourceForm: NgForm;
   @ViewChild('fileInput') fileInput: ElementRef;
   file: File;
-  fileUrl: string;
-  myModal: any;
+  storeSub: Subscription;
+  isCreatingNew: boolean;
+  showModal: boolean;
 
-  mediaTypeSubscription: Subscription;
-  modalModeSubscription: Subscription;
-  showModalSub: Subscription;
-
-  //
-  displayable: Resource;
+  displayable: Resource = new Resource();
 
   constructor(
-    private individualService: IndividualService,
-    private resourceService: ResourceService
+    private resourceService: ResourceService,
+    private store: Store<frmApp.AppState>,
+
   ) {}
 
   ngOnInit() {
-    this.mediaTypeSubscription =
-      this.resourceService.addMediaContentType.subscribe(
-        (contentType) => (this.contentType = contentType)
-      );
-
-    this.myModal = new window.bootstrap.Modal(
-      document.getElementById('exampleModal')
-    );
-
-    this.showModalSub = this.resourceService.showModal.subscribe((show) => {
-      if (show) {
-        this.myModal.show();
-      }
-    });
-
-    this.modalModeSubscription = this.resourceService.mode.subscribe((mode) => {
-      if (mode === 'create') {
-        this.displayable = this.resourceService.emptyData;
+    this.storeSub = this.store.select('resource').subscribe((data) => {
+      this.contentType = data.addMediaContentType;
+      this.isCreatingNew = data.isCreatingNew;
+      if (this.isCreatingNew) {
+        this.displayable = new Resource();
       } else {
-        this.displayable = this.resourceService.userResources.find(
-          (d) => d._id === mode
-        );
-        this.resourceForm.controls['name'].setValue(this.displayable.name);
-        this.resourceForm.controls['description'].setValue(
-          this.displayable.description
-        );
-        if (this.contentType == 'text')
-          this.resourceForm.controls['text'].setValue(this.displayable.text);
+        this.displayable = {...data.individualResource.find(
+          (d) => d._id === data.isEditingId
+        )}
       }
+      
+      this.showModal = data.showModal;
     });
+  }
+  closeModal() {
+    this.store.dispatch(ResourceActions.closeModal());
   }
   ngOnDestroy() {
-    this.mediaTypeSubscription.unsubscribe();
-    this.modalModeSubscription.unsubscribe();
-    this.resourceService.mode.next('create');
-    this.showModalSub.unsubscribe();
+    this.storeSub.unsubscribe();
   }
+
   onFileChange(event: { target: { files: File } }) {
     this.file = event.target.files[0];
     // console.log('file ', event.target.files[0]);
@@ -90,39 +69,30 @@ export class ModalComponent implements OnInit, OnDestroy {
   }
 
   async onSubmit() {
-    // console.log(this.resourceForm.value);
-    // let url: string;
-    // if (this.contentType !== 'text' && this.file) {
-    //   let upload = uploadcare.fileFrom('object', this.file);
-    //   await upload.done((fileInfo: { cdnUrl: string }) => {
-    //     console.log('Your file has been uploaded. URL: ' + fileInfo.cdnUrl);
-    //     this.fileUrl = fileInfo.cdnUrl;
-    //     url = fileInfo.cdnUrl;
-    //     // this.displayable.url = fileInfo.cdnUrl
-    //   });
-    //   this.file = null;
-    //   this.fileInput.nativeElement.value = '';
-    // }
-
     const { description, name, text } = this.resourceForm.value;
-    //
-    // const formData = new FormData();
-    // formData.append("description", description)
-    // formData.append("name", name)
-    // formData.append("text", text)
-    // formData.append("url", this.file)
-    // formData.append("resourceId", this.displayable._id)
-    // this.resourceService.saveResourceToDb(formData );
-    //
-    this.resourceService.saveResourceToDb({
-      description,
-      name,
-      file: this.file,
-      text,
-      resourceId: this.displayable._id,
-    });
+    const formData = new FormData();
+    formData.append('description', description);
+    formData.append('name', name);
+    formData.append('text', text);
+    formData.append('url', this.file);
+
+    if (this.isCreatingNew) {
+      this.store.dispatch(
+        ResourceActions.beginCreateNewResource({
+          resource: formData,
+        })
+      );
+    } else {
+      this.store.dispatch(
+        ResourceActions.beginPatchResource({
+          resource: formData,
+          id: this.displayable._id,
+        })
+      );
+    }
     this.resourceForm.reset();
-    this.myModal.hide();
+    // this.myModal.hide();
     this.file = null;
+    this.closeModal()
   }
 }

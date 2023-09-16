@@ -57,7 +57,7 @@
                 value=""
                 [checked]="viewable.value === 'lineage'"
                 [ngModel]="viewable.value === 'lineage'"
-                id="lineageCheckBox"
+                [id]="'lineageCheckBox'+viewable.id"
                 #lineage
                 (change)="
                   logChange('lineage', viewable.id, lineage.checked, $event)
@@ -78,7 +78,7 @@
                 value=""
                 [checked]="viewable.value === 'public'"
                 [ngModel]="viewable.value === 'public'"
-                id="publicCheckBox"
+                [id]="'publicCheckBox'+viewable.id"
                 #public
                 (change)="
                   logChange('public', viewable.id, public.checked, $event)

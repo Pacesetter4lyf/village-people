@@ -38,6 +38,7 @@ export class Individual implements BasicDetailsInterface {
     public appendedAs: string = '',
     public image: string = '',
     public createdBy: string = '',
+    public userId: string = "",
 
     public editableBy: string = '',
     public facebookAddress: string = '',
@@ -57,23 +58,3 @@ export class Individual implements BasicDetailsInterface {
     public adminOf: number[] = []
   ) {}
 }
-
-// _id?: string;
-// photo?: string | File;
-// firstName?: string;
-// lastName?: string;
-// gender?: string;
-// dateOfBirth?: string;
-// phoneNumber?: string;
-// facebook?: string;
-// address?: string;
-// primarySchool?: string;
-// secondarySchool?: string;
-// tertiarySchool?: string;
-// bibliography?: string;
-// primary?: string;
-// secondary?: string;
-// tertiary?: string;
-// createdBy?: string;
-// lineage?: string[];
-// adminOf?: number[];

@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DisplayUserModel } from '../display-user.model';
-import { IndividualService } from '../individual.service';
+import { DisplayModeType, IndividualService } from '../individual.service';
 import { BasicDetailsInterface } from '../individual.model';
+import * as frmApp from 'src/app/store/app.reducer';
+import { Store } from '@ngrx/store';
+import * as IndividualActions from '../store/individual.actions';
 
 @Component({
   selector: 'app-education',
@@ -12,47 +15,72 @@ import { BasicDetailsInterface } from '../individual.model';
 })
 export class EducationComponent implements OnInit {
   viewMode = true;
+  mode: DisplayModeType;
   isEditable: boolean;
   data: BasicDetailsInterface;
-  userSub: Subscription;
-  constructor(private individualService: IndividualService) {}
+  storeSub: Subscription;
+  constructor(private store: Store<frmApp.AppState>) {}
 
-  changeMode(mode: string) {
+  changeMode() {
     this.viewMode = !this.viewMode;
   }
   ngOnInit() {
-    this.userSub = this.individualService.displayUser.subscribe(
-      (user) => (this.data = user)
-    );
-    this.individualService.displayMode.subscribe((mode) => {
-      if (
-        mode === 'user-creating' ||
-        mode === 'user-viewing' ||
-        mode === 'self'
-      ) {
-        this.isEditable = true;
-      } else {
-        this.isEditable = false;
-      }
-    });
+    this.storeSub = this.store
+      .select('individual')
+      .subscribe((individualData) => {
+        if (individualData.mode === 'self')
+          this.data = individualData.actualUser;
+        else this.data = individualData.displayUser;
+
+        this.mode = individualData.mode;
+        this.viewMode = this.mode !== 'user-creating';
+
+        if (
+          this.mode === 'user-creating' ||
+          this.mode === 'user-viewing' ||
+          this.mode === 'self' ||
+          this.mode === 'registering'
+        ) {
+          this.isEditable = true;
+        } else {
+          this.isEditable = false;
+        }
+      });
   }
   ngOnDestroy() {
-    this.userSub.unsubscribe();
+    this.storeSub.unsubscribe();
   }
 
   onSubmit(form: NgForm) {
-    // console.log(form.value);
-    this.individualService.sendBasicDetails({
-      primarySchool: form.value.primarySchool
-        ? (form.value.primarySchool as string)
-        : '',
-      secondarySchool: form.value.secondarySchool
-        ? (form.value.secondarySchool as string)
-        : '',
-      tertiarySchool: form.value.tertiarySchool
-        ? (form.value.tertiarySchool as string)
-        : '',
-    });
+    const education = {
+      primarySchool: form.value.primarySchool,
+      secondarySchool: form.value.secondarySchool,
+      tertiarySchool: form.value.tertiarySchool,
+    } as BasicDetailsInterface;
+
+    
+    const basicFormData = new FormData();
+    basicFormData.append('primarySchool', education.primarySchool);
+    basicFormData.append('secondarySchool', education.secondarySchool);
+    basicFormData.append('tertiarySchool', education.tertiarySchool);
+
+    if (this.mode === 'self') {
+      this.store.dispatch(
+        IndividualActions.beginPatchUser({
+          individual: basicFormData,
+          isSelf: true,
+          id: this.data._id,
+        })
+      );
+    } else if (this.mode === 'user-viewing') {
+      this.store.dispatch(
+        IndividualActions.beginPatchUser({
+          individual: basicFormData,
+          isSelf: false,
+          id: this.data._id,
+        })
+      );
+    }
     this.viewMode = !this.viewMode;
   }
 }

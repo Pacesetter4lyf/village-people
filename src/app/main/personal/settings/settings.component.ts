@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ResourceService } from 'src/app/shared/resource.service';
-import { SettingsService } from './settings.service';
+
 import { Resource } from 'src/app/shared/resource.model';
 
-import { SettingsInterface } from './settings.service';
+
+import * as frmApp from 'src/app/store/app.reducer';
+import { Store } from '@ngrx/store';
+import * as SettingsActions from './store/settings.actions';
+import { Subscription, take } from 'rxjs';
+import { SettingsInterface } from './store/settings.reducer';
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -13,100 +18,72 @@ export class SettingsComponent implements OnInit {
   userFields: SettingsInterface[];
   resourceFields: SettingsInterface[];
   viewables: SettingsInterface[];
+  userId: string;
 
   media = ['text', 'image', 'audio', 'video'];
   selected = 'info';
   selectedMedia = 'text';
+  settingsSub: Subscription;
+  userSub: Subscription;
 
   constructor(
-    private resourceService: ResourceService,
-    private settingsService: SettingsService
+    private store: Store<frmApp.AppState>
   ) {}
   ngOnInit() {
     // get the setting from the backend
-    this.settingsService.getUserFields().subscribe((data) => {
-      this.userFields = data
-        .map((obj) => {
-          const [name, value] = Object.entries(obj)[0];
-          return { name, value, id: name };
-        })
-        .filter((item) => item.id !== 'id');
 
-      this.viewables = this.userFields;
-    });
-    this.settingsService.getResourceFields().subscribe((data) => {
-      this.resourceFields = data.map((item) => ({
-        name: item.name,
-        value: item.viewableBy,
-        id: item._id,
-        type: item.resourceType,
-      }));
-    });
-    // also get the userResources from the resource service
+    this.settingsSub = this.store
+      .select('settings')
+      .subscribe((settingsData) => {
+        this.userFields = settingsData.userFields;
+        this.resourceFields = settingsData.resourceFields;
+        this.selected = settingsData.selected;
+        this.selectedMedia = settingsData.selectedMedia;
+        // this.userId = settingsData.
+        if (settingsData.selected === 'info') {
+          this.viewables = [...this.userFields];
+        } else {
+          this.viewables = [...this.resourceFields];
+        }
+      });
+    this.userSub = this.store
+      .select('individual')
+      .subscribe((individualData) => {
+        this.userId = individualData.displayUser._id;
+      });
   }
 
   onChange(tab: string) {
-    this.selected = tab;
-    // change the viewables here as well
-    if (tab === 'info') this.viewables = [...this.userFields];
-    if (tab === 'media')
-      this.viewables = this.resourceFields.filter(
-        (res) => res.type === this.selectedMedia
-      );
+    this.store.dispatch(SettingsActions.changeSelectedTab({ selected: tab }));
   }
 
   changeMedia(media: string) {
-    this.selectedMedia = media;
-    this.viewables = this.resourceFields.filter((res) => res.type === media);
+    this.store.dispatch(
+      SettingsActions.changeSelectedMedia({ selectedMedia: media })
+    );
   }
 
-  async logChange(checkboxName: any, id: any, checked: any, event: any) {
-
-    const viewableIndex = this.viewables.findIndex(
-      (viewable) => viewable.id === id
-    );
-    const resourceFieldIndex = this.resourceFields.findIndex(
-      (resfield) => resfield.id === id
-    );
-    let viewable = this.viewables[viewableIndex];
-    // if we are turning on proceed ortherwise we want 'self'
-
-    const processedResult = await this.settingsService.updateVisibility(
-      this.selected,
-      viewable.id,
-      checkboxName,
-      checked,
-      viewable.name
-    );
-    if (processedResult !== 'success') return;
-    if (checked) {
-      // send to cloud here before you update anything
-      viewable.value = checkboxName;
-      this.viewables[viewableIndex] = viewable;
-
-      if (this.selected === 'info') {
-        this.userFields[viewableIndex] = viewable;
-        // make a patch to the cloud
-      } else {
-        this.resourceFields[resourceFieldIndex] = viewable;
-        // send checkbox name to cloud
-      }
+  async logChange(checkboxName: any, id: any, checked: any, event: Event) {
+    event.preventDefault();
+    if (this.selected === 'info') {
+      this.store.dispatch(
+        SettingsActions.beginPatchUserFields({
+          id: this.userId,
+          name: id,
+          visibility: checked ? checkboxName : 'self',
+        })
+      );
     } else {
-      viewable.value = 'self';
-      this.viewables[viewableIndex] = viewable;
-      if (this.selected === 'info') {
-        this.userFields[viewableIndex] = viewable;
-        // send self to settings
-      } else {
-        this.resourceFields[resourceFieldIndex] = viewable;
-        // send self to resources
-      }
+      this.store.dispatch(
+        SettingsActions.beginPatchResourceFields({
+          id: id,
+          visibility: checked ? checkboxName : 'self',
+        })
+      );
     }
   }
-
-  handleCheckboxChange(checkboxName: any, id: any, checked: any) {
-    // console.log('new value ', checked, checkboxName);
-    // console.log(checkboxName, id, checked);
-    // console.log(this.viewables);
+  ngOnDestroy() {
+    this.settingsSub.unsubscribe();
+    this.userSub.unsubscribe();
   }
 }

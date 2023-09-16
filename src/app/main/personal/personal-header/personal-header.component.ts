@@ -1,46 +1,46 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { IndividualService } from '../individual.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import * as frmApp from 'src/app/store/app.reducer';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-personal-header',
   templateUrl: './personal-header.component.html',
   styleUrls: ['./personal-header.component.css'],
 })
-export class PersonalHeaderComponent implements OnInit {
+export class PersonalHeaderComponent implements OnInit, OnDestroy {
   selected = 'Basic';
 
-  constructor(private individualService: IndividualService) {}
+  constructor(private store: Store<frmApp.AppState>) {}
+
   tabs = [];
-  allTabs: string[] = [
-    'Basic',
-    'Education',
-    'Biography',
-    'Media',
-    'Settings',
-    // 'Chats',
-  ];
+  allTabs: string[] = ['Basic', 'Education', 'Biography', 'Media', 'Settings'];
   mode: string;
   isRegistered: boolean;
+  storeSub: Subscription;
 
-  onTabChange(something: PointerEvent) {
-    this.individualService.tabClickEvent.emit(something);
-    this.selected = (<HTMLElement>something.target).innerText;
-  }
   ngOnInit() {
-    this.individualService.displayMode.subscribe((mode) => {
-      this.mode = mode;
-      // console.log(mode);
-      if (mode === 'self') {
-        this.tabs = [...this.allTabs];
-      } else if (mode === 'user-creating' || mode === 'registering') {
-        this.tabs = [this.allTabs[0]];
-      } else if (mode === 'user-viewing') {
-        const newTabs = [...this.allTabs];
-        newTabs.splice(7, 1);
-        this.tabs = newTabs;
-      } else {
-        this.tabs = this.allTabs.slice(0, 4);
-      }
-    });
+    this.storeSub = this.store
+      .select('individual')
+      .subscribe((individualData) => {
+        this.mode = individualData.mode;
+        // console.log(individualData.mode);
+        if (this.mode === 'self') {
+          this.tabs = [...this.allTabs];
+        } else if (
+          this.mode === 'user-creating' ||
+          this.mode === 'registering'
+        ) {
+          this.tabs = [this.allTabs[0]];
+        } else if (this.mode === 'user-viewing') {
+          this.tabs = [...this.allTabs];
+        } else {
+          this.tabs = this.allTabs.slice(0, 4);
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.storeSub.unsubscribe();
   }
 }

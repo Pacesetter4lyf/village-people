@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TreeModel } from './tree.model';
 import { TreeService } from './tree.service';
+import * as frmApp from 'src/app/store/app.reducer';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-tree',
@@ -9,7 +11,10 @@ import { TreeService } from './tree.service';
   styleUrls: ['./tree.component.css'],
 })
 export class TreeComponent implements OnInit, OnDestroy {
-  constructor(private treeService: TreeService) {}
+  constructor(
+    private treeService: TreeService,
+    private store: Store<frmApp.AppState>
+  ) {}
   treeSub: Subscription;
   tree: TreeModel;
   isDeleteable: boolean;

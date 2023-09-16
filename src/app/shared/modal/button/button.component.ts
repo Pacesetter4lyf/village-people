@@ -10,7 +10,6 @@ import { ResourceService } from '../../resource.service';
 export class ButtonComponent {
   @Input() mediaEditable: boolean;
   constructor(
-    private individualService: IndividualService,
     private resourceService: ResourceService
   ) {}
 

@@ -5,3 +5,12 @@
   <a [routerLink]="'videos'" routerLinkActive="active-link">Videos</a>
 </div>
 <router-outlet></router-outlet>
+<div class="d-flex justify-content-end" *ngIf="mediaEditable">
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="addNew()"
+  >
+    Add Content
+  </button>
+</div>

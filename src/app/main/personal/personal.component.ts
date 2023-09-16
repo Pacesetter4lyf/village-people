@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ResourceService } from 'src/app/shared/resource.service';
 import { IndividualService } from './individual.service';
+import { Store } from '@ngrx/store';
+import * as frmApp from 'src/app/store/app.reducer';
 
 @Component({
   selector: 'app-personal',
@@ -14,25 +16,17 @@ export class PersonalComponent implements OnInit, OnDestroy {
   clickSub: Subscription;
   userSub: Subscription;
   displayMode: string;
+  storeSub: Subscription;
 
-  constructor(
-    private individualService: IndividualService,
-    private resourceService: ResourceService
-  ) {}
+  constructor(private store: Store<frmApp.AppState>) {}
 
   ngOnInit() {
-    this.clickSub = this.individualService.tabClickEvent.subscribe(
-      (inputEvent) => {
-        this.selected = (<HTMLElement>inputEvent.target).innerText;
-      }
-    );
-
-    this.individualService.displayMode.subscribe(
-      (mode) => (this.displayMode = mode)
-    );
+    this.storeSub = this.store.select('individual').subscribe((individual) => {
+      this.displayMode = individual.mode;
+    });
   }
 
   ngOnDestroy() {
-    this.clickSub.unsubscribe();
+    this.storeSub.unsubscribe();
   }
 }

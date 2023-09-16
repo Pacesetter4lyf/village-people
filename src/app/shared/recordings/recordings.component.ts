@@ -1,12 +1,14 @@
 import { ApplicationRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, map, of, switchMap, take, tap } from 'rxjs';
 import { DisplayUserModel } from 'src/app/main/personal/display-user.model';
-import {
-  IndividualService,
-} from 'src/app/main/personal/individual.service';
+import { IndividualService } from 'src/app/main/personal/individual.service';
 import { ResourceService } from '../resource.service';
 import { Resource } from '../resource.model';
+import { Store } from '@ngrx/store';
+import * as frmApp from 'src/app/store/app.reducer';
+import * as ResourceActions from '../store/resource.actions';
+
 @Component({
   selector: 'app-recordings',
   templateUrl: './recordings.component.html',
@@ -20,18 +22,33 @@ export class RecordingsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private individualService: IndividualService,
     private resourceService: ResourceService,
-    private appRef: ApplicationRef
+    private appRef: ApplicationRef,
+    private store: Store<frmApp.AppState>
   ) {}
 
   ngOnInit() {
-    this.mediaEditable = this.resourceService.getMediaEditable();
-    this.resourceService.addMediaContentType.next('audio');
-
-    this.audiosSub = this.resourceService.resources.subscribe(
-      (resources) =>
-        (this.audios = resources.filter(
+    this.audiosSub = this.activatedRoute.parent?.data
+      .pipe(
+        take(1),
+        switchMap((data) => {
+          const inLineage = data['lineage'];
+          return this.store.select('resource').pipe(
+            take(1),
+            tap((data) => (this.mediaEditable = data.mediaEditable)),
+            map((resource) =>
+              inLineage ? resource.lineageResource : resource.individualResource
+            )
+          );
+        })
+      )
+      .subscribe((data) => {
+        this.audios = data?.filter(
           (resource) => resource.resourceType === 'audio'
-        ))
+        );
+      });
+
+    this.store.dispatch(
+      ResourceActions.changeActiveResource({ resourceType: 'audio' })
     );
   }
 

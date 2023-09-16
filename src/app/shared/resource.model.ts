@@ -5,6 +5,7 @@ export class Resource {
       | {
           firstName: string;
           lastName: string;
+          _id: string;
         } = '',
     public resourceType: 'image' | 'text' | 'audio' | 'video' | '' = '',
     public _id: string = '',

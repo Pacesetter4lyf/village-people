@@ -1,24 +1,25 @@
 <!-- Modal -->
-<form #resourceForm="ngForm">
+<form #resourceForm="ngForm" >
   <div
-    class="modal fade"
-    id="exampleModal"
+    class="modal fade show"
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
+    [style]="{display: 'block'}"
+    *ngIf="showModal"
   >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">
-            Add {{ contentType }}
-          </h1>
+          <h1 class="modal-title fs-5">Add {{ contentType }}</h1>
           <button
             type="button"
             class="btn-close"
-            data-bs-dismiss="modal"
             aria-label="Close"
-          ></button>
+            (click)="closeModal()"
+          >
+            
+          </button>
         </div>
         <div class="modal-body">
           <label for="">Name</label>
@@ -28,6 +29,7 @@
             placeholder="resource name"
             aria-label=".form-control-sm example"
             [ngModel]="displayable.name"
+            [value]="displayable.name"
             name="name"
             required
           />
@@ -38,6 +40,7 @@
             placeholder="description"
             aria-label=".form-control-sm example"
             [ngModel]="displayable.description"
+            [value]="displayable.description"
             name="description"
             required
           />
@@ -59,6 +62,7 @@
             <textarea
               name="text"
               [ngModel]="displayable.text"
+              [value]="displayable.text"
               id=""
               rows="5"
               class="w-100 form-control"
@@ -70,7 +74,7 @@
           <button
             type="button"
             class="btn btn-secondary"
-            data-bs-dismiss="modal"
+            (click)="closeModal()"
           >
             Close
           </button>
@@ -80,7 +84,7 @@
             (click)="onSubmit()"
             [disabled]="!resourceForm.form.valid"
           >
-            Save changes
+            {{ isCreatingNew ? "create" : "save changes" }}
           </button>
         </div>
       </div>

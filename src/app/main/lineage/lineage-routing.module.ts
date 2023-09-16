@@ -16,11 +16,13 @@ import { LineageComponent } from './lineage.component';
 import { LinkComponent } from './link/link.component';
 import { SearchComponent } from './search/search.component';
 import { TreeComponent } from './tree/tree.component';
+import { ResourceResolver } from './lineage-resource-resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: LineageComponent,
+    data: { lineage: true },
     canActivate: [canActivateFn],
     resolve: [IndividualResolver],
     children: [
@@ -36,6 +38,8 @@ const routes: Routes = [
       {
         path: 'media',
         component: GalleryComponent,
+        data: { lineage: true },
+        resolve: [ResourceResolver],
         children: [
           {
             path: 'posts',

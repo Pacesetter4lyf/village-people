@@ -1,17 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ResourceService } from 'src/app/shared/resource.service';
-
+import { Subscription, take } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as frmApp from 'src/app/store/app.reducer';
+import * as ResourceActions from '../../../shared/store/resource.actions';
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.css'],
 })
 export class GalleryComponent implements OnInit {
-  constructor(private resourceService: ResourceService) {}
+  resSub: Subscription;
+  constructor(private store: Store<frmApp.AppState>) {}
   ngOnInit() {
-    // set resource service to individual
-    this.resourceService.setResource('lineage');
-    // set mediaEditable
+    this.resSub = this.store
+      .select('individual')
+      .pipe(take(1))
+      .subscribe((data) => {
+        this.store.dispatch(
+          ResourceActions.changeMediaEditable({ mediaEditable: false })
+        );
+      });
+  }
+
+  ngOnDestroy() {
+    this.resSub.unsubscribe();
   }
 }

@@ -9,7 +9,11 @@ import { BasicComponent } from './basic/basic.component';
 import { BibliographyComponent } from './bibliography/bibliography.component';
 import { EducationComponent } from './education/education.component';
 import { settingsGuard } from './individual-guard.service';
-import { IndividualResolver } from './individual-resolver.service';
+import {
+  IndividualResolver,
+  ResourceResolver,
+  SettingsResolver,
+} from './individual-resolver.service';
 import { MediaComponent } from './media/media.component';
 import { PersonalComponent } from './personal.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -19,7 +23,7 @@ const routes: Routes = [
     path: '',
     component: PersonalComponent,
     canActivate: [canActivateFn],
-    resolve: [IndividualResolver],
+    resolve: { actualUser: IndividualResolver },
     children: [
       { path: 'basic', component: BasicComponent },
       { path: 'education', component: EducationComponent },
@@ -27,6 +31,8 @@ const routes: Routes = [
       {
         path: 'media',
         component: MediaComponent,
+        data: { lineage: false },
+        resolve: [ResourceResolver],
         children: [
           {
             path: 'posts',
@@ -54,7 +60,8 @@ const routes: Routes = [
       {
         path: 'settings',
         component: SettingsComponent,
-        resolve: [settingsGuard],
+        canActivate: [settingsGuard],
+        resolve: { resolved: SettingsResolver },
       },
       { path: '', redirectTo: 'basic', pathMatch: 'full' },
     ],

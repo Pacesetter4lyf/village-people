@@ -21,6 +21,7 @@ import { AuthEffects } from './auth/store/auth.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { chatEffects } from './main/chat/store/chat.effects';
+import { appEffects } from './store/app.effects';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,7 @@ import { chatEffects } from './main/chat/store/chat.effects';
     AuthModule,
     AppRoutingModule,
     StoreModule.forRoot(fromApp.AppReducer, {}),
-    EffectsModule.forRoot([AuthEffects, chatEffects]),
+    EffectsModule.forRoot(appEffects),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
   ],
   providers: [

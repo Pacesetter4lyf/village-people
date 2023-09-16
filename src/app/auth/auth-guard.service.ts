@@ -9,8 +9,8 @@ export const canActivateFn = () => {
 
   return store.select('auth').pipe(
     take(1),
-    map((authState) => authState.user),
-    map((user) => {
+    map((authState) => {
+      const user = authState.user;
       const isAuth = !!user;
       if (isAuth) return true;
       return router.navigate(['auth']);
