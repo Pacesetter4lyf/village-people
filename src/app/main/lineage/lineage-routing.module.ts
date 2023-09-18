@@ -17,6 +17,7 @@ import { LinkComponent } from './link/link.component';
 import { SearchComponent } from './search/search.component';
 import { TreeComponent } from './tree/tree.component';
 import { ResourceResolver } from './lineage-resource-resolver';
+import { TreeResolver } from './lineage.resolver.service';
 
 const routes: Routes = [
   {
@@ -24,7 +25,7 @@ const routes: Routes = [
     component: LineageComponent,
     data: { lineage: true },
     canActivate: [canActivateFn],
-    resolve: [IndividualResolver],
+    resolve: [IndividualResolver, TreeResolver],
     children: [
       { path: '', redirectTo: 'tree', pathMatch: 'full' },
       { path: 'tree', component: TreeComponent },

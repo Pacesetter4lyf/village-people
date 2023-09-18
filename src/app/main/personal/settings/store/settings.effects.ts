@@ -1,10 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap, map, catchError, of, withLatestFrom } from 'rxjs';
-import { Individual } from '../../individual.model';
-import { RespType } from '../../store/individual.effects';
 import { environment } from 'src/environments/environment';
 const apiUrl = environment.apiUrl;
 import * as SettingsActions from './settings.actions';

@@ -74,6 +74,3 @@ export const setErrorMessage = createAction(
 
 export const changeMode = createAction(CHANGE_MODE, props<{ mode: string }>());
 
-export type individualActions =
-  | ReturnType<typeof beginDataFetch>
-  | ReturnType<typeof actualUserFetchSuccess>;

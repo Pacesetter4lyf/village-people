@@ -120,13 +120,18 @@ export class individualEffects {
       )
     )
   );
-  beginAppendMember = createEffect(() =>
-    this.actions$.pipe(
-      ofType(IndividualActions.BEGIN_APPEND_MEMBER),
-      tap(() => {
-        this.router.navigate(['/individual']);
-      })
-    ),
+  beginAppendMember = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(
+          IndividualActions.BEGIN_APPEND_MEMBER,
+          IndividualActions.actualUserFetchSuccess,
+          IndividualActions.displayUserFetchSuccess
+        ),
+        tap(() => {
+          this.router.navigate(['/individual']);
+        })
+      ),
     { dispatch: false }
   );
 
