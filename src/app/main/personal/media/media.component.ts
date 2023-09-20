@@ -19,7 +19,11 @@ export class MediaComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe((data) => {
         const mode = data.mode;
-        if (mode === 'user-creating' || mode === 'self') {
+        if (
+          mode === 'user-creating' ||
+          mode === 'self' ||
+          mode === 'user-viewing'
+        ) {
           this.store.dispatch(
             ResourceActions.changeMediaEditable({ mediaEditable: true })
           );
