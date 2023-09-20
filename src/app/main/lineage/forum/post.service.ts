@@ -10,6 +10,8 @@ import { AdminService, personRowInterface } from '../admin/admin.service';
 import { Individual } from '../../personal/individual.model';
 
 import { environment } from 'src/environments/environment';
+import { Store } from '@ngrx/store';
+import * as frmApp from 'src/app/store/app.reducer';
 const apiUrl = environment.apiUrl;
 
 @Injectable({ providedIn: 'root' })
@@ -23,20 +25,17 @@ export class PostService {
   userId: string;
   adminOf: number[];
 
-  constructor(
-    private http: HttpClient,
-    private adminService: AdminService,
-    private individualService: IndividualService
-  ) {
-    this.adminService.personListObservable.subscribe((data) => {
-      this.membersList.next(data);
+  constructor(private http: HttpClient, private store: Store<frmApp.AppState>) {
+    this.store.subscribe((data) => {
+      this.membersList.next(data.admin.members);
+      this.userId = data.individual.actualUser._id;
+      this.adminOf = data.individual.actualUser.adminOf;
     });
-
-    this.userId = this.individualService.actualUser.value._id;
-    this.adminOf = this.individualService.actualUser.value.adminOf;
   }
 
   savePost(postDetails: PostModel, isEditing: boolean) {
+    // if(isEditing){}else{}
+
     return this.http
       .post<respType<PostModel>>(`${apiUrl}/post`, {
         postDetails,
@@ -45,8 +44,15 @@ export class PostService {
       .pipe(
         map((response) => response.data.data),
         tap((data) => {
-          this.posts = [data, ...this.posts];
           this.post = data;
+          if (isEditing) {
+            const index = this.posts.findIndex(
+              (post) => post.id === postDetails.id
+            );
+            this.posts[index] = this.post;
+          } else {
+            this.posts = [data, ...this.posts];
+          }
         })
       );
   }

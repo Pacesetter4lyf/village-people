@@ -1,4 +1,6 @@
 import { AuthEffects } from '../auth/store/auth.effects';
+import { chatEffects } from '../main/chat/store/chat.effects';
+import { AdminEffects } from '../main/lineage/admin/store/admin.effects';
 import { LineageEffects } from '../main/lineage/store/lineage.effects';
 import { TreeEffects } from '../main/lineage/tree/store/tree.effects';
 import { settingsEffects } from '../main/personal/settings/store/settings.effects';
@@ -12,4 +14,6 @@ export const appEffects = [
   settingsEffects,
   TreeEffects,
   LineageEffects,
+  AdminEffects,
+  chatEffects,
 ];

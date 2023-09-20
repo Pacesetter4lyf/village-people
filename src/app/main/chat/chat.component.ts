@@ -29,6 +29,13 @@ export class ChatSmallComponent {
     private store: Store<fromApp.AppState>
   ) {}
   ngOnInit() {
+    this.store.select('individual').subscribe((individual) => {
+      if (individual.actualUser && individual.actualUser.id) {
+        this.actualUserId = individual.actualUser.id;
+        this.store.dispatch(new ChatActions.GetChatList());
+      }
+    });
+
     this.storeSub = this.store.select('chat').subscribe((chat) => {
       this.chatParents = chat.chatList;
       this.expanded = chat.expanded;
@@ -36,13 +43,6 @@ export class ChatSmallComponent {
       this.chatDetails = chat.chats;
       this.userId = chat.chatRecipientId;
       this.name = chat.chatRecipientName;
-    });
-
-    this.chatService.userId.subscribe((actualUser) => {
-      this.actualUserId = actualUser;
-      if (actualUser) {
-        this.store.dispatch(new ChatActions.GetChatList());
-      }
     });
   }
 

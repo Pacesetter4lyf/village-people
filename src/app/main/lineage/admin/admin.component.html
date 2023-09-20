@@ -35,7 +35,7 @@
           class="form-select"
           aria-label="Default select example"
           (change)="lineageChanged()"
-          style="padding: 0px;"
+          style="padding: 0px"
         >
           <option *ngFor="let lineage of userLineage" value="{{ lineage }}">
             {{ lineage }}
@@ -214,7 +214,7 @@
           <td>{{ member.nodeTo?.mother?.firstName }}</td>
           <td>{{ member.nodeTo?.father?.firstName }}</td>
           <td style="font-size: 0.7rem">
-            <button (click)="declineEnableRequest(member.id, i)">
+            <button (click)="declineEnableRequest(member.id, i, member.status)">
               {{ member.status === "declined" ? "enable" : "decline" }}
             </button>
           </td>
@@ -372,7 +372,6 @@
             name="rep-mode"
             value="me"
             [(ngModel)]="controlledBy"
-            (change)="controlledByChanged()"
           />
           <label>You want to take over the other Node</label>
         </div>
@@ -382,7 +381,6 @@
             name="rep-mode"
             value="them"
             [(ngModel)]="controlledBy"
-            (change)="controlledByChanged()"
           />
           <label>Ask them to take over a node</label>
         </div>
@@ -516,7 +514,9 @@
         <div class="">
           <input type="text" #codeInput />
           <button (click)="seeSourceNode(codeInput.value)">see node</button>
-          <button (click)="sendRequestToExternal('codeSearched')" >update sender</button>
+          <button (click)="sendRequestToExternal('codeSearched')">
+            update sender
+          </button>
         </div>
       </div>
 

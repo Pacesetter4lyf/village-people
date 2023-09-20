@@ -24,6 +24,10 @@ export interface state {
   relationship: string;
   linkNode: boolean;
   error: string;
+  //
+  foundEntries: itemInterface[];
+  searchInside: boolean;
+  selectedIndex: number;
 }
 
 const initialState: state = {
@@ -37,6 +41,10 @@ const initialState: state = {
   relationship: null,
   linkNode: false,
   error: '',
+  //
+  foundEntries: [],
+  searchInside: true,
+  selectedIndex: -1,
 };
 
 export const lineageReducer = createReducer(
@@ -76,5 +84,14 @@ export const lineageReducer = createReducer(
   }),
   on(lineageActions.getRelationshipSuccess, (state, action) => {
     return { ...state, relationship: action.relationship };
+  }),
+  on(lineageActions.searchMemberSuccess, (state, action) => {
+    return { ...state, foundEntries: action.members, selectedIndex: -1 };
+  }),
+  on(lineageActions.searchResultSelected, (state, action) => {
+    return { ...state, selectedIndex: action.index };
+  }),
+  on(lineageActions.changeSearchInside, (state, action) => {
+    return { ...state, searchInside: !action.searchInside };
   })
 );

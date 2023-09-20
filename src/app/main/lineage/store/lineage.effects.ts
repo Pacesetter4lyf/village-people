@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store, createAction, select } from '@ngrx/store';
 import * as frmApp from 'src/app/store/app.reducer';
@@ -113,7 +113,10 @@ export class LineageEffects {
         ]).pipe(
           take(1),
           map(([tree, lineage]) => {
-            if (tree.node._id === lineage.selectedB.id) {
+            if (
+              tree.node._id === lineage.selectedB.id ||
+              tree.node._id === lineage.selectedA.id
+            ) {
               return treeActions.fetchNodeBegin({ id: tree.node._id });
             } else {
               return lineageActions.dummy();
@@ -124,14 +127,36 @@ export class LineageEffects {
     )
   );
 
-  //   return this.http.patch<respType<string>>(
-  //     `${apiUrl}/userdata/relationship/${a}/${b}`,
-  //     {
-  //       relationship: relationship,
-  //       set: set,
-  //       linkNode,
-  //     }
-  //   );
+  memberSearchBegin = createEffect(() =>
+    this.action$.pipe(
+      ofType(lineageActions.searchMemberBegin),
+      switchMap((action) => {
+        const params = new HttpParams().set(
+          'searchOutside',
+          (!action.searchInside).toString()
+        );
+        return this.http
+          .get<respType<itemInterface[]>>(
+            `${apiUrl}/userdata/search/${action.text}`,
+            { params }
+          )
+          .pipe(
+            map((response) =>
+              lineageActions.searchMemberSuccess({
+                members: response.data.data,
+              })
+            ),
+            catchError((errorRes) =>
+              of(
+                lineageActions.serverReturnsError({
+                  error: errorRes.error.error.message,
+                })
+              )
+            )
+          );
+      })
+    )
+  );
 
   constructor(
     private http: HttpClient,

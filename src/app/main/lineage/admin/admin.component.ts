@@ -4,12 +4,15 @@ import {
   codeRowInterface,
   personRowInterface,
 } from './admin.service';
-import { Subscription, switchMap } from 'rxjs';
+import { Subscription, switchMap, tap } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as ChatActions from '../../chat/store/chat.actions';
 import { Store } from '@ngrx/store';
 import * as appState from 'src/app/store/app.reducer';
+import * as treeActions from '../tree/store/tree.actions';
+import * as adminActions from './store/admin.actions';
+import { Individual } from '../../personal/individual.model';
 
 @Component({
   selector: 'app-admin',
@@ -18,9 +21,10 @@ import * as appState from 'src/app/store/app.reducer';
 })
 export class AdminComponent implements OnInit, OnDestroy {
   constructor(
-    private adminService: AdminService,
+    // private adminService: AdminService,
     private formBuilder: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private store: Store<appState.AppState>
   ) {
     this.form = this.formBuilder.group({
@@ -28,7 +32,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       state: [''],
       village: [''],
     });
-    this.currentLineage = 'all';
+    // this.currentLineage = 'all';
   }
 
   navItems: string[] = [
@@ -41,7 +45,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     'sent requests',
     'archived',
   ];
-  itemSelected: string = this.navItems[0];
+  itemSelected: string;
 
   controlledBy: string = 'me';
   joinType = 'replace';
@@ -55,16 +59,15 @@ export class AdminComponent implements OnInit, OnDestroy {
   incomingRequest: codeRowInterface[];
   generatedRequest: codeRowInterface[];
   requestStatusList: codeRowInterface[];
+  peopleFound: personRowInterface[];
   foundPersonFromCode: codeRowInterface;
   allMembersSub: Subscription;
   allCodesSub: Subscription;
-
+  storeSub: Subscription;
   // the lineage
   currentLineage: 'all' | number;
   userLineage: string[];
-
   // the people got by finding
-  peopleFound: personRowInterface[];
 
   t2SelectedRow: number;
   t3SelectedRow: number;
@@ -74,241 +77,208 @@ export class AdminComponent implements OnInit, OnDestroy {
   tMembersApplyCode: number; // for the table to select the person to apply code on
   // the details for the form
   form: FormGroup;
-
-  // for the navigation
-  itemClicked(item: string) {
-    this.itemSelected = item;
-  }
+  userId: string;
+  actualUser: Individual;
 
   // controlledByChanged() {
   //   console.log(this.controlledBy);
   // }
 
   ngOnInit() {
-    this.adminService.fetchMembersList();
-    this.allMembersSub = this.adminService.personListObservable
+    this.storeSub = this.store
+      .select('individual')
       .pipe(
-        switchMap((members) => {
-          this.membersList = [...members];
-          this.filteredMembersList = members.filter(
-            (member) => member.status !== 'archived'
-          );
+        switchMap((person) => {
+          const id = person.actualUser._id;
+          const lineage = person.actualUser.lineage;
+          this.actualUser = person.actualUser;
+          this.userId = id;
+          return this.store.select('admin').pipe(
+            tap((admin) => {
+              this.currentLineage = admin.currentLineage;
+              this.membersList = [...admin.members];
 
-          this.archivedList = members.filter(
-            (member) => member.status === 'archived'
-          );
+              this.filteredMembersList = admin.members.filter(
+                (member) =>
+                  member.status !== 'archived' &&
+                  (this.currentLineage === 'all' ||
+                    member.lineage.includes(+this.currentLineage))
+              );
 
-          return this.adminService.getCodes(); // Return the second observable
+              this.archivedList = admin.members.filter(
+                (member) => member.status === 'archived'
+              );
+              this.codesList = admin.codesList;
+              this.sentRequest = this.codesList.filter((item) => {
+                return item.nodeTo && item.sentBy === id;
+              });
+              this.incomingRequest = this.codesList.filter((item) => {
+                return item.nodeTo && item.sentBy !== id;
+              });
+
+              const membersListId = this.membersList.map((item) => item.id);
+              this.generatedRequest = this.codesList.filter((item) => {
+                return membersListId.includes(item.userData.id);
+              });
+              this.requestStatusList = this.codesList.filter((item) => {
+                return item.status !== 'created';
+              });
+              this.foundPersonFromCode = admin.foundPersonFromCode;
+              this.peopleFound = admin.peopleFound;
+              this.userLineage = ['all', ...lineage];
+              this.t2SelectedRow = admin.t2SelectedRow;
+              this.t3SelectedRow = admin.t3SelectedRow;
+              this.t4SelectedRow = admin.t4SelectedRow; // find people
+              this.t5SelectedRow = admin.t5SelectedRow; // 2nd table in find people
+              this.t6SelectedRow = admin.t6SelectedRow;
+              this.tMembersApplyCode = admin.tMembersApplyCode;
+              this.itemSelected = admin.tabSelected;
+            })
+          );
         })
       )
-      .subscribe((codes) => {
-        this.codesList = codes;
+      .subscribe();
+  }
 
-        this.sentRequest = this.codesList.filter((item) => {
-          return (
-            item.nodeTo &&
-            (item.sentBy === this.adminService.getMyId() )
-          );
-        });
-        this.incomingRequest = this.codesList.filter((item) => {
-          return (
-            item.nodeTo && item.sentBy !== this.adminService.getMyId()
-          );
-        });
-        //requestStatusList
-        const membersListId = this.membersList.map((item) => item.id);
-        this.generatedRequest = this.codesList.filter((item) => {
-          return membersListId.includes(item.userData.id);
-        });
-
-        this.requestStatusList = this.codesList.filter((item) => {
-          return item.status !== 'created';
-        });
-      });
-
-    this.adminService.foundCode.subscribe((person) => {
-      this.foundPersonFromCode = person;
-    });
-
-    // when find people is clicked, i want to subscribe to it
-    this.adminService.findResult.subscribe((response) => {
-      this.peopleFound = response;
-    });
-
-    this.userLineage = ['all', ...this.adminService.getMe().lineage];
+  itemClicked(item: string) {
+    this.store.dispatch(adminActions.changeTab({ tab: item }));
   }
 
   ngOnDestroy() {
-    this.allMembersSub.unsubscribe();
+    this.storeSub.unsubscribe();
   }
 
   viewNode(id: string, publicNode?: boolean) {
-    this.adminService.viewNode(id, publicNode);
+    // to view the node in the tree
+    this.store.dispatch(treeActions.fetchNodeBegin({ id }));
+    this.router.navigate(['..', 'tree'], { relativeTo: this.route });
   }
+
   selectRow(table: number | string, i: number) {
-    if (table === 2) {
-      this.t2SelectedRow = i;
-    }
-    if (table === 4) {
-      //for found people
-      this.t4SelectedRow = i;
-    }
-    if (table === 5) {
-      this.t5SelectedRow = i;
-    }
-    if (table === 6) {
-      this.t6SelectedRow = i;
-    }
-    if (table === 'tMembersApplyCode') {
-      this.tMembersApplyCode = i;
-    }
     //tMembersApplyCode
+    this.store.dispatch(adminActions.selectTableRow({ table, index: i }));
   }
 
   generateCode(generateType: string) {
+    if (this.joinType === 'append' && this.appendMode === 'none') return;
     if (generateType === 'generateOnly' && this.t2SelectedRow === undefined)
       return;
-    this.adminService.generateCode(
-      this.membersList[this.t2SelectedRow].id,
-      this.joinType,
-      this.appendMode
+    this.store.dispatch(
+      adminActions.generateCodeBegin({
+        id: this.membersList[this.t2SelectedRow].id,
+        joinType: this.joinType,
+        appendMode: this.appendMode,
+      })
     );
   }
 
   revokeCode(id: string) {
-    this.adminService.cancelCode(id);
+    this.store.dispatch(adminActions.revokeCodeBegin({ id }));
   }
 
   beginMerge(id: string) {
-    // this.navItems = [...this.navItems, 'merge']
-    // this.itemClicked('merge');
-    // to merge a node, the nodeTo will become the owner and user of the node
-    // the userData is archived and instances of userDataId is
-    // replaced with the incoming, i.e the nodeTo
-    this.adminService.beginMerge(id);
+    this.store.dispatch(adminActions.mergeNodeBegin({ id }));
   }
 
   findPeople() {
     const values = this.form.value;
     let { lastName } = values;
     if (lastName) {
-      this.adminService.findPeople(lastName);
+      this.store.dispatch(adminActions.findPeopleBegin({ text: lastName }));
     }
   }
   sendRequestToExternal(codeSearched?: string) {
-    //here send t4 and t5. i.e. send t5 details to t4 who is the guest
-    // it also shows up in your list of sent requests
-
     if (codeSearched) {
-      this.adminService.sendRequestToExternal(
-        this.foundPersonFromCode.id,
-        this.foundPersonFromCode.userData.id,
-        this.membersList[this.tMembersApplyCode].id
+      this.store.dispatch(
+        adminActions.sendRequestToExternalBegin({
+          codeId: this.foundPersonFromCode.id,
+          nodeFrom: this.foundPersonFromCode.userData.id, //codeRowInterface,
+          nodeTo: this.membersList[this.tMembersApplyCode].id, //personRowInterface
+        })
       );
       return;
     }
     console.log(
-      'recipient ',
-      this.peopleFound[this.t4SelectedRow],
-      'nodeToBeMerged',
-      this.codesList[this.t5SelectedRow]
-    );
-    this.adminService.sendRequestToExternal(
-      this.codesList[this.t5SelectedRow].id,
-      this.codesList[this.t5SelectedRow].userData.id,
-      this.peopleFound[this.t4SelectedRow].id
+      "codeId:", this.codesList[this.t5SelectedRow].id,
+      "nodeFrom:", this.codesList[this.t5SelectedRow].userData.id, //codeRowInterface,
+      "nodeTo:", this.peopleFound[this.t4SelectedRow].id, //personRowInterface
+    )
+    this.store.dispatch(
+      adminActions.sendRequestToExternalBegin({
+        codeId: this.codesList[this.t5SelectedRow].id,
+        nodeFrom: this.codesList[this.t5SelectedRow].userData.id, //codeRowInterface,
+        nodeTo: this.peopleFound[this.t4SelectedRow].id, //personRowInterface
+      })
     );
   }
   generateCode2(formValues: any) {
-    // console.log('form values ', formValues);
     const { replace_append, append } = formValues;
-    // console.log(
-    //   replace_append === 'append' && !append,
-    //   this.t4SelectedRow === undefined,
-    //   !replace_append
-    // );
     if (
       (replace_append === 'append' && !append) ||
       this.t4SelectedRow === undefined ||
       !replace_append
     )
       return;
-    this.adminService.generateCode(
-      this.peopleFound[this.t4SelectedRow].id,
-      replace_append,
-      append,
-      this.adminService.getMyId()
+    this.store.dispatch(
+      adminActions.generateCodeBegin({
+        id: this.peopleFound[this.t4SelectedRow].id,
+        joinType: replace_append,
+        appendMode: append,
+        nodeTo: this.userId,
+      })
     );
   }
 
-  seeSourceNode(code: string) {
-    // console.log('code ', code);
-    this.adminService.seeSourceNode(code);
+  seeSourceNode(code: number) {
+    this.store.dispatch(adminActions.seeSourceNodeBegin({ code }));
   }
 
-  declineEnableRequest(id: string, index: number) {
-    const request = this.incomingRequest[index];
-    const requestStatus = request.status;
-    if (requestStatus === 'declined') {
-      // enable the request. a patch with status set to created
-      this.adminService.updateRequest(request.id, 'created');
+  declineEnableRequest(id: string, index: number, status: string) {
+    console.log('status ', status);
+    if (status === 'declined') {
+      this.store.dispatch(
+        adminActions.updateRequestBegin({ id, status: 'created' })
+      );
     } else {
-      // decline the request. a patch with status set to declined
-      this.adminService.updateRequest(request.id, 'declined');
+      this.store.dispatch(
+        adminActions.updateRequestBegin({ id, status: 'declined' })
+      );
     }
   }
   lineageChanged() {
-    // console.log('lineage has changed');
-    if (this.currentLineage === 'all')
-      this.filteredMembersList = [...this.membersList];
-    else {
-      this.filteredMembersList = this.membersList.filter((member) => {
-        return member.lineage.includes(+this.currentLineage);
-      });
-    }
+    this.store.dispatch(
+      adminActions.changeLineage({ lineage: this.currentLineage })
+    );
   }
 
-  changeMemberStatus(id: string, action: string) {
+  changeMemberStatus(id: string, action: 'reinstate' | 'remove') {
     // if you are the admin of the node
     //    if it was created by you  and has no other lineage then delete it
     //    if it wasnt created by you then remove it
-
     if (this.currentLineage === 'all' && action === 'remove') {
       alert('select an actual lineage');
       return;
     }
     //lineage we adminster
-    const adminOf = this.adminService.getMe().adminOf;
+    const adminOf = this.actualUser.adminOf;
     // the node we want to remove
-    const target = this.membersList.filter((members) => members.id === id)[0]; // sould e find
+    const target = this.membersList.find((members) => members.id === id); // sould e find
     // find the node, and then if we admin the node
     // console.log(target);
     if (target && target.lineage.filter((item) => adminOf.includes(item))) {
-      if (action === 'remove') {
-        this.adminService.changeMemberStatus(
-          'remove',
+      this.store.dispatch(
+        adminActions.changeMemberStatusBegin({
+          action,
           id,
-          +this.currentLineage
-        );
-      } else {
-        this.adminService.changeMemberStatus('reinstate', id);
-      }
+          lineage: +this.currentLineage,
+        })
+      );
     } else {
       alert('you are not an admin');
     }
   }
 
-  chatMember(id: string) {
-    // this.adminService.switchToSelf()
-    const firstName = this.membersList.find((m) => m.id === id);
-    this.router.navigate(['./individual', 'chats', id], {
-      queryParams: firstName,
-    });
-  }
-
   openChat(id: string, name: string) {
-    // this.adminService.openChat(id, name)
-
     this.store.dispatch(
       new ChatActions.ConversationOpenInitiated({ id, name })
     );

@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { respType } from 'src/app/shared/types/response.type';
 import { itemInterface } from '../lineage.service';
 import { Router } from '@angular/router';
@@ -7,6 +7,11 @@ import { TreeService } from '../tree/tree.service';
 import { IndividualService } from '../../personal/individual.service';
 
 import { environment } from 'src/environments/environment';
+import { Store } from '@ngrx/store';
+import * as frmApp from 'src/app/store/app.reducer';
+import * as treeActions from '../tree/store/tree.actions';
+import * as lineageActions from '../store/lineage.actions';
+import * as individualActions from '../../personal/store/individual.actions';
 const apiUrl = environment.apiUrl;
 
 @Component({
@@ -14,42 +19,36 @@ const apiUrl = environment.apiUrl;
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
   searchText = '';
-  important = ['firstname', 'lastname', 'father', 'mother'];
   foundEntries: itemInterface[];
-  selectedIndex: number;
   selectedEntry: itemInterface;
-  searchInside = true;
+  searchInside: boolean = true;
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private treeService: TreeService,
-    private individualService: IndividualService
-  ) {}
+  constructor(private router: Router, private store: Store<frmApp.AppState>) {}
+
+  ngOnInit() {
+    this.store.select('lineage').subscribe((lineage) => {
+      this.foundEntries = lineage.foundEntries;
+      this.selectedEntry =
+        lineage.selectedIndex >= 0
+          ? { ...this.foundEntries[lineage.selectedIndex] }
+          : null;
+    });
+  }
 
   onSubmit() {
     if (!this.searchText) return;
-    const params = new HttpParams().set(
-      'searchOutside',
-      (!this.searchInside).toString()
+    this.store.dispatch(
+      lineageActions.searchMemberBegin({
+        text: this.searchText,
+        searchInside: this.searchInside,
+      })
     );
-    this.http
-      .get<respType<itemInterface[]>>(
-        `${apiUrl}/userdata/search/${this.searchText}`,
-        { params }
-      )
-      .subscribe((resp) => {
-        this.selectedEntry = null;
-        this.selectedIndex = null;
-        this.foundEntries = resp.data.data;
-      });
   }
 
   selectResult(i: number) {
-    this.selectedIndex = i;
-    this.selectedEntry = this.foundEntries[i];
+    this.store.dispatch(lineageActions.searchResultSelected({ index: i }));
   }
 
   toggleLineageSelector() {
@@ -57,12 +56,14 @@ export class SearchComponent {
   }
 
   showTree(id: string) {
-    this.treeService.changeNode(id);
+    this.store.dispatch(treeActions.fetchNodeBegin({ id }));
     this.router.navigate(['lineage', 'tree']);
   }
-  
+
   showDetails(id: string) {
-    this.individualService.showDetails(id);
+    this.store.dispatch(
+      individualActions.beginDataFetch({ id, isSelf: false })
+    );
     this.router.navigate(['individual']);
   }
 }

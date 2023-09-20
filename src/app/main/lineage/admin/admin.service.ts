@@ -30,7 +30,7 @@ export interface personRowInterface {
   husband: string;
   lineage: number[];
   status: string;
-  user: boolean | string;
+  // user: boolean | string;
 }
 export interface codeRowInterface {
   id: string;
@@ -173,12 +173,6 @@ export class AdminService {
     nodeTo?: string
   ) {
     if (joinType === 'append' && appendMode === 'none') return;
-    // let payload = {
-    //   userData: id,
-    //   mode: joinType === 'replace' ? 'replace' : appendMode,
-    // };
-    // if (nodeTo) payload = {...payload, [nodeTo]: nodeTo}
-
     this.http
       .post<respType<personRowInterface[]>>(`${apiUrl}/joincode`, {
         userData: id,

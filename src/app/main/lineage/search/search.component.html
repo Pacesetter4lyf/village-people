@@ -39,10 +39,9 @@
           role="button"
           *ngFor="let person of foundEntries; let i = index"
           (click)="selectResult(i)"
-          [class.active]="selectedIndex === i"
+          [class.active]="person.id === selectedEntry?.id"
         >
           <p>{{ person.firstName }} {{ person.lastName }}</p>
-          <p>4</p>
         </li>
       </ul>
     </div>

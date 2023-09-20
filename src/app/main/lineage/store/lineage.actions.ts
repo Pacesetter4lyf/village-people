@@ -11,6 +11,11 @@ const LINK_UNLINK_BEGIN = '[link] link unlink begin';
 const LINK_UNLINK_SUCCESS = '[link] link unlink success';
 const DUMMY = '[link] dummy';
 
+const SEARCH_MEMBER_BEGIN = '[search] search member begin';
+const SEARCH_MEMBER_SUCCESS = '[search] search member success';
+const SEARCH_RESULT_SELECTED = '[search] search member selected';
+const CHANGE_SEARCH_INSIDE = '[search] change search inside';
+
 export const searchTextBegin = createAction(
   SEARCH_TEXT_BEGIN,
   props<{ text: string; for: 'A' | 'B' }>()
@@ -52,3 +57,23 @@ export const serverReturnsError = createAction(
   props<{ error: string }>()
 );
 export const dummy = createAction(DUMMY);
+
+export const searchMemberBegin = createAction(
+  SEARCH_MEMBER_BEGIN,
+  props<{ text: string, searchInside: boolean }>()
+);
+export const searchMemberSuccess = createAction(
+  SEARCH_MEMBER_SUCCESS,
+  props<{ members: itemInterface[] }>()
+);
+
+export const searchResultSelected = createAction(
+  SEARCH_RESULT_SELECTED,
+  props<{ index: number }>()
+);
+
+export const changeSearchInside = createAction(
+  CHANGE_SEARCH_INSIDE,
+  props<{ searchInside: boolean }>()
+);
+

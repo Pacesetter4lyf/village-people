@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { respType } from 'src/app/shared/types/response.type';
 import { environment } from 'src/environments/environment';
 import { IndividualService } from '../../personal/individual.service';
+import { Store } from '@ngrx/store';
+import * as frmApp from 'src/app/store/app.reducer';
+import { beginDataFetch } from '../../personal/store/individual.actions';
 const apiUrl = environment.apiUrl;
 
 interface BirthdayInterface {
@@ -25,7 +28,7 @@ export class BirthdaysComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private individualService: IndividualService
+    private store: Store<frmApp.AppState>
   ) {}
   ngOnInit() {
     this.http
@@ -72,7 +75,7 @@ export class BirthdaysComponent implements OnInit {
   }
 
   showDetails(id: string) {
-    this.individualService.showDetails(id)
-    this.router.navigate(['/individual'])
+    this.store.dispatch(beginDataFetch({ id, isSelf: false }));
+    this.router.navigate(['/individual']);
   }
 }

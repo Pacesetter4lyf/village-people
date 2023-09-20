@@ -6,7 +6,7 @@ import * as fromResource from '../shared/store/resource.reducer';
 import * as fromSettings from '../main/personal/settings/store/settings.reducer';
 import * as fromTree from '../main/lineage/tree/store/tree.reducer';
 import * as fromLineage from '../main/lineage/store/lineage.reducer';
-
+import * as fromAdmin from '../main/lineage/admin/store/admin.reducer'
 export interface AppState {
   auth: fromAuth.state;
   chat: fromChat.state;
@@ -15,6 +15,7 @@ export interface AppState {
   settings: fromSettings.state;
   tree: fromTree.state;
   lineage: fromLineage.state;
+  admin: fromAdmin.state;
 }
 
 export const AppReducer: ActionReducerMap<AppState> = {
@@ -25,4 +26,5 @@ export const AppReducer: ActionReducerMap<AppState> = {
   settings: fromSettings.settingsReducer,
   tree: fromTree.treeReducer,
   lineage: fromLineage.lineageReducer,
+  admin: fromAdmin.adminReducer,
 };
