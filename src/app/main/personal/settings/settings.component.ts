@@ -3,7 +3,6 @@ import { ResourceService } from 'src/app/shared/resource.service';
 
 import { Resource } from 'src/app/shared/resource.model';
 
-
 import * as frmApp from 'src/app/store/app.reducer';
 import { Store } from '@ngrx/store';
 import * as SettingsActions from './store/settings.actions';
@@ -26,9 +25,7 @@ export class SettingsComponent implements OnInit {
   settingsSub: Subscription;
   userSub: Subscription;
 
-  constructor(
-    private store: Store<frmApp.AppState>
-  ) {}
+  constructor(private store: Store<frmApp.AppState>) {}
   ngOnInit() {
     // get the setting from the backend
 
@@ -43,7 +40,9 @@ export class SettingsComponent implements OnInit {
         if (settingsData.selected === 'info') {
           this.viewables = [...this.userFields];
         } else {
-          this.viewables = [...this.resourceFields];
+          this.viewables = [...this.resourceFields].filter(
+            (field) => field.type === this.selectedMedia
+          );
         }
       });
     this.userSub = this.store
