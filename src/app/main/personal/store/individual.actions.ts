@@ -19,6 +19,7 @@ export const BEGIN_APPEND_MEMBER = '[individual] Begin Append Member';
 export const SET_ERROR_MESSAGE = '[individual] Set Individual Message';
 export const ERROR_GETTING_USER = '[individual] Error Getting User';
 export const CHANGE_MODE = '[individual] Change Mode';
+export const WOULD_REGISTER = '[individual] Would Register';
 
 export const beginDataFetch = createAction(
   BEGIN_DATA_FETCH,
@@ -72,5 +73,19 @@ export const setErrorMessage = createAction(
   props<{ error: string }>()
 );
 
-export const changeMode = createAction(CHANGE_MODE, props<{ mode: string }>());
+export const changeMode = createAction(
+  CHANGE_MODE,
+  props<{
+    mode:
+      | 'registering'
+      | 'self'
+      | 'user-creating'
+      | 'admin-viewing'
+      | 'user-viewing'
+      | 'user-created-not-owned'
+      | 'lineage-viewing'
+      | 'guest';
+  }>()
+);
 
+export const wouldRegister = createAction(WOULD_REGISTER);

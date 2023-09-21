@@ -36,13 +36,14 @@ export const IndividualResolver: ResolveFn<boolean> = () => {
               );
             } else {
               store.dispatch(
-                individualActions.changeMode({ mode: 'registering' })
+                individualActions.wouldRegister()
               );
-              return actions$.pipe(
-                ofType(individualActions.changeMode),
-                take(1),
-                map(() => true)
-              );
+              // return actions$.pipe(
+              //   ofType(individualActions.changeMode),
+              //   take(1),
+              //   map(() => true)
+              // );
+              return of(true);
             }
           })
         );

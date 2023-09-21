@@ -17,3 +17,18 @@ export const canActivateFn = () => {
     })
   );
 };
+
+export const canActivateFnLineage = () => {
+  const router = inject(Router);
+  const store = inject(Store);
+
+  return store.select('individual').pipe(
+    take(1),
+    map((individual) => {
+      const user = individual.actualUser;
+      const isAuth = !!user;
+      if (isAuth) return true;
+      return false
+    })
+  );
+};

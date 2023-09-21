@@ -41,7 +41,8 @@ export class BasicComponent implements OnInit, OnDestroy {
         this.appendAsWhat = individualData.appendAsWhat;
         this.appendTo = individualData.appendTo;
 
-        this.viewMode = this.mode !== 'user-creating';
+        this.viewMode =
+          this.mode !== 'user-creating' && this.mode !== 'registering';
         if (
           this.mode === 'user-creating' ||
           this.mode === 'user-viewing' ||

@@ -3,11 +3,13 @@ import { Individual } from '../individual.model';
 import {
   actualUserFetchSuccess,
   beginAppendMember,
+  changeMode,
   createAppendSuccess,
   displayUserFetchSuccess,
   errorGettingUser,
   patchOthersSuccess,
   patchSelfSuccess,
+  wouldRegister,
 } from './individual.actions';
 import { DisplayModeType } from '../individual.service';
 
@@ -104,5 +106,11 @@ export const individualReducer = createReducer(
       appendTo: action.appendTo,
       mode: 'user-creating' as DisplayModeType,
     };
+  }),
+  on(changeMode, (state, action) => {
+    return { ...state, mode: action.mode };
+  }),
+  on(wouldRegister, (state, action) => {
+    return { ...state, mode: 'registering' as DisplayModeType, displayUser: new Individual(), };
   })
 );

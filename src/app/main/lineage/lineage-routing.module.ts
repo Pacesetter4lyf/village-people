@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { canActivateFn } from 'src/app/auth/auth-guard.service';
+import { canActivateFn, canActivateFnLineage } from 'src/app/auth/auth-guard.service';
 import { PicturesComponent } from 'src/app/shared/pictures/pictures.component';
 import { PostsComponent } from 'src/app/shared/posts/posts.component';
 import { RecordingsComponent } from 'src/app/shared/recordings/recordings.component';
@@ -24,7 +24,7 @@ const routes: Routes = [
     path: '',
     component: LineageComponent,
     data: { lineage: true },
-    canActivate: [canActivateFn],
+    canActivate: [canActivateFn, canActivateFnLineage],
     resolve: [IndividualResolver, TreeResolver, AdminResolver],
     children: [
       { path: '', redirectTo: 'tree', pathMatch: 'full' },
