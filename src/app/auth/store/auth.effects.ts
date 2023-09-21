@@ -10,6 +10,9 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../user.model';
 import { AuthService } from '../auth.service';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/app.reducer';
+import { removeUser } from 'src/app/main/personal/store/individual.actions';
 const apiUrl = environment.apiUrl;
 
 export interface AuthResponseData {
@@ -144,6 +147,7 @@ export class AuthEffects {
         tap(() => {
           this.authService.clearLogoutTimer();
           localStorage.removeItem('user');
+          this.store.dispatch(removeUser());
         })
       ),
     { dispatch: false }
@@ -209,6 +213,7 @@ export class AuthEffects {
     private http: HttpClient,
     private router: Router,
     private authService: AuthService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private store: Store<AppState>
   ) {}
 }

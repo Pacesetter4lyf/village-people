@@ -9,6 +9,7 @@ import {
   errorGettingUser,
   patchOthersSuccess,
   patchSelfSuccess,
+  removeUser,
   wouldRegister,
 } from './individual.actions';
 import { DisplayModeType } from '../individual.service';
@@ -110,7 +111,14 @@ export const individualReducer = createReducer(
   on(changeMode, (state, action) => {
     return { ...state, mode: action.mode };
   }),
+  on(removeUser, (state, action) => {
+    return { ...state, actualUser: null };
+  }),
   on(wouldRegister, (state, action) => {
-    return { ...state, mode: 'registering' as DisplayModeType, displayUser: new Individual(), };
+    return {
+      ...state,
+      mode: 'registering' as DisplayModeType,
+      displayUser: new Individual(),
+    };
   })
 );

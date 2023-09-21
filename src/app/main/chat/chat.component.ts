@@ -30,8 +30,8 @@ export class ChatSmallComponent {
   ) {}
   ngOnInit() {
     this.store.select('individual').subscribe((individual) => {
+      this.actualUserId = individual.actualUser?.id;
       if (individual.actualUser && individual.actualUser.id) {
-        this.actualUserId = individual.actualUser.id;
         this.store.dispatch(new ChatActions.GetChatList());
       }
     });
