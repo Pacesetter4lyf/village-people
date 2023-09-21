@@ -33,7 +33,7 @@ export const settingsReducer = createReducer(
     return { ...state, selected: action.selected };
   }),
   on(SettingsActions.changeSelectedMedia, (state, action) => {
-    return { ...state, selected: action.selectedMedia };
+    return { ...state, selectedMedia: action.selectedMedia };
   }),
   on(SettingsActions.successPatchUserFields, (state, action) => {
     let userFields: SettingsInterface[] = JSON.parse(
