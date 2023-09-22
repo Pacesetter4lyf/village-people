@@ -8,7 +8,7 @@ import { LandingComponent } from './landing/landing.component';
 import { IndividualService } from './main/personal/individual.service';
 import { AuthInterceptorService } from './auth/auth-inteceptor.service';
 
-import { UcWidgetModule } from 'ngx-uploadcare-widget';
+// import { UcWidgetModule } from 'ngx-uploadcare-widget';
 import { ChatSmallComponent } from './main/chat/chat.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppRoutingModule } from './app-routing.module';
@@ -34,7 +34,7 @@ import { appEffects } from './store/app.effects';
   imports: [
     BrowserModule,
     HttpClientModule,
-    UcWidgetModule,
+    // UcWidgetModule,
     FontAwesomeModule,
     SharedModule, // basically for resources
     AuthModule,

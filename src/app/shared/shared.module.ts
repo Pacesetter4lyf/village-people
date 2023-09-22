@@ -6,6 +6,7 @@ import { PicturesComponent } from './pictures/pictures.component';
 import { PostsComponent } from './posts/posts.component';
 import { RecordingsComponent } from './recordings/recordings.component';
 import { VideosComponent } from './videos/videos.component';
+// import { UcWidgetModule } from 'ngx-uploadcare-widget';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,10 @@ import { VideosComponent } from './videos/videos.component';
     LoadingSpinnerComponent,
     ButtonComponent,
   ],
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    //  UcWidgetModule
+  ],
   exports: [
     RecordingsComponent,
     PicturesComponent,

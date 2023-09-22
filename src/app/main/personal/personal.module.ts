@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { PersonalRoutingModule } from './personal-routing.module';
+import { AuthModule } from 'src/app/auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,12 @@ import { PersonalRoutingModule } from './personal-routing.module';
     ModalComponent,
     SettingsComponent,
   ],
-  imports: [RouterModule, FormsModule, CommonModule, PersonalRoutingModule],
+  imports: [
+    RouterModule,
+    FormsModule,
+    CommonModule,
+    PersonalRoutingModule,
+    // AuthModule,
+  ],
 })
 export class PersonalModule {}

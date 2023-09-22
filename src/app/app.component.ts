@@ -12,7 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  title = 'village-people';
+  title = 'ClanHub';
   constructor(private store: Store<fromApp.AppState>) {}
   ngOnInit() {
     this.store.dispatch(new AuthActions.AutoLogin());
