@@ -98,7 +98,7 @@ export class resourceEffects {
       ofType(ResourceActions.beginFetchLineageResource),
       switchMap((payload) => {
         return this.http
-          .get<RespType<Resource[]>>(`${apiUrl}/resource/user/${payload.id}`)
+          .get<RespType<Resource[]>>(`${apiUrl}/resource/`)
           .pipe(
             map((responseData) => {
               return ResourceActions.fetchLineageResourceSuccess({
