@@ -7,14 +7,12 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { exhaustMap, take, map } from 'rxjs/operators';
-import { AuthService } from './auth.service';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
   constructor(
-    private authService: AuthService,
     private store: Store<fromApp.AppState>
   ) {}
 

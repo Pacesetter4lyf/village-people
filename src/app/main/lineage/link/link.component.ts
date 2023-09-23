@@ -1,7 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Subject, Subscription, map, take } from 'rxjs';
-import { itemInterface, LineageService } from '../lineage.service';
-import { TreeService } from '../tree/tree.service';
+import { itemInterface } from '../lineage.service';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as frmApp from 'src/app/store/app.reducer';

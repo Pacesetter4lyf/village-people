@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DisplayModeType, IndividualService } from '../individual.service';
+import { DisplayModeType} from '../individual.service';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DisplayUserModel } from '../display-user.model';

@@ -3,8 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { respType } from 'src/app/shared/types/response.type';
 import { itemInterface } from '../lineage.service';
 import { Router } from '@angular/router';
-import { TreeService } from '../tree/tree.service';
-import { IndividualService } from '../../personal/individual.service';
 
 import { environment } from 'src/environments/environment';
 import { Store } from '@ngrx/store';

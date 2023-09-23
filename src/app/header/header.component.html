@@ -70,7 +70,12 @@
         </li>
       </ul>
 
-      <button class="btn btn-primary " (click)="auth()">
+      <button
+        class="btn btn-primary"
+        (click)="auth()"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+      >
         {{ !signedIn ? "SIGN IN" : "SIGN OUT" }}
       </button>
     </div>

@@ -2,7 +2,6 @@ import { Actions, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 import * as fromApp from 'src/app/store/app.reducer';
-import { IndividualService } from './individual.service';
 import { Individual } from './individual.model';
 import { Store } from '@ngrx/store';
 import {

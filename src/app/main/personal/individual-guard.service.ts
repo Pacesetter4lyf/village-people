@@ -1,16 +1,19 @@
 import { inject, Injectable } from '@angular/core';
-import {
-  GuardsCheckEnd,
-  Router,
-} from '@angular/router';
-import {  take, tap } from 'rxjs/operators';
-import { IndividualService } from './individual.service';
+import { GuardsCheckEnd, Router } from '@angular/router';
+import { take, tap } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/app.reducer';
 
 export const settingsGuard = () => {
-  const individualService = inject(IndividualService);
   const router = inject(Router);
+  const store = inject<Store<AppState>>(Store);
 
-  const mode = individualService.displayMode.value;
+  let mode: string;
+  store
+    .select('individual')
+    .pipe(take(1))
+    .subscribe((data) => (mode = data.mode));
+
   if (mode !== 'self' && mode !== 'user-viewing') {
     return router.navigate(['individual', 'basic']);
   }
@@ -20,9 +23,8 @@ export const settingsGuard = () => {
 // this will ensure that the user or
 // anyone cannot go to the other pages if a user is being created atm
 export const IndividualGuard = () => {
-  const individualService = inject(IndividualService);
   const router = inject(Router);
-
+  const store = inject<Store<AppState>>(Store);
   let page: string;
   router.events
     .pipe(
@@ -37,7 +39,12 @@ export const IndividualGuard = () => {
     )
     .subscribe();
   console.log('Clicked link ', page);
-  const mode = individualService.displayMode.value;
+
+  let mode: string;
+  store
+    .select('individual')
+    .pipe(take(1))
+    .subscribe((data) => (mode = data.mode));
   if (
     page !== 'basic' &&
     (mode === 'user-creating' || mode === 'registering')
@@ -48,10 +55,14 @@ export const IndividualGuard = () => {
 };
 
 export const othersGuard = () => {
-  const individualService = inject(IndividualService);
+  const store = inject<Store<AppState>>(Store);
   const router = inject(Router);
 
-  const mode = individualService.displayMode.value;
+  let mode: string;
+  store
+    .select('individual')
+    .pipe(take(1))
+    .subscribe((data) => (mode = data.mode));
   if (mode !== 'user-viewing') {
     return true;
   }

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ResourceService } from 'src/app/shared/resource.service';
-import { IndividualService } from './individual.service';
 import { Store } from '@ngrx/store';
 import * as frmApp from 'src/app/store/app.reducer';
 

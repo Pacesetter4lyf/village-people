@@ -3,10 +3,8 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subject, map, of, tap } from 'rxjs';
 import { respType } from 'src/app/shared/types/response.type';
-import { IndividualService } from '../../personal/individual.service';
-import { LineageService } from '../lineage.service';
 import { PostModel } from './post.model';
-import { AdminService, personRowInterface } from '../admin/admin.service';
+import {  personRowInterface } from '../admin/admin.service';
 import { Individual } from '../../personal/individual.model';
 
 import { environment } from 'src/environments/environment';

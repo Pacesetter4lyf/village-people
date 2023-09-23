@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { DisplayModeType, IndividualService } from '../individual.service';
+import { DisplayModeType} from '../individual.service';
 import { BasicDetailsInterface } from '../individual.model';
 import { Store } from '@ngrx/store';
 import * as frmApp from 'src/app/store/app.reducer';

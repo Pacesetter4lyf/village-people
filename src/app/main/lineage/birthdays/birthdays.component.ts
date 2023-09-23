@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { respType } from 'src/app/shared/types/response.type';
 import { environment } from 'src/environments/environment';
-import { IndividualService } from '../../personal/individual.service';
 import { Store } from '@ngrx/store';
 import * as frmApp from 'src/app/store/app.reducer';
 import { beginDataFetch } from '../../personal/store/individual.actions';

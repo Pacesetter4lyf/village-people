@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import {  Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IndividualService } from '../main/personal/individual.service';
 import { AuthService } from './auth.service';
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from './store/auth.actions';
@@ -19,12 +18,10 @@ export class AuthComponent {
   isLoading = false;
   error: string = null;
   constructor(
-    private individualService: IndividualService,
     private store: Store<fromApp.AppState>
   ) {}
 
   ngOnInit() {
-    this.individualService.displayUser.next(null);
     this.storeSub = this.store.select('auth').subscribe((authState) => {
       this.isLoading = authState.loading;
       this.error = authState.authError;

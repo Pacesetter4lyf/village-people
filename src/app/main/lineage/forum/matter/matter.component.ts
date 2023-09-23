@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { PostModel } from '../post.model';
-import { AdminService } from '../../admin/admin.service';
 import { PostService } from '../post.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';

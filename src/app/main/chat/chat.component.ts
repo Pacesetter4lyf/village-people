@@ -1,6 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
-import { ChatService } from './chat.service';
 import { Chat, ChatParent } from './chat.model';
 import { take, Subscription } from 'rxjs';
 import * as fromApp from 'src/app/store/app.reducer';
@@ -25,7 +24,6 @@ export class ChatSmallComponent {
   storeSub: Subscription;
 
   constructor(
-    private chatService: ChatService,
     private store: Store<fromApp.AppState>
   ) {}
   ngOnInit() {

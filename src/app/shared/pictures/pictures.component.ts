@@ -1,13 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  ActivatedRoute,
-  Params,
-  Router,
-  RouterStateSnapshot,
-} from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription, map, of, switchMap, take, tap } from 'rxjs';
-import { DisplayUserModel } from 'src/app/main/personal/display-user.model';
-import { IndividualService } from 'src/app/main/personal/individual.service';
 import { ResourceService } from '../resource.service';
 import { Resource } from '../resource.model';
 import { Store } from '@ngrx/store';
@@ -26,7 +19,6 @@ export class PicturesComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private resourceService: ResourceService,
-    private individualService: IndividualService,
     private store: Store<frmApp.AppState>
   ) {}
 

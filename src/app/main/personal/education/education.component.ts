@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DisplayUserModel } from '../display-user.model';
-import { DisplayModeType, IndividualService } from '../individual.service';
+import { DisplayModeType } from '../individual.service';
 import { BasicDetailsInterface } from '../individual.model';
 import * as frmApp from 'src/app/store/app.reducer';
 import { Store } from '@ngrx/store';

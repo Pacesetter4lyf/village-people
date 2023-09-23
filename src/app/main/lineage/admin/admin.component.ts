@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  AdminService,
   codeRowInterface,
   personRowInterface,
 } from './admin.service';

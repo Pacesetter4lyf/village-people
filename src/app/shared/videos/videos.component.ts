@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription, map, of, switchMap, take, tap } from 'rxjs';
-import { IndividualService } from 'src/app/main/personal/individual.service';
 import { ResourceService } from '../resource.service';
 import { Resource } from '../resource.model';
 import { Store } from '@ngrx/store';
@@ -18,7 +17,6 @@ export class VideosComponent implements OnInit {
   videosSub: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
-    private resourceService: ResourceService,
     private store: Store<frmApp.AppState>
   ) {}
 

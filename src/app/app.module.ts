@@ -5,7 +5,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent, SafePipe } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { LandingComponent } from './landing/landing.component';
-import { IndividualService } from './main/personal/individual.service';
 import { AuthInterceptorService } from './auth/auth-inteceptor.service';
 
 // import { UcWidgetModule } from 'ngx-uploadcare-widget';
@@ -44,7 +43,6 @@ import { appEffects } from './store/app.effects';
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
   ],
   providers: [
-    IndividualService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,

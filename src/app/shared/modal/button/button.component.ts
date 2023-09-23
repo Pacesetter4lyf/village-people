@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { IndividualService } from 'src/app/main/personal/individual.service';
 import { ResourceService } from '../../resource.service';
 
 @Component({
