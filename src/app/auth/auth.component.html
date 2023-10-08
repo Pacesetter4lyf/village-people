@@ -3,7 +3,7 @@
     <div *ngIf="isLoading" style="text-align: center">
       <app-loading-spinner></app-loading-spinner>
     </div>
-    <div *ngIf="error" style="text-align: center">
+    <div *ngIf="error" style="text-align: center" data-testid="error">
       <p>{{ error }}</p>
     </div>
     <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading">
@@ -17,7 +17,8 @@
           name="email"
           ngModel
           required
-          emai
+          email
+          data-testid="email"
         />
       </div>
       <div class="mb-3">
@@ -30,6 +31,7 @@
           ngModel
           required
           minlength="6"
+          data-testid="password"
         />
       </div>
       <div class="d-flex justify-content-between">
@@ -37,10 +39,14 @@
           type="submit"
           class="btn btn-primary"
           [disabled]="!authForm.valid"
+          data-testid="submit-button"
         >
           {{ isLoginMode ? "sign in" : "sign up" }}
         </button>
-        <a class="btn btn-link" (click)="isLoginMode = !isLoginMode"
+        <a
+          class="btn btn-link"
+          (click)="isLoginMode = !isLoginMode"
+          data-testid="switch-mode"
           >switch to {{ isLoginMode ? "sign up" : "sign in" }}</a
         >
       </div>

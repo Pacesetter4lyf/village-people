@@ -1,11 +1,11 @@
 import { Store } from '@ngrx/store';
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import {  Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from './auth.service';
 import * as fromApp from '../store/app.reducer';
-import * as AuthActions from './store/auth.actions';
+import * as AuthActions from './store/actions/auth.actions';
 
 @Component({
   selector: 'app-auth',
@@ -17,9 +17,7 @@ export class AuthComponent {
   isLoginMode = true;
   isLoading = false;
   error: string = null;
-  constructor(
-    private store: Store<fromApp.AppState>
-  ) {}
+  constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
     this.storeSub = this.store.select('auth').subscribe((authState) => {

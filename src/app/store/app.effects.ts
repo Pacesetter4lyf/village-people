@@ -1,4 +1,4 @@
-import { AuthEffects } from '../auth/store/auth.effects';
+import { AuthEffects } from '../auth/store/effects/auth.effects';
 import { chatEffects } from '../main/chat/store/chat.effects';
 import { AdminEffects } from '../main/lineage/admin/store/admin.effects';
 import { LineageEffects } from '../main/lineage/store/lineage.effects';

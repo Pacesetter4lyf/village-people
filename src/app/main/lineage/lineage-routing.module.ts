@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { canActivateFn, canActivateFnLineage } from 'src/app/auth/auth-guard.service';
+import {
+  canActivateFn,
+  canActivateFnLineage,
+} from 'src/app/auth/auth-guard.service/auth-guard.service';
 import { PicturesComponent } from 'src/app/shared/pictures/pictures.component';
 import { PostsComponent } from 'src/app/shared/posts/posts.component';
 import { RecordingsComponent } from 'src/app/shared/recordings/recordings.component';

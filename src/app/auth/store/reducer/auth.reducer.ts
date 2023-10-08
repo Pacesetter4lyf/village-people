@@ -1,5 +1,5 @@
-import { User } from '../user.model';
-import * as AuthActions from './auth.actions';
+import { User } from '../../user.model';
+import * as AuthActions from '../actions/auth.actions';
 
 export interface state {
   user: User;

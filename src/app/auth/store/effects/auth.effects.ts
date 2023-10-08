@@ -1,5 +1,5 @@
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import * as AuthActions from './auth.actions';
+import * as AuthActions from '../actions/auth.actions';
 import { switchMap, map, catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // import { AuthResponseData } from '../auth.service';
@@ -8,8 +8,8 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { User } from '../user.model';
-import { AuthService } from '../auth.service';
+import { User } from '../../user.model';
+import { AuthService } from '../../auth.service';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.reducer';
 import { removeUser } from 'src/app/main/personal/store/individual.actions';
@@ -48,20 +48,21 @@ const handleAuthentication = (responseData: AuthResponseData) => {
     isRegistered: responseData.data.user?.isRegistered,
   });
 };
+
 const handleError = (errorRes) => {
   // Handle errors here and dispatch an error action
   let error = 'An unknown error occured';
   if (!errorRes.error || !errorRes.error.message) {
     return of(new AuthActions.AuthenticateFail(error));
   }
-  switch (errorRes.error.message) {
-    case 'Incorrect email or password':
-      error = 'Incorrect email or password';
-      break;
-    default:
-      error = 'An unknown error occured';
-  }
-  return of(new AuthActions.AuthenticateFail(error));
+  // switch (errorRes.error.message) {
+  //   case 'Incorrect email or password':
+  //     error = 'Incorrect email or password';
+  //     break;
+  //   default:
+  //     error = 'An unknown error occured';
+  // }
+  return of(new AuthActions.AuthenticateFail(errorRes.error.message));
 };
 
 @Injectable()
@@ -111,6 +112,7 @@ export class AuthEffects {
               return handleAuthentication(responseData);
             }),
             catchError((errorRes) => {
+              console.log('errorRes ', errorRes);
               return handleError(errorRes);
             })
           );
@@ -129,16 +131,16 @@ export class AuthEffects {
     { dispatch: false }
   );
 
-  redirectToAuth = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(AuthActions.LOGOUT),
-        tap(() => {
-          this.router.navigate(['/auth']);
-        })
-      ),
-    { dispatch: false }
-  );
+  // redirectToAuth = createEffect(
+  //   () =>
+  //     this.actions$.pipe(
+  //       ofType(AuthActions.LOGOUT),
+  //       tap(() => {
+  //         this.router.navigate(['/auth']);
+  //       })
+  //     ),
+  //   { dispatch: false }
+  // );
 
   authLogout = createEffect(
     () =>
@@ -148,6 +150,7 @@ export class AuthEffects {
           this.authService.clearLogoutTimer();
           localStorage.removeItem('user');
           this.store.dispatch(removeUser());
+          this.router.navigate(['/auth']); // could be removed
         })
       ),
     { dispatch: false }
@@ -213,7 +216,9 @@ export class AuthEffects {
     private http: HttpClient,
     private router: Router,
     private authService: AuthService,
-    private activatedRoute: ActivatedRoute,
+    // private activatedRoute: ActivatedRoute,
     private store: Store<AppState>
-  ) {}
+  ) {
+    // console.log('initiating',  actions$)
+  }
 }

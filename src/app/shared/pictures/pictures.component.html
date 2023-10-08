@@ -1,34 +1,31 @@
 <div class="row">
   <div class="col-lg-4 col-md-4 col-sm-6" *ngFor="let image of images">
-    <div class="card">
-      <img
-        [src]="image.url"
-        class="card-img-top img-fluid"
-        alt="{{ image.name }}"
-        height="250px"
-        width="100%"
-      />
+    <div class="card mb-1">
+      <div class="div" style="width: 100%; height: 250px">
+        <img
+          [src]="image.url"
+          class="card-img-top"
+          alt="{{ image.name }}"
+          height="100%"
+          width="100%"
+          style="object-fit: contain"
+        />
+    
+      </div>
+
       <div class="card-body">
         <h5 class="card-title">{{ image.name }}</h5>
         <p class="card-text">{{ image.description }}</p>
         <div class="div">
           <div class="d-flex justify-content-between" *ngIf="mediaEditable">
-            <a class="btn btn-primary" (click)="onDelete(image._id)"
-              >Delete</a
-            >
-            <a
-              class="btn btn-primary"
-              (click)="onEdit(image._id)"
-              >Edit</a
-            >
+            <a class="btn btn-primary" (click)="onDelete(image._id)">Delete</a>
+            <a class="btn btn-primary" (click)="onEdit(image._id)">Edit</a>
           </div>
           <div class="div" *ngIf="!mediaEditable">
-            {{ image.user.firstName }} - {{ image.user.lastName }}
+            {{ image.user.firstName }} {{ image.user.lastName }}
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-

@@ -52,7 +52,7 @@
                 routerLink="/lineage"
                 routerLinkActive="active"
                 data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
+
                 >Lineage</a
               >
             </li>
@@ -75,6 +75,7 @@
         (click)="auth()"
         data-bs-toggle="collapse"
         data-bs-target="#navbarSupportedContent"
+        data-testid = 'auth-button'
       >
         {{ !signedIn ? "SIGN IN" : "SIGN OUT" }}
       </button>
@@ -82,4 +83,3 @@
   </div>
 </nav>
 
-<app-minor-header *ngIf="signedIn"></app-minor-header>

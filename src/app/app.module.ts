@@ -16,7 +16,7 @@ import { AuthModule } from './auth/auth.module';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import * as fromApp from './store/app.reducer';
-import { AuthEffects } from './auth/store/auth.effects';
+import { AuthEffects } from './auth/store/effects/auth.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { chatEffects } from './main/chat/store/chat.effects';
