@@ -18,16 +18,15 @@ export interface CommentFieldsInterface {
     comment: string;
     likes: string[];
   }[];
-}
-
-export class PostModel implements CommentFieldsInterface {
   poster: {
     firstName: string;
     id: string;
     adminableBy?: string[];
     lineage?: number[];
   };
+}
 
+export class PostModel implements CommentFieldsInterface {
   constructor(
     public id: string = '',
     public isCommentsTurnedOff: boolean = false,
@@ -36,10 +35,10 @@ export class PostModel implements CommentFieldsInterface {
     public personId: string = '',
     public postBox: string = '',
     public isNotVisibleByLineage: boolean = false,
-    public isLineageResource : boolean = false,
+    public isLineageResource: boolean = false,
     public title: string = '',
     public likes: string[] = [],
-    public dateCreated = new Date(),
+    public datePosted = new Date().toString(),
     public comments: {
       userId: {
         id: string;
@@ -48,13 +47,17 @@ export class PostModel implements CommentFieldsInterface {
       date: Date;
       comment: string;
       likes: string[];
-    }[] = null
-  ) {
-    this.poster = {
+    }[] = null,
+    public poster: {
+      firstName: string;
+      id: string;
+      adminableBy?: string[];
+      lineage?: number[];
+    } = {
       firstName: '',
       id: '',
       adminableBy: [],
       lineage: [],
-    };
-  }
+    }
+  ) {}
 }

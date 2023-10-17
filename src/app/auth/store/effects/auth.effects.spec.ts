@@ -328,11 +328,12 @@ describe('AuthEffects', () => {
   });
   it('returns a login action if user is available', async () => {
     const autoLoginAction = new AuthActions.AutoLogin();
+    const expirationDate = new Date(Date.now() + 1000 * 60 * 60 * 5).toString();
     const expectedAction = new AuthActions.Login({
       email: 'test@example.com',
       userId: '123456',
       token: 'some token',
-      expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 5),
+      expirationDate: new Date(expirationDate),
       isRegistered: '7891011',
     });
 
@@ -340,7 +341,7 @@ describe('AuthEffects', () => {
       email: 'test@example.com',
       id: '123456',
       _token: 'some token',
-      _tokenExpirationDate: new Date(Date.now() + 1000 * 60 * 60 * 5),
+      _tokenExpirationDate: expirationDate,
       _isRegistered: '7891011',
     };
     const getItemSpy = jest
@@ -358,7 +359,6 @@ describe('AuthEffects', () => {
       '7891011'
     );
     const expirationDate = new Date(Date.now() + 1000 * 60 * 60 * 5).toString();
-    console.log('expiration date ', expirationDate);
     const expectedAction = new AuthActions.Login({
       email: 'test@example.com',
       userId: '123456',

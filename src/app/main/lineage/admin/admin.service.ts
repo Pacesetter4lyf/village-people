@@ -10,6 +10,20 @@ export interface personRowInterface {
   status: string;
   // user: boolean | string;
 }
+
+export class PersonRowClass implements personRowInterface {
+  constructor(
+    public id = '',
+    public firstName = '',
+    public lastName = '',
+    public mother = '',
+    public father = '',
+    public wife = '',
+    public husband = '',
+    public lineage = [1234],
+    public status = 'active'
+  ) {}
+}
 export interface codeRowInterface {
   id: string;
   nodeTo: {

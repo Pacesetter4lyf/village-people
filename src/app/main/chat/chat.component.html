@@ -2,22 +2,25 @@
   class="chat-container"
   [ngClass]="{ expanded: expanded }"
   *ngIf="actualUserId"
+  data-testid="container"
 >
   <div class="top" [ngClass]="{ inActualChat: isInActualChat }">
     <i
       class="fas fa-arrow-left back"
       (click)="back()"
       *ngIf="isInActualChat"
+      data-testid="go-back"
     ></i>
     <i
       class="fas fa-arrow-down"
       (click)="topClicked()"
       [ngClass]="expanded ? 'fa-arrow-down' : 'fa-arrow-up'"
+      data-testid="collapse-expand"
     ></i>
   </div>
 
-  <div class="body" *ngIf="expanded">
-    <div class="chat-list" *ngIf="!isInActualChat">
+  <div class="body" *ngIf="expanded" data-testid="body">
+    <div class="chat-list" *ngIf="!isInActualChat" data-testid="chat-list">
       <div
         class="chat mb-1 border border-primary"
         role="button"
@@ -36,29 +39,44 @@
         </div>
       </div>
     </div>
-    <div class="actual-chats" *ngIf="isInActualChat">
-      <div class="">{{ name }}</div>
-      <div
-        class="d-flex border border-danger"
-        *ngFor="let chat of chatDetails"
-        [ngClass]="!chat.sentByUser ? ' ps-3' : 'justify-content-end pe-3'"
-      >
-        <div class="chat mb-1">
-          <div class="">
-            {{ chat.from }} - {{ chat.createdAt.substring(0, 10) }}
-          </div>
-          <div class="">
-            {{ chat.message }}
+    <div class="actual-chats" *ngIf="isInActualChat" data-testid="actual-chats">
+      <p class="name">{{ name }}</p>
+      <div class="chat-items">
+        <div
+          class="d-flex border border-danger chat-item"
+          *ngFor="let chat of chatDetails"
+          [ngClass]="!chat.sentByUser ? ' ps-3' : 'justify-content-end pe-3'"
+        >
+          <div class="chat mb-1">
+            <div class="">
+              {{ chat.from }} - {{ chat.createdAt.substring(0, 10) }}
+            </div>
+            <div class="">
+              {{ chat.message }}
+            </div>
           </div>
         </div>
       </div>
       <div class="div">
         <form>
-          <textarea #message name="" id="" rows="2" class="w-100"></textarea>
+          <textarea
+            #message
+            name=""
+            id=""
+            rows="2"
+            class="w-100"
+            data-testid="message-box"
+          ></textarea>
         </form>
       </div>
       <div class="div">
-        <button class="btn btn-success" (click)="sendMessage()">send</button>
+        <button
+          class="btn btn-success"
+          data-testid="send-message"
+          (click)="sendMessage()"
+        >
+          send
+        </button>
       </div>
     </div>
   </div>

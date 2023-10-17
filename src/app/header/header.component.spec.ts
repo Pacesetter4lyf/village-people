@@ -42,7 +42,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
 
-describe.skip('HeaderComponent', () => {
+describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   let store: MockStore;

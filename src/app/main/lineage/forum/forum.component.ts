@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PostService } from './post.service';
 import { PostModel } from './post.model';
 import { personRowInterface } from '../admin/admin.service';
-import { pipe, take } from 'rxjs';
+import { Subscription, pipe, take } from 'rxjs';
 
 @Component({
   selector: 'app-forum',
   templateUrl: './forum.component.html',
   styleUrls: ['./forum.component.css'],
 })
-export class ForumComponent implements OnInit {
+export class ForumComponent implements OnInit, OnDestroy {
   allPosts: PostModel[];
   posts: PostModel[];
   constructor(private postService: PostService) {}
@@ -21,16 +21,20 @@ export class ForumComponent implements OnInit {
 
   membersList: personRowInterface[];
 
+  getPostsSub: Subscription
+  membersSub: Subscription
+
   ngOnInit() {
     //get all the pos tcreated for people in the lineage or
     // for people in the lineage
-    this.postService.getPosts().subscribe((data) => {
+    this.getPostsSub = this.postService.getPosts().subscribe((data) => {
+      // const newData = data.map(post => ({...post, dateCreated:  }))
       this.allPosts = [...data];
       this.posts = [...data];
       // console.log(data);
     });
 
-    this.postService.membersList.pipe(take(2)).subscribe((data) => {
+    this.membersSub = this.postService.membersList.pipe(take(2)).subscribe((data) => {
       this.membersList = data;
     });
   }
@@ -70,4 +74,8 @@ export class ForumComponent implements OnInit {
     }
   }
   //
+  ngOnDestroy(){
+    this.getPostsSub.unsubscribe()
+    this.membersSub.unsubscribe()
+  }
 }

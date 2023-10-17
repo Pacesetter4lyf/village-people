@@ -3,7 +3,7 @@ export class Chat {
     public from: string,
     public to: string,
     public message: string,
-    public createdAt: Date,
+    public createdAt: string,
     public sentByUser: Boolean
   ) {}
 }
@@ -13,7 +13,7 @@ export class ChatParent {
     public name: string,
     public lastMessage: string,
     public lastMessageBy: string,
-    public lastMessageDate: Date,
+    public lastMessageDate: string,
     public to: string
   ) {}
 }

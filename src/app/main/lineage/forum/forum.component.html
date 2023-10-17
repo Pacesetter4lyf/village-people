@@ -11,6 +11,7 @@
           id="createdByMe"
           [(ngModel)]="createdByMe"
           (change)="showCreatedByMe()"
+          data-testid="createdByMe"
         />
         <label for="createdByMe">created by me</label>
       </div>
@@ -20,6 +21,7 @@
           id="createdForMe"
           (change)="showCreatedForMe()"
           [(ngModel)]="createdForMe"
+          data-testid="createdForMe"
         />
         <label for="createdForMe">created for me</label>
       </div>
@@ -29,6 +31,7 @@
           type="select"
           (change)="createdForChanged()"
           [(ngModel)]="createdFor"
+          data-testid="createdFor"
         >
           <option [value]=""></option>
           <option *ngFor="let member of membersList" [value]="member.id">
@@ -37,8 +40,13 @@
         </select>
       </div>
     </div>
-    <div class="forum-topics">
-      <div class="forum-topic" *ngFor="let post of posts" [routerLink]="[post.id]">
+    <div class="forum-topics" data-testid="forum-topics">
+      <div
+        class="forum-topic"
+        *ngFor="let post of posts; index as i"
+        [routerLink]="[post.id]"
+        [attr.data-testid]="'post-' + i"
+      >
         <p class="title">{{ post.title }}</p>
         |
         <p clas="name">{{ post.poster.firstName }}</p>

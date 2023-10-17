@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subject, map, of, tap } from 'rxjs';
 import { respType } from 'src/app/shared/types/response.type';
 import { PostModel } from './post.model';
-import {  personRowInterface } from '../admin/admin.service';
+import { personRowInterface } from '../admin/admin.service';
 import { Individual } from '../../personal/individual.model';
 
 import { environment } from 'src/environments/environment';
@@ -56,6 +56,7 @@ export class PostService {
   }
 
   getPosts() {
+    // console.log('here ')
     if (this.posts.length) return of(this.posts);
     else return this.fetchPosts();
   }
