@@ -26,8 +26,8 @@ export class PostService {
   constructor(private http: HttpClient, private store: Store<frmApp.AppState>) {
     this.store.subscribe((data) => {
       this.membersList.next(data.admin.members);
-      this.userId = data.individual.actualUser._id;
-      this.adminOf = data.individual.actualUser.adminOf;
+      this.userId = data.individual.actualUser?._id;
+      this.adminOf = data.individual.actualUser?.adminOf;
     });
   }
 
